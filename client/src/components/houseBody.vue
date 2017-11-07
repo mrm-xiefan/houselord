@@ -1,6 +1,7 @@
 <template>
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
+      <button class="btn bg-purple pull-right" v-on:click="addHouse()"><i class="fa fa-plus"></i></button>
       <div>{{manager.controller.currentApp}}</div>
     </section>
   </div>
@@ -11,7 +12,7 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
-  import File from '@/store/file.js'
+  import House from '@/store/house.js'
   export default {
     props: ['manager'],
     mounted() {
@@ -22,6 +23,16 @@
         if ($('.control-sidebar').hasClass('control-sidebar-open')) {
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
+      },
+      addHouse() {
+        let house = {
+          isNew: true,
+          owner: manager.user._id,
+          address: '',
+          note: '',
+          image: null
+        }
+        utils.event.$emit('HOUSE_DETAIL', new House(house))
       }
     }
   }

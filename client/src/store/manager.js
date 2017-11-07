@@ -10,6 +10,7 @@ class Manager {
     this.controller = new Controller()
     this.socket = null
     this.oldsocket = null
+    this.houses = []
   }
 
   login(data, next) {

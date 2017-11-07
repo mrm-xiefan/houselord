@@ -11,7 +11,6 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
-  import File from '@/store/file.js'
   export default {
     props: ['manager'],
     mounted() {
