@@ -1,0 +1,48 @@
+<template>
+  <header class="main-header">
+    <a class="logo" v-on:click="triggerIcon()">
+      <span class="logo-mini"><b>HLord</b></span>
+      <span class="logo-lg">HouseLord</span>
+    </a>
+    <nav class="navbar navbar-static-top">
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+</template>
+
+<script>
+  import CONST from '@/store/const.js'
+  import manager from '@/store/manager.js'
+  import utils from '@/tool/utils.js'
+
+  export default {
+    props: ['manager'],
+    methods: {
+      backward() {
+        this.$router.go(-1)
+      },
+      goTop() {
+        $('html, body').animate({scrollTop: 0}, 'fast')
+      },
+      triggerIcon() {
+        this.$router.push({name: CONST.defaultApp})
+      }
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>
