@@ -6,9 +6,9 @@
           HouseLord
         </div>
         <div class="login-box-body">
-          <p class="login-box-msg">Register a new membership</p>
+          <p class="login-box-msg">アカウントの作成</p>
           <div class="form-group has-feedback">
-            <input id="register-user" v-model="manager.user._id" type="text" class="form-control" placeholder="User">
+            <input id="register-user" v-model="manager.user._id" type="text" class="form-control" placeholder="Account">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
@@ -21,10 +21,10 @@
           </div>
           <div class="row">
             <div class="col-xs-8 middle-padding">
-              <router-link to="/login">I already have a membership</router-link>
+              <router-link to="/login">すでにアカウントをお持ちの場合</router-link>
             </div>
             <div class="col-xs-4">
-              <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="register">Register</button>
+              <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="register">作成</button>
             </div>
           </div>
         </div>

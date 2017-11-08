@@ -3,10 +3,10 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
 
-        <div class="modal-header">
+        <div class="modal-header gradient-header">
           <button type="button" class="close" id="close-detail" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-          <h4 class="modal-title">建築詳細</h4>
+          <h4 class="modal-title">シェアハウス詳細</h4>
         </div>
 
         <div class="modal-body" v-if="house">
@@ -16,8 +16,11 @@
             </div>
             <div class="select-data">
               <div class="data-row box-2column category">
-                <div class="modal-item">
-                  <input v-model="house.owner" type="text" class="form-control" placeholder="所有者" disabled>
+                <div class="modal-item btn-group">
+                  <input v-model="house.owner" type="text" class="form-control" data-toggle="dropdown" placeholder="オーナー">
+                  <ul class="dropdown-menu">
+                    <li v-for="owner in manager.owners" v-if="owner.visible(house.owner)"><a v-on:click="setOwner(house, owner)">{{owner._id}}</a></li>
+                  </ul>
                 </div>
                 <div class="modal-item">
                   <input v-model="house.name" type="text" class="form-control" placeholder="建築名">
@@ -38,7 +41,7 @@
           <div class="room-form" v-for="room in house.rooms">
             <div class="data-row box-3column">
               <div class="modal-item">
-                <input v-model="room.number" type="text" class="form-control" placeholder="部屋番号">
+                <input v-model="room.number" type="text" class="form-control" placeholder="ルーム番号">
               </div>
               <div class="modal-item">
                 <input v-model="room.size" type="text" class="form-control" placeholder="面積・間取り">
@@ -60,13 +63,13 @@
             </div>
           </div>
           <div class="add-room" v-on:click="addRoom()">
-            部屋追加
+            ルーム追加
           </div>
         </div>
 
         <div class="modal-footer">
           <button type="button" id="close-house-detail" class="btn btn-cancel" data-dismiss="modal" aria-label="Close">キャンセル</button>
-          <button type="button" id="save-house-detail" class="btn btn-create" :disabled="!house || !house.name" v-on:click="saveHouse()">保存</button>
+          <button type="button" id="save-house-detail" class="btn btn-create" :disabled="!house || !house.lord || !house.name" v-on:click="saveHouse()">保存</button>
         </div>
       </div>
     </div>
@@ -80,6 +83,7 @@
 
   import House from '@/store/house.js'
   import Room from '@/store/room.js'
+  import Owner from '@/store/owner.js'
   import thumbnailAttachment from '@/components/parts/thumbnailAttachment'
   export default {
     props: ['manager'],
@@ -105,6 +109,9 @@
       utils.event.$off('HOUSE_DETAIL')
     },
     methods: {
+      setOwner(house, owner) {
+        house.owner = owner._id
+      },
       addRoom() {
         let room = {
           number: '',
@@ -128,7 +135,24 @@
               response => {
                 if (response) {
                   manager.houses.push(new House(response))
-                  $('#house-modal').modal('hide')
+                  manager.sortHouse()
+                  if (manager.isNewOwner(self.house.owner)) {
+                    let data = {
+                      _id: self.house.owner,
+                      lord: manager.user._id
+                    }
+                    utils.restPost('/api/addOwner', data).then(
+                      response => {
+                        if (response) {
+                          manager.owners.push(new Owner(response))
+                          manager.sortOwner()
+                          $('#house-modal').modal('hide')
+                        }
+                      }
+                    )
+                  } else {
+                    $('#house-modal').modal('hide')
+                  }
                 }
               }
             )
@@ -143,7 +167,6 @@
   /* header */
   .modal-header {
     padding: 12px 22px 10px;
-    background: #605ca8;
   }
   .modal-header h4 {
     color: #fff;

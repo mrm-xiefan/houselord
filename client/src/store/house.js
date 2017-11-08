@@ -6,6 +6,7 @@ import Room from '@/store/room.js'
 class House {
   constructor(data) {
     this._id = data._id
+    this.lord = data.lord
     this.isNew = data.isNew
     this.name = data.name
     this.address = data.address
@@ -18,6 +19,7 @@ class House {
         this.rooms.push(new Room(data.rooms[i]))
       }
     }
+    this.udate = data.udate
   }
   clearRoom() {
     for (let i = this.rooms.length - 1; i >= 0; i --) {
@@ -29,6 +31,7 @@ class House {
   toJSON() {
     let data = {
       name: this.name,
+      lord: this.lord,
       address: this.address,
       owner: this.owner,
       note: this.note,

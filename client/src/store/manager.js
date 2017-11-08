@@ -3,6 +3,8 @@ import utils from '../tool/utils.js'
 import Controller from './controller.js'
 import User from './user.js'
 import io from 'socket.io-client/dist/socket.io.js'
+import House from './house.js'
+import Owner from './owner.js'
 
 class Manager {
   constructor() {
@@ -11,11 +13,23 @@ class Manager {
     this.socket = null
     this.oldsocket = null
     this.houses = []
+    this.owners = []
   }
 
   login(data, next) {
+    let self = this
     this.user.login(data.user)
-    this.initSocket(next)
+    this.initSocket(() => {
+      utils.restGet('/api/getInitData').then(
+        response => {
+          if (response) {
+            self.refreshHouse(response.houses)
+            self.refreshOwner(response.owners)
+            next()
+          }
+        }
+      )
+    })
   }
   logout() {
     this.user.logout()
@@ -51,6 +65,43 @@ class Manager {
     self.socket.on('reinited', () => {
       // utils.event.$emit('SHOW_MESSAGE', 'I001')
     })
+  }
+
+  refreshHouse(houses) {
+    this.houses.splice(0, this.houses.length)
+    for (let i = 0; i < houses.length; i ++) {
+      this.houses.push(new House(houses[i]))
+    }
+    this.sortHouse()
+  }
+  sortHouse() {
+    this.houses.sort((a, b) => {
+      if (a.udate > b.udate) return -1
+      else if (a.udate < b.udate) return 1
+      else return 0
+    })
+  }
+  refreshOwner(owners) {
+    this.owners.splice(0, this.owners.length)
+    for (let i = 0; i < owners.length; i ++) {
+      this.owners.push(new Owner(owners[i]))
+    }
+    this.sortOwner()
+  }
+  sortOwner() {
+    this.owners.sort((a, b) => {
+      if (a._id > b._id) return 1
+      else if (a._id < b._id) return -1
+      else return 0
+    })
+  }
+  isNewOwner(owner) {
+    for (let i = 0; i < this.owners.length; i ++) {
+      if (this.owners[i]._id == owner) {
+        return false
+      }
+    }
+    return true
   }
 }
 

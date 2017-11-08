@@ -1,36 +1,35 @@
 import logger from './logger.js'
 import conf from 'config'
 import mongo from './mongo.js'
-import {ObjectId} from 'mongodb'
 import utils from './utils.js'
 
-class HouseService {
+class OwnerService {
   constructor() {
   }
-  getLordHouses(lord, next) {
+  getAllOwners(lord, next) {
     mongo.findAll(
-      'houses',
+      'owners',
       {lord: lord, deleted: {$ne: true}},
       {sort: {'udate': -1}},
-      (error, houses) => {
+      (error, owners) => {
         if (error) {
           next(error, null)
         }
         else {
-          next(null, houses)
+          next(null, owners)
         }
       }
     )
   }
-  insertHouse(user, house, next) {
-    house.cuser = user._id
-    house.uuser = user._id
+  insertOwner(user, owner, next) {
+    owner.cuser = user._id
+    owner.uuser = user._id
     let now = new Date()
-    house.cdate = now.valueOf()
-    house.udate = now.valueOf()
+    owner.cdate = now.valueOf()
+    owner.udate = now.valueOf()
     mongo.insert(
-      'houses',
-      house,
+      'owners',
+      owner,
       {},
       (error, result) => {
         if (error) {
@@ -44,4 +43,4 @@ class HouseService {
   }
 }
 
-export default new HouseService()
+export default new OwnerService()

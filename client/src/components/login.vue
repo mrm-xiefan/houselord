@@ -6,9 +6,9 @@
           HouseLord
         </div>
         <div class="login-box-body">
-          <p class="login-box-msg">Login with your membership</p>
+          <p class="login-box-msg">すでにアカウントをお持ちの場合、ログインしてご利用ください。</p>
           <div class="form-group has-feedback">
-            <input id="login-user" v-model="manager.user._id" type="text" class="form-control" placeholder="User">
+            <input id="login-user" v-model="manager.user._id" type="text" class="form-control" placeholder="Account">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
@@ -17,10 +17,10 @@
           </div>
           <div class="row">
             <div class="col-xs-8 middle-padding">
-              <router-link to="/register">Register a new membership</router-link>
+              <router-link to="/register">アカウントを持っていない場合</router-link>
             </div>
             <div class="col-xs-4">
-              <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="login">Login</button>
+              <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="login">ログイン</button>
             </div>
           </div>
         </div>
