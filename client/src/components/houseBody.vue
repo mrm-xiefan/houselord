@@ -55,7 +55,7 @@
   .button-top {
     display: flex;
     position: absolute;
-    top: 60px;
+    top: 110px;
     right: 10px;
   }
   .button-top .btn {
@@ -83,6 +83,7 @@
   .houses-area {
     width: 100%;
     min-height: 100px;
+    border-bottom: solid 1px #aaaaaa;
   }
   .house-area {
     float: left;

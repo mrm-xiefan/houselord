@@ -5,7 +5,7 @@ import login from '@/components/login'
 import register from '@/components/register'
 import error from '@/components/error'
 import house from '@/components/house'
-import lord from '@/components/lord'
+import owner from '@/components/owner'
 import publish from '@/components/publish'
 import finance from '@/components/finance'
 
@@ -57,7 +57,7 @@ export default new Router({
     {name: 'logout', path: '/logout', beforeEnter: logout},
     {name: 'error', path: '/error', component: error},
     {name: 'house', path: '/house', component: house, beforeEnter: preloadHouse},
-    {name: 'lord', path: '/lord', component: lord, beforeEnter: preloadLord},
+    {name: 'owner', path: '/owner', component: owner, beforeEnter: preloadLord},
     {name: 'publish', path: '/publish', component: publish, beforeEnter: preloadPublish},
     {name: 'finance', path: '/finance', component: finance, beforeEnter: preloadFinance},
     {path: '*', redirect: '/'}

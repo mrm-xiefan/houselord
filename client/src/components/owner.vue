@@ -3,7 +3,7 @@
     <lockScreen :manager="manager"></lockScreen>
     <appHeader :manager="manager"></appHeader>
     <appSideMenu :manager="manager"></appSideMenu>
-    <lordBody :manager="manager"></lordBody>
+    <ownerBody :manager="manager"></ownerBody>
     <appFooter :manager="manager"></appFooter>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
@@ -19,7 +19,7 @@
   import lockScreen from '@/components/parts/lockScreen'
   import appHeader from '@/components/appHeader'
   import appSideMenu from '@/components/appSideMenu'
-  import lordBody from '@/components/lordBody'
+  import ownerBody from '@/components/ownerBody'
   import appFooter from '@/components/appFooter'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
@@ -29,7 +29,7 @@
       lockScreen: lockScreen,
       appHeader: appHeader,
       appSideMenu: appSideMenu,
-      lordBody: lordBody,
+      ownerBody: ownerBody,
       appFooter: appFooter,
       messageModal: messageModal,
       appControlPanel: appControlPanel

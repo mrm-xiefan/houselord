@@ -17,8 +17,8 @@
             <i class="fa fa-circle-o"></i> <span>シェアハウス</span>
           </router-link>
         </li>
-        <li :class="{'active': manager.controller.currentApp == 'lord'}">
-          <router-link to="/lord">
+        <li :class="{'active': manager.controller.currentApp == 'owner'}">
+          <router-link to="/owner">
             <i class="fa fa-circle-o"></i> <span>オーナー</span>
           </router-link>
         </li>

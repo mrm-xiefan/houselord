@@ -8,15 +8,15 @@
         <div class="login-box-body">
           <p class="login-box-msg">アカウントの作成</p>
           <div class="form-group has-feedback">
-            <input id="register-user" v-model="manager.user._id" type="text" class="form-control" placeholder="Account">
+            <input id="register-user" v-model="manager.user._id" type="text" class="form-control" placeholder="Account" @keyup.enter="foucusPassword()">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
-            <input id="register-password" v-model="manager.user.password" type="password" class="form-control" placeholder="Password">
+            <input id="register-password" v-model="manager.user.password" type="password" class="form-control" placeholder="Password" @keyup.enter="foucusRetype()">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
-            <input id="register-retype" v-model="retype" type="password" class="form-control" placeholder="Retype password">
+            <input id="register-retype" v-model="retype" type="password" class="form-control" placeholder="Retype password" @keyup.enter="register()">
             <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
           </div>
           <div class="row">
@@ -24,7 +24,7 @@
               <router-link to="/login">すでにアカウントをお持ちの場合</router-link>
             </div>
             <div class="col-xs-4">
-              <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="register">作成</button>
+              <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="register()">作成</button>
             </div>
           </div>
         </div>
@@ -57,6 +57,19 @@
       manager.logout()
     },
     methods: {
+      foucusPassword() {
+        if (manager.user._id != '') {
+          $('#register-password').focus()
+        }
+      },
+      foucusRetype() {
+        if (manager.user.password != '') {
+          $('#register-retype').focus()
+        }
+        else if (manager.user._id == '') {
+          $('#register-user').focus()
+        }
+      },
       register() {
         let self = this
         if (manager.user._id == '' || manager.user.password == '' || manager.user.password != this.retype) {

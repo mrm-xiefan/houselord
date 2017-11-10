@@ -8,11 +8,11 @@
         <div class="login-box-body">
           <p class="login-box-msg">すでにアカウントをお持ちの場合、ログインしてご利用ください。</p>
           <div class="form-group has-feedback">
-            <input id="login-user" v-model="manager.user._id" type="text" class="form-control" placeholder="Account">
+            <input id="login-user" v-model="manager.user._id" type="text" class="form-control" placeholder="Account" @keyup.enter="foucusPassword()">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
-            <input id="login-password" v-model="manager.user.password" type="password" class="form-control" placeholder="Password">
+            <input id="login-password" v-model="manager.user.password" type="password" class="form-control" placeholder="Password" @keyup.enter="login()">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
           <div class="row">
@@ -20,7 +20,7 @@
               <router-link to="/register">アカウントを持っていない場合</router-link>
             </div>
             <div class="col-xs-4">
-              <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="login">ログイン</button>
+              <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="login()">ログイン</button>
             </div>
           </div>
         </div>
@@ -48,6 +48,11 @@
       manager.logout()
     },
     methods: {
+      foucusPassword() {
+        if (manager.user._id != '') {
+          $('#login-password').focus()
+        }
+      },
       login() {
         let self = this
         let path = self.$route.query.path
