@@ -34,6 +34,18 @@ router.post('/addHouse', (req, res) => {
     res.json({error: error, data: house})
   })
 })
+router.post('/updateHouse', (req, res) => {
+  logger.info('updateHouse:', JSON.stringify(req.body.params))
+  houseService.updateHouse(req.session.user, req.body.params, (error, house) => {
+    res.json({error: error, data: house})
+  })
+})
+router.post('/deleteHouse', (req, res) => {
+  logger.info('deleteHouse:', JSON.stringify(req.body.params))
+  houseService.deleteHouse(req.session.user, req.body.params, (error) => {
+    res.json({error: error, data: {}})
+  })
+})
 router.post('/addOwner', (req, res) => {
   logger.info('addOwner:', JSON.stringify(req.body.params))
   ownerService.insertOwner(req.session.user, req.body.params, (error, owner) => {

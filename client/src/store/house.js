@@ -28,8 +28,17 @@ class House {
       }
     }
   }
+  getPhoto() {
+    if (this.photo) {
+      return this.photo
+    }
+    else {
+      return '/static/noimage.png'
+    }
+  }
   toJSON() {
     let data = {
+      _id: this._id,
       name: this.name,
       lord: this.lord,
       address: this.address,

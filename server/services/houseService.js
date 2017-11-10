@@ -42,6 +42,45 @@ class HouseService {
       }
     )
   }
+  updateHouse(user, house, next) {
+    let id = house._id
+    delete house._id
+    house.uuser = user._id
+    let now = new Date()
+    house.udate = now.valueOf()
+    mongo.update(
+      'houses',
+      {_id: ObjectId(id)},
+      {$set: house},
+      {multi: false},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          house._id = id
+          next(null, house)
+        }
+      }
+    )
+  }
+  deleteHouse(user, house, next) {
+    let now = new Date()
+    mongo.update(
+      'houses',
+      {_id: ObjectId(house._id)},
+      {$set: {deleted: true, uuser: user._id, udate: now.valueOf()}},
+      {multi: false},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          next(null)
+        }
+      }
+    )
+  }
 }
 
 export default new HouseService()

@@ -136,28 +136,46 @@
                 if (response) {
                   manager.houses.push(new House(response))
                   manager.sortHouse()
-                  if (manager.isNewOwner(self.house.owner)) {
-                    let data = {
-                      _id: self.house.owner,
-                      lord: manager.user._id
+                  self.saveOwner()
+                }
+              }
+            )
+          }
+          else {
+            utils.restPost('/api/updateHouse', self.house.toJSON()).then(
+              response => {
+                if (response) {
+                  for (let i = 0; i < manager.houses.length; i ++) {
+                    if (manager.houses[i]._id == response._id) {
+                      manager.houses.splice(i, 1, new House(response))
                     }
-                    utils.restPost('/api/addOwner', data).then(
-                      response => {
-                        if (response) {
-                          manager.owners.push(new Owner(response))
-                          manager.sortOwner()
-                          $('#house-modal').modal('hide')
-                        }
-                      }
-                    )
-                  } else {
-                    $('#house-modal').modal('hide')
                   }
+                  self.saveOwner()
                 }
               }
             )
           }
         })
+      },
+      saveOwner() {
+        let self = this
+        if (manager.isNewOwner(self.house.owner)) {
+          let data = {
+            _id: self.house.owner,
+            lord: manager.user._id
+          }
+          utils.restPost('/api/addOwner', data).then(
+            response => {
+              if (response) {
+                manager.owners.push(new Owner(response))
+                manager.sortOwner()
+                $('#house-modal').modal('hide')
+              }
+            }
+          )
+        } else {
+          $('#house-modal').modal('hide')
+        }
       }
     }
   }

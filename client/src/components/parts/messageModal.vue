@@ -9,9 +9,9 @@
           {{message}}
         </div>
         <div class="modal-footer">
-          <button type="button" :class="{'btn': true, 'btn-primary': type == 'info', 'btn-danger': type == 'warn', 'pull-right': true}" data-dismiss="modal" v-show="type != 'select'" v-on:click="excuteYes">OK</button>
-          <button type="button" :class="{'btn': true, 'btn-primary': type == 'select', 'btn-danger': type == 'warn'}" data-dismiss="modal" v-show="type == 'select'" v-on:click="excuteYes">YES</button>
-          <button type="button" :class="{'btn': true, 'btn-primary': type == 'select', 'btn-danger': type == 'warn'}" data-dismiss="modal" v-show="type == 'select'" v-on:click="excuteNo">NO</button>
+          <button type="button" :class="{'btn': true, 'btn-primary': type == 'info', 'btn-danger': type == 'warn', 'pull-right': true}" data-dismiss="modal" v-show="type != 'select'" v-on:click="excuteYes">確認</button>
+          <button type="button" :class="{'btn': true, 'btn-primary': type == 'select', 'btn-danger': type == 'warn'}" data-dismiss="modal" v-show="type == 'select'" v-on:click="excuteYes">はい</button>
+          <button type="button" :class="{'btn': true, 'btn-primary': type == 'select', 'btn-danger': type == 'warn'}" data-dismiss="modal" v-show="type == 'select'" v-on:click="excuteNo">いいえ</button>
         </div>
       </div>
     </div>
@@ -66,5 +66,11 @@
 <style scoped>
   #message-modal {
     z-index: 9999;
+  }
+  .modal-body {
+    min-height: 100px;
+  }
+  .btn {
+    width: 100px;
   }
 </style>
