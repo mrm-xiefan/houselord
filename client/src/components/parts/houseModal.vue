@@ -5,7 +5,7 @@
 
         <div class="modal-header gradient-header">
           <button type="button" class="close" id="close-detail" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+          <span aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></span></button>
           <h4 class="modal-title">シェアハウス詳細</h4>
         </div>
 
@@ -17,48 +17,61 @@
             <div class="select-data">
               <div class="data-row box-2column category">
                 <div class="modal-item btn-group">
-                  <input v-model="house.owner" type="text" class="form-control" data-toggle="dropdown" placeholder="オーナー">
+                  <input v-model="house.owner" type="text" class="form-control" data-toggle="dropdown" placeholder="入力">
+                  <span class="input-group-label">ｵｰﾅｰ:</span>
                   <ul class="dropdown-menu">
                     <li v-for="owner in manager.owners" v-if="owner.visible(house.owner)"><a v-on:click="setOwner(house, owner)">{{owner._id}}</a></li>
                   </ul>
                 </div>
                 <div class="modal-item">
-                  <input v-model="house.name" type="text" class="form-control" placeholder="建築名">
+                  <input v-model="house.name" type="text" class="form-control" placeholder="入力">
+                  <span class="input-group-label">名前:</span>
                 </div>
               </div>
               <div class="data-row category">
                 <div class="modal-item">
-                  <input v-model="house.address" type="text" class="form-control" placeholder="アドレス">
+                  <input v-model="house.address" type="text" class="form-control" placeholder="入力">
+                  <span class="input-group-label">ｱﾄﾞﾚｽ:</span>
                 </div>
               </div>
               <div class="data-row category">
                 <div class="modal-item">
-                  <input v-model="house.note" type="text" class="form-control" placeholder="備考">
+                  <input v-model="house.note" type="text" class="form-control" placeholder="入力">
+                  <span class="input-group-label">備考:</span>
                 </div>
               </div>
             </div>
           </div>
-          <div class="room-form" v-for="room in house.rooms">
+          <div class="room-form" v-for="(room, index) in house.rooms">
+            <div class="delete-room bg-purple" v-on:click.stop="deleteRoom(index)">
+              <i class="glyphicon glyphicon-remove"></i>
+            </div>
             <div class="data-row box-3column">
-              <div class="modal-item">
-                <input v-model="room.number" type="text" class="form-control" placeholder="ルーム番号">
+              <div class="modal-item long-label">
+                <input v-model="room.number" type="text" class="form-control" placeholder="入力">
+                <span class="input-group-label">ルーム番号:</span>
               </div>
-              <div class="modal-item">
-                <input v-model="room.size" type="text" class="form-control" placeholder="面積・間取り">
+              <div class="modal-item long-label">
+                <input v-model="room.size" type="text" class="form-control" placeholder="入力">
+                <span class="input-group-label">面積・間取:</span>
               </div>
-              <div class="modal-item">
-                <input v-model="room.floor" type="text" class="form-control" placeholder="階層・備考">
+              <div class="modal-item long-label">
+                <input v-model="room.floor" type="text" class="form-control" placeholder="入力">
+                <span class="input-group-label">階層・備考:</span>
               </div>
             </div>
             <div class="data-row box-3column">
-              <div class="modal-item">
-                <input v-model="room.contract" type="number" class="form-control" placeholder="契約金">
+              <div class="modal-item long-label">
+                <input v-model="room.contract" type="number" class="form-control" placeholder="入力">
+                <span class="input-group-label">契約金:</span>
               </div>
-              <div class="modal-item">
-                <input v-model="room.rent" type="number" class="form-control" placeholder="賃貸料">
+              <div class="modal-item long-label">
+                <input v-model="room.rent" type="number" class="form-control" placeholder="入力">
+                <span class="input-group-label">賃貸料:</span>
               </div>
-              <div class="modal-item">
-                <input v-model="room.expenses" type="number" class="form-control" placeholder="管理費など">
+              <div class="modal-item long-label">
+                <input v-model="room.expenses" type="number" class="form-control" placeholder="入力">
+                <span class="input-group-label">管理費など:</span>
               </div>
             </div>
           </div>
@@ -123,6 +136,9 @@
         }
         this.house.rooms.push(new Room(room))
       },
+      deleteRoom(index) {
+        this.house.rooms.splice(index, 1)
+      },
       saveHouse() {
         let self = this
         this.house.clearRoom()
@@ -148,6 +164,8 @@
                   for (let i = 0; i < manager.houses.length; i ++) {
                     if (manager.houses[i]._id == response._id) {
                       manager.houses.splice(i, 1, new House(response))
+                      manager.sortHouse()
+                      utils.event.$emit('REFRESH_HOUSE')
                     }
                   }
                   self.saveOwner()
@@ -228,22 +246,36 @@
   .data-row .modal-item {
     flex: 1 1 auto;
     margin: 0 5px;
+    position: relative;
   }
   .data-row .modal-item .btn {
-    height: 47px;
+    height: 46px;
     border: none;
+  }
+  .modal-item input {
+    padding-left: 50px;
+  }
+  .long-label input {
+    padding-left: 85px;
   }
   .data-row .modal-item .btn:focus,
   .btn-group.open .dropdown-toggle {
     background: #e6e6e6;
     box-shadow: none;
   }
+  .input-group-label {
+    position: absolute;
+    top: 13px;
+    left: 5px;
+    font-size: 14px;
+    color: #aaa;
+  }
   .data-row .modal-item label {
     display: none;
   }
   .data-row .modal-item input[type="text"],
   .data-row .modal-item input[type="number"] {
-    height: 47px;
+    height: 46px;
     background: #f4f4f4;
     border: none;
     border-radius: 4px;
@@ -257,6 +289,25 @@
   .room-form {
     padding: 10px 5px 10px 5px;
     border-top: 1px solid #eee;
+    position: relative;
+  }
+  .delete-room {
+    position: absolute;
+    right: -10px;
+    top: -15px;
+    padding: 3px;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    opacity: 0.7;
+    z-index: 10;
+  }
+  .delete-room i {
+    font-size: 20px;
+  }
+  .delete-room:hover {
+    opacity: 1;
   }
   .add-room {
     margin: 0px;

@@ -5,6 +5,7 @@ import login from '@/components/login'
 import register from '@/components/register'
 import error from '@/components/error'
 import house from '@/components/house'
+import room from '@/components/room'
 import owner from '@/components/owner'
 import publish from '@/components/publish'
 import finance from '@/components/finance'
@@ -21,7 +22,13 @@ let preloadHouse = (to, from, next) => {
   }
   next()
 }
-let preloadLord = (to, from, next) => {
+let preloadRoom = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  next()
+}
+let preloadOwner = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
   }
@@ -57,7 +64,8 @@ export default new Router({
     {name: 'logout', path: '/logout', beforeEnter: logout},
     {name: 'error', path: '/error', component: error},
     {name: 'house', path: '/house', component: house, beforeEnter: preloadHouse},
-    {name: 'owner', path: '/owner', component: owner, beforeEnter: preloadLord},
+    {name: 'room', path: '/room', component: room, beforeEnter: preloadRoom},
+    {name: 'owner', path: '/owner', component: owner, beforeEnter: preloadOwner},
     {name: 'publish', path: '/publish', component: publish, beforeEnter: preloadPublish},
     {name: 'finance', path: '/finance', component: finance, beforeEnter: preloadFinance},
     {path: '*', redirect: '/'}

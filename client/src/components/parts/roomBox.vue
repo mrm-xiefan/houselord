@@ -1,16 +1,16 @@
 <template>
-  <div class="house-box" v-on:click="openHouse(house)">
+  <div class="room-box" v-on:click="openRoom(room)">
     <div class="image-container">
-      <div class="house-tool delete-tool bg-purple" v-on:click.stop="deleteHouse(house)">
+      <div class="room-tool delete-tool bg-purple" v-on:click.stop="deleteRoom(room)">
         <i class="glyphicon glyphicon-trash"></i>
       </div>
-      <div class="house-tool edit-tool bg-blue" v-on:click.stop="editHouse(house)">
+      <!-- <div class="room-tool edit-tool bg-blue" v-on:click.stop="editRoom(room)">
         <i class="glyphicon glyphicon-edit"></i>
-      </div>
-      <img class="resize-picture" :src="house.getPhoto()"></img>
+      </div> -->
+      <!-- <img class="resize-picture" :src="room.getPhoto()"></img> -->
     </div>
-    <div class="house-info text-muted">
-      {{house.name}}
+    <div class="room-info text-muted">
+      {{room.number}}
     </div>
   </div>
 </template>
@@ -21,20 +21,19 @@
   import utils from '@/tool/utils.js'
 
   export default {
-    props: ['manager', 'house'],
+    props: ['manager', 'room'],
     methods: {
-      deleteHouse(house) {
+      deleteRoom(room) {
         utils.event.$emit(
           'SHOW_MESSAGE',
           'I002',
           () => {
-            utils.restPost('/api/deleteHouse', house.toJSON()).then(
+            utils.restPost('/api/deleteRoom', room.toJSON()).then(
               response => {
                 if (response) {
-                  for (let i = 0; i < manager.houses.length; i ++) {
-                    if (manager.houses[i]._id == house._id) {
-                      manager.houses.splice(i, 1)
-                      utils.event.$emit('REFRESH_HOUSE')
+                  for (let i = 0; i < manager.rooms.length; i ++) {
+                    if (manager.rooms[i]._id == room._id) {
+                      manager.rooms.splice(i, 1)
                       break
                     }
                   }
@@ -44,18 +43,18 @@
           }
         )
       },
-      editHouse(house) {
-        utils.event.$emit('HOUSE_DETAIL', utils.clone(house))
+      editRoom(room) {
+        utils.event.$emit('HOUSE_DETAIL', utils.clone(room))
       },
-      openHouse(house) {
-        this.$router.push({name: 'room'})
+      openRoom(room) {
+        console.log('open')
       }
     }
   }
 </script>
 
 <style scoped>
-  .house-box {
+  .room-box {
     float: left;
     width: 200px;
     height: auto;
@@ -66,7 +65,7 @@
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
     cursor: pointer;
   }
-  .house-box:hover {
+  .room-box:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
   }
   .image-container {
@@ -82,7 +81,7 @@
     width: 100%;
     height: auto;
   }
-  .house-tool {
+  .room-tool {
     position: absolute;
     bottom: 0px;
     padding: 5px;
@@ -95,7 +94,7 @@
     z-index: 100;
     opacity: 0.7;
   }
-  .house-tool:hover {
+  .room-tool:hover {
     opacity: 1;
   }
   .delete-tool {
@@ -104,7 +103,7 @@
   .edit-tool {
     right: 0px;
   }
-  .house-info {
+  .room-info {
     width: 100%;
     text-align: center;
     padding: 10px;

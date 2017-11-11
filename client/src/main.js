@@ -29,7 +29,9 @@ import Vue from 'vue'
 import router from '@/tool/router.js'
 utils.router = router
 import app from './app'
+import {VueMasonryPlugin} from 'vue-masonry'
 Vue.config.productionTip = false
+Vue.use(VueMasonryPlugin)
 
 router.beforeEach((to, from, next) => {
   manager.controller.setApp(to)

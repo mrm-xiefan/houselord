@@ -1,11 +1,8 @@
 <template>
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
-      <div class="button-top bg-purple">
-        <button class="btn" type="button" v-on:click="addHouse()"><i class="fa fa-plus"></i>登録</button>
-      </div>
-      <div class="houses-area" v-masonry transition-duration="0.3s" item-selector=".house-box">
-        <houseBox :manager="manager" :house="house" v-masonry-tile v-for="house in manager.houses" :key="house._id"></houseBox>
+      <div class="room-area">
+        <roomBox :manager="manager" :room="room" v-masonry-tile v-for="room in manager.rooms" :key="room._id"></roomBox>
       </div>
       <div class="room-area row">
       </div>
@@ -18,23 +15,15 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
-  import House from '@/store/house.js'
-  import houseBox from '@/components/parts/houseBox'
+  import Room from '@/store/room.js'
+  import roomBox from '@/components/parts/roomBox'
   export default {
     props: ['manager'],
     mounted() {
       $('body').layout('fix')
     },
     components: {
-      houseBox: houseBox
-    },
-    created() {
-      let self = this
-      utils.event.$on('REFRESH_HOUSE', () => {
-        self.$nextTick(() => {
-          self.$redrawVueMasonry()
-        })
-      })
+      roomBox: roomBox
     },
     methods: {
       closeSide() {
@@ -42,21 +31,9 @@
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
       },
-      addHouse() {
-        let house = {
-          isNew: true,
-          lord: manager.user._id,
-          owner: '',
-          name: '',
-          address: '',
-          note: '',
-          image: null
-        }
-        utils.event.$emit('HOUSE_DETAIL', new House(house))
+      addRoom() {
+        console.log('add room')
       }
-    },
-    beforeDestroy() {
-      utils.event.$off('REFRESH_HOUSE')
     }
   }
 </script>
@@ -92,7 +69,7 @@
     margin-right: 3px;
     font-size: 14px;
   }
-  .houses-area {
+  .rooms-area {
     width: 100%;
     overflow: hidden;
   }
