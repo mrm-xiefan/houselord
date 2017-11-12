@@ -22,6 +22,21 @@ class HouseService {
       }
     )
   }
+  getHouse(_id, next) {
+    mongo.findAll(
+      'houses',
+      {_id: ObjectId(_id), deleted: {$ne: true}},
+      {},
+      (error, results) => {
+        if (error) {
+          next(error, null)
+        }
+        else {
+          next(null, results[0])
+        }
+      }
+    )
+  }
   insertHouse(user, house, next) {
     house.cuser = user._id
     house.uuser = user._id

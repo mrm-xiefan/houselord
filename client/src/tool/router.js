@@ -13,6 +13,7 @@ import finance from '@/components/finance'
 import CONST from '@/store/const.js'
 import manager from '@/store/manager.js'
 import utils from '@/tool/utils.js'
+import House from '@/store/house.js'
 
 Vue.use(Router)
 
@@ -26,7 +27,20 @@ let preloadRoom = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
   }
-  next()
+  if (to.params.house) {
+    utils.restGet('/api/getHouseDetail', {_id: to.params.house}).then(
+      response => {
+        if (response) {
+          manager.selectedHouse = new House(response.house)
+          next()
+        }
+      }
+    )
+  }
+  else {
+    manager.selectedHouse = null
+    next()
+  }
 }
 let preloadOwner = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
@@ -64,7 +78,7 @@ export default new Router({
     {name: 'logout', path: '/logout', beforeEnter: logout},
     {name: 'error', path: '/error', component: error},
     {name: 'house', path: '/house', component: house, beforeEnter: preloadHouse},
-    {name: 'room', path: '/room', component: room, beforeEnter: preloadRoom},
+    {name: 'room', path: '/room/:house', component: room, beforeEnter: preloadRoom},
     {name: 'owner', path: '/owner', component: owner, beforeEnter: preloadOwner},
     {name: 'publish', path: '/publish', component: publish, beforeEnter: preloadPublish},
     {name: 'finance', path: '/finance', component: finance, beforeEnter: preloadFinance},

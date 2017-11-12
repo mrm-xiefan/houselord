@@ -1,10 +1,41 @@
 <template>
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
-      <div class="room-area">
-        <roomBox :manager="manager" :room="room" v-masonry-tile v-for="room in manager.rooms" :key="room._id"></roomBox>
-      </div>
-      <div class="room-area row">
+      <div class="house-detail" v-if="manager.selectedHouse">
+        <div class="box box-solid box-primary">
+          <div class="box-header">
+            {{manager.selectedHouse.name}}
+            <div class="pull-right box-tools">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="box-body text-blue">
+            <div class="house-photo">
+              <img class="resize-picture" :src="manager.selectedHouse.getPhoto()"></img>
+            </div>
+            <div class="house-info">
+              <div class="house-row">
+                <div class="house-title"><i class="fa fa-user"></i> オーナー：</div><div class="house-content">{{manager.selectedHouse.owner}}</div>
+              </div>
+              <div class="house-row">
+                <div class="house-title"><i class="fa fa-map-pin"></i> アドレス：</div><div class="house-content">{{manager.selectedHouse.address}}</div>
+              </div>
+              <div class="house-row">
+                <div class="house-title"><i class="fa fa-sticky-note"></i> 備考：</div><div class="house-content">{{manager.selectedHouse.note}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" v-for="index in Math.ceil(manager.selectedHouse.rooms.length / 2)">
+          <div class="col-md-6">
+            <roomBox :manager="manager" :room="manager.selectedHouse.rooms[(index - 1) * 2]"></roomBox>
+          </div>
+          <div class="col-md-6" v-if="manager.selectedHouse.rooms[(index - 1) * 2 + 1]">
+            <roomBox :manager="manager" :room="manager.selectedHouse.rooms[(index - 1) * 2 + 1]"></roomBox>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -21,6 +52,7 @@
     props: ['manager'],
     mounted() {
       $('body').layout('fix')
+      $('.box').boxWidget()
     },
     components: {
       roomBox: roomBox
@@ -34,6 +66,9 @@
       addRoom() {
         console.log('add room')
       }
+    },
+    beforeDestroy() {
+      manager.selectedHouse = null
     }
   }
 </script>
@@ -42,35 +77,38 @@
   section.content {
     height: 100%;
   }
-  .button-top {
+  .box-body {
     display: flex;
-    justify-content: flex-end;
-    padding: 10px;
   }
-  .button-top .btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 85px;
-    font-size: 13px;
-    color: #5855E8;
-    background: #f0f1f6;
-    border: solid 1px #5855E8;
-    border-radius: 25px;
-    margin-left: 10px;
+  .house-photo {
+    border-radius: 3px;
+    width: 180px;
+    height: auto;
+    margin: 10px;
   }
-  .button-top .btn:hover {
-    opacity: 0.7;
-  }
-  .button-top .btn:focus {
-    outline: none;
-  }
-  .button-top .btn i {
-    margin-right: 3px;
-    font-size: 14px;
-  }
-  .rooms-area {
+  .resize-picture {
+    border-radius: 3px;
     width: 100%;
+    height: auto;
+    border: 1px solid #0073b7;
+  }
+  .house-info {
+    width: calc(100% - 180px);
+  }
+  .house-row {
+    margin: 10px;
+    padding: 10px;
+    font-size: 18px;
     overflow: hidden;
+    background: #eee;
+    border-radius: 5px;
+  }
+  .house-title {
+    width: 120px;
+    float: left;
+  }
+  .house-content {
+    float: left;
+    width: calc(100% - 120px);
   }
 </style>

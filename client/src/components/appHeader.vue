@@ -13,9 +13,6 @@
       </a>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <li v-if="manager.controller.currentApp != 'house' && manager.controller.currentApp != 'owner' && manager.controller.currentApp != 'publish' && manager.controller.currentApp != 'finance'">
-            <a v-on:click="backward()"><i class="fa fa-mail-reply"></i></a>
-          </li>
           <li>
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
           </li>

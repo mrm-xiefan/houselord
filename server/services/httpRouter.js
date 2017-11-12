@@ -52,5 +52,17 @@ router.post('/addOwner', (req, res) => {
     res.json({error: error, data: owner})
   })
 })
+router.get('/getHouseDetail', (req, res) => {
+  let url_parts = url.parse(req.url, true)
+  logger.info('getHouseDetail: ' + JSON.stringify(url_parts.query))
+  houseService.getHouse(url_parts.query._id, (error, house) => {
+    if (error) {
+      res.json({error: error, data: null})
+    }
+    else {
+      res.json({error: null, data: {house: house}})
+    }
+  })
+})
 
 module.exports = router

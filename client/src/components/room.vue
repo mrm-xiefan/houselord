@@ -5,7 +5,6 @@
     <appSideMenu :manager="manager"></appSideMenu>
     <roomBody :manager="manager"></roomBody>
     <appFooter :manager="manager"></appFooter>
-    <houseModal :manager="manager"></houseModal>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
     <div class="control-sidebar-bg"></div>
@@ -22,7 +21,6 @@
   import appSideMenu from '@/components/appSideMenu'
   import roomBody from '@/components/roomBody'
   import appFooter from '@/components/appFooter'
-  import houseModal from '@/components/parts/houseModal'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
   export default {
@@ -33,7 +31,6 @@
       appSideMenu: appSideMenu,
       roomBody: roomBody,
       appFooter: appFooter,
-      houseModal: houseModal,
       messageModal: messageModal,
       appControlPanel: appControlPanel
     },

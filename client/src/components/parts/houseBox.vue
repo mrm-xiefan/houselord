@@ -48,7 +48,8 @@
         utils.event.$emit('HOUSE_DETAIL', utils.clone(house))
       },
       openHouse(house) {
-        this.$router.push({name: 'room'})
+        manager.selectedHouse = house
+        this.$router.push({path: '/room/' + house._id})
       }
     }
   }

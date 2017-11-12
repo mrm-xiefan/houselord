@@ -267,7 +267,7 @@ class Utils {
     if (splitedNum[1]) {
       replacedNum = replacedNum + delimiter + splitedNum[1]
     }
-    return '¥' + replacedNum
+    return replacedNum + ' 円'
   }
   formatNumber(number) {
     if (!number && number !== 0) {

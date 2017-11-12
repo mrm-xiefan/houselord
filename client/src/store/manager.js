@@ -15,6 +15,8 @@ class Manager {
     this.locker = 'unlock'
     this.houses = []
     this.owners = []
+
+    this.selectedHouse = null
   }
 
   login(data, next) {

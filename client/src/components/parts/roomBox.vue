@@ -1,16 +1,64 @@
 <template>
-  <div class="room-box" v-on:click="openRoom(room)">
-    <div class="image-container">
-      <div class="room-tool delete-tool bg-purple" v-on:click.stop="deleteRoom(room)">
-        <i class="glyphicon glyphicon-trash"></i>
+  <div :class="['box', 'box-solid', room.isRented()? 'bg-green-gradient': 'bg-light-blue-gradient', 'room-box']">
+    <div class="box-header">
+      {{room.number}}<span class="text-gray" v-if="room.size">（{{room.size}}）</span>
+      <div class="pull-right box-tools">
+        <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']">
+          <i class="fa fa-calendar"></i>
+        </button>
       </div>
-      <!-- <div class="room-tool edit-tool bg-blue" v-on:click.stop="editRoom(room)">
-        <i class="glyphicon glyphicon-edit"></i>
-      </div> -->
-      <!-- <img class="resize-picture" :src="room.getPhoto()"></img> -->
     </div>
-    <div class="room-info text-muted">
-      {{room.number}}
+    <div class="box-body">
+      <div class="info-row">
+        <div class="money-box">
+          <div class="money-row">
+            <div class="money-title"><i class="fa fa-money"></i> 契約金：</div><div class="money-amount">{{room.getContract()}}</div>
+          </div>
+          <div class="money-row">
+            <div class="money-title"><i class="fa fa-money"></i> 賃貸料：</div><div class="money-amount">{{room.getRent()}} / 月</div>
+          </div>
+          <div class="money-row">
+            <div class="money-title"><i class="fa fa-money"></i> 保証金：</div><div class="money-amount">{{room.getExpenses()}}</div>
+          </div>
+        </div>
+        <div class="status-box">
+          <!-- <div class="badge bg-blue" v-if="room.isReserved()">
+            予約中
+          </div> -->
+          <div class="badge bg-green" v-if="room.isRented()">
+            レンタル中
+          </div>
+          <div class="badge bg-red" v-if="room.isUnpaid()">
+            賃貸料未払い
+          </div>
+        </div>
+      </div>
+      <div class="resident-row">
+        <div class="info-row">
+          <div class="resident-box">
+            <div class="resident-title"><i class="fa fa-user"></i> 居住者：</div><div class="resident-content">山田太郎</div>
+          </div>
+          <div class="resident-box">
+            <div class="resident-title"><i class="fa fa-phone"></i> 連絡先：</div><div class="resident-content">08011112222</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="resident-note">
+            <div class="resident-title"><i class="fa fa-sticky-note"></i> 備 考：</div><div class="resident-content">連絡取れにくい。留守が多い。やばい！とにかくやばい！お金持ち。摂取対象！</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box-footer no-padding">
+      <div class="room-button">
+        契約
+      </div>
+      <div class="room-button">
+        解約
+      </div>
+      <div class="room-button">
+        支払
+      </div>
     </div>
   </div>
 </template>
@@ -22,90 +70,80 @@
 
   export default {
     props: ['manager', 'room'],
-    methods: {
-      deleteRoom(room) {
-        utils.event.$emit(
-          'SHOW_MESSAGE',
-          'I002',
-          () => {
-            utils.restPost('/api/deleteRoom', room.toJSON()).then(
-              response => {
-                if (response) {
-                  for (let i = 0; i < manager.rooms.length; i ++) {
-                    if (manager.rooms[i]._id == room._id) {
-                      manager.rooms.splice(i, 1)
-                      break
-                    }
-                  }
-                }
-              }
-            )
-          }
-        )
-      },
-      editRoom(room) {
-        utils.event.$emit('HOUSE_DETAIL', utils.clone(room))
-      },
-      openRoom(room) {
-        console.log('open')
-      }
+    mounted() {
+
     }
   }
 </script>
 
 <style scoped>
   .room-box {
-    float: left;
-    width: 200px;
-    height: auto;
-    margin: 10px;
-    padding: 0px;
-    background: #f4f4f4;
-    border-radius: 3px;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
-    cursor: pointer;
   }
-  .room-box:hover {
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
+  .box-header {
+    font-size: 20px;
   }
-  .image-container {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    width: 100%;
-    height: auto;
-    position: relative;
+  .box-header span {
+    font-size: 16px;
   }
-  .resize-picture {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    width: 100%;
-    height: auto;
+  .info-row {
+    display: flex;
+    align-items: center;
   }
-  .room-tool {
-    position: absolute;
-    bottom: 0px;
-    padding: 5px;
+  .money-box {
+    width: calc(70%);
+  }
+  .money-row {
+    margin: 10px;
+    display: flex;
+  }
+  .money-title {
+    width: 80px;
+  }
+  .status-box {
+    width: calc(30%);
+    height: 100%;
+  }
+  .badge {
     margin: 5px;
-    font-size: 9px;
-    text-align: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    z-index: 100;
-    opacity: 0.7;
   }
-  .room-tool:hover {
-    opacity: 1;
+  .resident-row {
+    padding: 10px 5px 10px 5px;
+    border: 1px solid #00a65a;
+    border-radius: 5px;
   }
-  .delete-tool {
-    right: 30px;
+  .resident-box {
+    margin: 5px;
+    width: calc(50%);
+    overflow: hidden;
   }
-  .edit-tool {
-    right: 0px;
+  .resident-title {
+    width: 80px;
+    float: left;
   }
-  .room-info {
-    width: 100%;
-    text-align: center;
-    padding: 10px;
+  .resident-content {
+    float: left;
+    width: calc(100% - 80px);
+  }
+  .resident-note {
+    margin: 5px;
+    overflow: hidden;
+  }
+  .box-footer {
+    display: flex;
+    justify-content: center;
+  }
+  .room-button {
+    color: #333;
+    font-size: 15px;
+    padding: 15px;
+    cursor: pointer;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .room-button:hover {
+    box-shadow:inset 0 1px 5px rgba(0, 0, 0, 0.5);
   }
 </style>

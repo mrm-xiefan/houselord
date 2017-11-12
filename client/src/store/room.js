@@ -1,20 +1,20 @@
 import manager from '@/store/manager.js'
 import CONST from './const.js'
 import utils from '@/tool/utils.js'
+import Resident from '@/store/resident.js'
 
 class Room {
   constructor(data) {
     this.number = data.number
     this.size = data.size
     this.floor = data.floor
-    this.contract = data.contract
-    this.rent = data.rent
-    this.expenses = data.expenses
-    this.photos = []
-    if (data.photos) {
-      for (let i = 0; i < data.photos.length; i ++) {
-        this.photos.push(data.photos[i])
-      }
+    this.contract = Number(data.contract)
+    this.rent = Number(data.rent)
+    this.expenses = Number(data.expenses)
+
+    this.resident = null
+    if (data.resident) {
+      this.resident = new Resident(data.resident)
     }
   }
   isValid() {
@@ -23,15 +23,32 @@ class Room {
     }
     return true
   }
+  getContract() {
+    return utils.formatMoney(this.contract)
+  }
+  getRent() {
+    return utils.formatMoney(this.rent)
+  }
+  getExpenses() {
+    return utils.formatMoney(this.expenses)
+  }
+  isReserved() {
+    return true
+  }
+  isRented() {
+    return true
+  }
+  isUnpaid() {
+    return true
+  }
   toJSON() {
     return {
       number: this.number,
       size: this.size,
       floor: this.floor,
-      contract: this.contract,
-      rent: this.rent,
-      expenses: this.expenses,
-      photos: this.photos
+      contract: Number(this.contract),
+      rent: Number(this.rent),
+      expenses: Number(this.expenses)
     }
   }
 }

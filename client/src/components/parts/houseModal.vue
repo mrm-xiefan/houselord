@@ -71,7 +71,7 @@
               </div>
               <div class="modal-item long-label">
                 <input v-model="room.expenses" type="number" class="form-control" placeholder="入力">
-                <span class="input-group-label">管理費など:</span>
+                <span class="input-group-label">保証金:</span>
               </div>
             </div>
           </div>
@@ -108,7 +108,7 @@
     components: {
       thumbnailAttachment: thumbnailAttachment
     },
-    created() {
+    mounted() {
       let self = this
       utils.event.$on('HOUSE_DETAIL', (house) => {
         self.house = house

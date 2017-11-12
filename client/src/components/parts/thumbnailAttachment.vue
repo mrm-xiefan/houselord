@@ -88,7 +88,7 @@
           // showCancel: false,
           showClose: false,
           showBrowse: true,
-          browseOnZoneClick: true,
+          browseOnZoneClick: false,
           // removeFromPreviewOnError: false,
           // previewFileIcon: '<i class="fa fa-file"></i>',
           browseIcon: '<i class="fa fa-folder-open-o"></i>',
@@ -121,18 +121,18 @@
                   '{delete}' +
                 '</div>\n' +
               '</div>',
-            actionDelete: '<button type="button" class="kv-file-remove btn btn-default" {dataUrl} {dataKey}><i class="fa fa-trash-o"></i> Remove</button>',
+            // actionDelete: '<button type="button" class="kv-file-remove btn btn-default" {dataUrl} {dataKey}><i class="fa fa-trash-o"></i> Remove</button>',
             // actionUpload: ''
             preview:
-              '<div class="file-preview" style="min-height: 205px; width: 100%; border: 1px solid #ddd; border-bottom: none;">\n' +
+              '<div class="file-preview" style="min-height: 205px; width: 100%; border: 1px solid #ddd;">\n' +
                 '{close}' +
-                '<div class="{dropClass}" style="font-size: 20px; min-height: 205px; padding: 0px; border: none; height: 100%; text-align: center; vertical-align: middle;">\n' +
+                // '<div class="{dropClass}" style="font-size: 20px; min-height: 205px; padding: 0px; border: none; height: 100%; text-align: center; vertical-align: middle;">\n' +
                   '<div class="file-preview-thumbnails" style="font-size: 14px; overflow: hidden; width: 100%;">\n' +
                   '</div>\n' +
                   '<div class="clearfix"></div>' +
                   '<div class="file-preview-status text-center text-success"></div>\n' +
                   '<div class="kv-fileinput-error"></div>\n' +
-                '</div>\n' +
+                // '</div>\n' +
               '</div>',
             main1:
               '<div class="row">\n' +
@@ -140,15 +140,15 @@
                   '{preview}\n' +
                   '<div class="kv-upload-progress hide"></div>\n' +
                 '</div>\n' +
-              '</div>\n' +
-              '<div class="input-group {class}">\n' +
-                '{caption}\n' +
-                '<div class="input-group-btn">\n' +
-                  '{remove}\n' +
-                  '{cancel}\n' +
-                  '{upload}\n' +
-                  '{browse}\n' +
-                '</div>\n' +
+              // '</div>\n' +
+              // '<div class="input-group {class}">\n' +
+              //   '{caption}\n' +
+              //   '<div class="input-group-btn">\n' +
+              //     '{remove}\n' +
+              //     '{cancel}\n' +
+              //     '{upload}\n' +
+              //     '{browse}\n' +
+              //   '</div>\n' +
               '</div>'
           },
           previewTemplates: {
