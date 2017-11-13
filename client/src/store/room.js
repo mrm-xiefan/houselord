@@ -8,14 +8,9 @@ class Room {
     this.number = data.number
     this.size = data.size
     this.floor = data.floor
-    this.contract = Number(data.contract)
+    this.keyMoney = Number(data.keyMoney)
     this.rent = Number(data.rent)
-    this.expenses = Number(data.expenses)
-
-    this.resident = null
-    if (data.resident) {
-      this.resident = new Resident(data.resident)
-    }
+    this.deposit = Number(data.deposit)
   }
   isValid() {
     if (!this.number || this.number == '') {
@@ -23,14 +18,14 @@ class Room {
     }
     return true
   }
-  getContract() {
-    return utils.formatMoney(this.contract)
+  getKeyMoney() {
+    return utils.formatMoney(this.keyMoney)
   }
   getRent() {
     return utils.formatMoney(this.rent)
   }
-  getExpenses() {
-    return utils.formatMoney(this.expenses)
+  getDeposit() {
+    return utils.formatMoney(this.deposit)
   }
   isReserved() {
     return true
@@ -46,9 +41,9 @@ class Room {
       number: this.number,
       size: this.size,
       floor: this.floor,
-      contract: Number(this.contract),
+      keyMoney: Number(this.keyMoney),
       rent: Number(this.rent),
-      expenses: Number(this.expenses)
+      deposit: Number(this.deposit)
     }
   }
 }

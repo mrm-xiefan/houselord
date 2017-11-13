@@ -62,16 +62,16 @@
             </div>
             <div class="data-row box-3column">
               <div class="modal-item long-label">
-                <input v-model="room.contract" type="number" class="form-control" placeholder="入力">
-                <span class="input-group-label">契約金:</span>
+                <input v-model="room.keyMoney" type="number" class="form-control" placeholder="入力">
+                <span class="input-group-label">礼金:</span>
               </div>
               <div class="modal-item long-label">
                 <input v-model="room.rent" type="number" class="form-control" placeholder="入力">
-                <span class="input-group-label">賃貸料:</span>
+                <span class="input-group-label">家賃:</span>
               </div>
               <div class="modal-item long-label">
-                <input v-model="room.expenses" type="number" class="form-control" placeholder="入力">
-                <span class="input-group-label">保証金:</span>
+                <input v-model="room.deposit" type="number" class="form-control" placeholder="入力">
+                <span class="input-group-label">敷金:</span>
               </div>
             </div>
           </div>
@@ -130,9 +130,9 @@
           number: '',
           size: '',
           floor: '',
-          contract: '',
+          keyMoney: '',
           rent: '',
-          expenses: ''
+          deposit: ''
         }
         this.house.rooms.push(new Room(room))
       },

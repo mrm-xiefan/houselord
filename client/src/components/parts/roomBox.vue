@@ -1,5 +1,5 @@
 <template>
-  <div :class="['box', 'box-solid', room.isRented()? 'bg-green-gradient': 'bg-light-blue-gradient', 'room-box']">
+  <div :class="['box', 'box-solid', room.isRented()? 'bg-rent-gradient': 'bg-not-rent-gradient', 'room-box']">
     <div class="box-header">
       {{room.number}}<span class="text-gray" v-if="room.size">（{{room.size}}）</span>
       <div class="pull-right box-tools">
@@ -12,13 +12,13 @@
       <div class="info-row">
         <div class="money-box">
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 契約金：</div><div class="money-amount">{{room.getContract()}}</div>
+            <div class="money-title"><i class="fa fa-money"></i> 契約金：</div><div class="money-amount">{{room.getKeyMoney()}}</div>
           </div>
           <div class="money-row">
             <div class="money-title"><i class="fa fa-money"></i> 賃貸料：</div><div class="money-amount">{{room.getRent()}} / 月</div>
           </div>
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 保証金：</div><div class="money-amount">{{room.getExpenses()}}</div>
+            <div class="money-title"><i class="fa fa-money"></i> 保証金：</div><div class="money-amount">{{room.getDeposit()}}</div>
           </div>
         </div>
         <div class="status-box">
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div class="box-footer no-padding">
-      <div class="room-button">
+      <div class="room-button" v-on:click="deal(room)">
         契約
       </div>
       <div class="room-button">
@@ -70,8 +70,10 @@
 
   export default {
     props: ['manager', 'room'],
-    mounted() {
-
+    methods: {
+      deal(room) {
+        utils.event.$emit('CONTRACT_DETAIL', room)
+      }
     }
   }
 </script>
@@ -79,6 +81,26 @@
 <style scoped>
   .room-box {
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
+  }
+  .bg-rent-gradient {
+    background: #00a65a;
+    background: -webkit-linear-gradient(bottom, #00a65a, #00ca6d);
+    background: linear-gradient(to top right, #00a65a, #00ca6d);
+    background: -ms-linear-gradient(bottom, #00a65a, #00ca6d) !important;
+    background: -moz-linear-gradient(center bottom, #00a65a 0%, #00ca6d 100%) !important;
+    background: -o-linear-gradient(#00ca6d, #00a65a) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ca6d', endColorstr='#00a65a', GradientType=0) !important;
+    color: #fff;
+  }
+  .bg-not-rent-gradient {
+    background: #3c8dbc;
+    background: -webkit-linear-gradient(bottom, #3c8dbc, #67a8ce);
+    background: linear-gradient(to top right, #3c8dbc, #67a8ce);
+    background: -ms-linear-gradient(bottom, #3c8dbc, #67a8ce) !important;
+    background: -moz-linear-gradient(center bottom, #3c8dbc 0%, #67a8ce 100%) !important;
+    background: -o-linear-gradient(#67a8ce, #3c8dbc) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#67a8ce', endColorstr='#3c8dbc', GradientType=0) !important;
+    color: #fff;
   }
   .box-header {
     font-size: 20px;
