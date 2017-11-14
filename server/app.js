@@ -11,7 +11,7 @@ import logger from './services/logger.js'
 import mongo from './services/mongo.js'
 import utils from './services/utils.js'
 import httpRouter from './services/httpRouter.js'
-import socketRouter from './services/socketRouter.js'
+// import socketRouter from './services/socketRouter.js'
 import userService from './services/userService.js'
 import dataService from './services/dataService.js'
 
@@ -271,5 +271,5 @@ mongo.init(() => {
   server.listen(conf.port)
   server.on('listening', onListening)
 
-  socketRouter.init(server, store)
+  // socketRouter.init(server, store)
 })

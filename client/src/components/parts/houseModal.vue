@@ -62,15 +62,15 @@
             </div>
             <div class="data-row box-3column">
               <div class="modal-item long-label">
-                <input v-model="room.keyMoney" type="number" class="form-control" placeholder="入力">
+                <input v-model="room.keyMoney" type="number" step=1000 class="form-control" placeholder="入力">
                 <span class="input-group-label">礼金:</span>
               </div>
               <div class="modal-item long-label">
-                <input v-model="room.rent" type="number" class="form-control" placeholder="入力">
+                <input v-model="room.rent" type="number" step=1000 class="form-control" placeholder="入力">
                 <span class="input-group-label">家賃:</span>
               </div>
               <div class="modal-item long-label">
-                <input v-model="room.deposit" type="number" class="form-control" placeholder="入力">
+                <input v-model="room.deposit" type="number" step=1000 class="form-control" placeholder="入力">
                 <span class="input-group-label">敷金:</span>
               </div>
             </div>
@@ -82,7 +82,7 @@
 
         <div class="modal-footer">
           <button type="button" id="close-house-detail" class="btn btn-cancel" data-dismiss="modal" aria-label="Close">キャンセル</button>
-          <button type="button" id="save-house-detail" class="btn btn-create" :disabled="!house || !house.lord || !house.name" v-on:click="saveHouse()">保存</button>
+          <button type="button" id="save-house-detail" class="btn btn-create" :disabled="!house || !house.isValid()" v-on:click="saveHouse()">保存</button>
         </div>
       </div>
     </div>
@@ -126,6 +126,7 @@
         house.owner = owner._id
       },
       addRoom() {
+        this.house.clearRoom()
         let room = {
           number: '',
           size: '',
@@ -297,14 +298,14 @@
     top: -15px;
     padding: 3px;
     text-align: center;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     opacity: 0.7;
     z-index: 10;
   }
   .delete-room i {
-    font-size: 20px;
+    font-size: 30px;
   }
   .delete-room:hover {
     opacity: 1;

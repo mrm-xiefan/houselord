@@ -58,7 +58,7 @@
 <style scoped>
   .house-box {
     float: left;
-    width: 200px;
+    width: 280px;
     height: auto;
     margin: 10px;
     padding: 0px;
@@ -88,10 +88,10 @@
     bottom: 0px;
     padding: 5px;
     margin: 5px;
-    font-size: 9px;
+    font-size: 24px;
     text-align: center;
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     z-index: 100;
     opacity: 0.7;
@@ -100,10 +100,10 @@
     opacity: 1;
   }
   .delete-tool {
-    right: 30px;
+    right: 55px;
   }
   .edit-tool {
-    right: 0px;
+    right: 5px;
   }
   .house-info {
     width: 100%;

@@ -1,7 +1,7 @@
 import manager from '@/store/manager.js'
 import CONST from './const.js'
 import utils from '@/tool/utils.js'
-import Resident from '@/store/resident.js'
+import Contract from '@/store/contract.js'
 
 class Room {
   constructor(data) {
@@ -11,6 +11,12 @@ class Room {
     this.keyMoney = Number(data.keyMoney)
     this.rent = Number(data.rent)
     this.deposit = Number(data.deposit)
+    this.contracts = []
+    if (data.contracts) {
+      for (let i = 0; i < data.contracts.length; i ++) {
+        this.contracts.push(new Contract(data.contracts[i]))
+      }
+    }
   }
   isValid() {
     if (!this.number || this.number == '') {
@@ -27,14 +33,47 @@ class Room {
   getDeposit() {
     return utils.formatMoney(this.deposit)
   }
+  getCurrentRental() {
+    let now = new Date()
+    now = now.valueOf()
+    for (let i = 0; i < this.contracts.length; i ++) {
+      if (this.contracts[i].start - 2592000000 <= now && now <= this.contracts[i].end) {
+        return this.contracts[i]
+      }
+    }
+    return null
+  }
+  getFutureRental() {
+    let now = new Date()
+    now = now.valueOf()
+    for (let i = 0; i < this.contracts.length; i ++) {
+      if (this.contracts[i].start - 2592000000 > now) {
+        return this.contracts[i]
+      }
+    }
+    return null
+  }
   isReserved() {
     return true
   }
   isRented() {
-    return true
+    if (this.getCurrentRental()) {
+      return true
+    }
+    else {
+      return false
+    }
   }
   isUnpaid() {
-    return true
+    for (let i = 0; i < this.contracts.length; i ++) {
+      let contract = this.contracts[i]
+      if (contract) {
+        if (contract.isUnpaid()) {
+          return true
+        }
+      }
+    }
+    return false
   }
   toJSON() {
     return {

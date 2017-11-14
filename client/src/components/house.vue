@@ -5,6 +5,7 @@
     <appSideMenu :manager="manager"></appSideMenu>
     <houseBody :manager="manager"></houseBody>
     <appFooter :manager="manager"></appFooter>
+    <addHouseButton :manager="manager"></addHouseButton>
     <houseModal :manager="manager"></houseModal>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
@@ -22,6 +23,7 @@
   import appSideMenu from '@/components/appSideMenu'
   import houseBody from '@/components/houseBody'
   import appFooter from '@/components/appFooter'
+  import addHouseButton from '@/components/parts/addHouseButton'
   import houseModal from '@/components/parts/houseModal'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
@@ -33,6 +35,7 @@
       appSideMenu: appSideMenu,
       houseBody: houseBody,
       appFooter: appFooter,
+      addHouseButton: addHouseButton,
       houseModal: houseModal,
       messageModal: messageModal,
       appControlPanel: appControlPanel

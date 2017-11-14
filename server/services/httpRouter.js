@@ -7,6 +7,7 @@ import conf from 'config'
 import mongo from './mongo.js'
 import houseService from './houseService.js'
 import ownerService from './ownerService.js'
+import contractService from './contractService.js'
 
 let router = express.Router()
 
@@ -62,6 +63,12 @@ router.get('/getHouseDetail', (req, res) => {
     else {
       res.json({error: null, data: {house: house}})
     }
+  })
+})
+router.post('/addContract', (req, res) => {
+  logger.info('addContract:', JSON.stringify(req.body.params))
+  contractService.insertContract(req.session.user, req.body.params, (error, contract) => {
+    res.json({error: error, data: contract})
   })
 })
 

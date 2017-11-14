@@ -6,10 +6,13 @@ class Contract {
   constructor(data) {
     this._id = data._id
 
-    this.resident = null
-    if (data.resident) {
-      this.resident = new Resident(data.resident)
-    }
+    this.resident = data.resident
+    this.phone = data.phone
+    this.note = data.note
+
+    this.start = data.start
+    this.end = data.end
+    this.first = data.first
 
     this.pays = []
     if (data.pays) {
@@ -17,7 +20,16 @@ class Contract {
         this.pays.push(data.pays[i])
       }
     }
-
+  }
+  isUnpaid() {
+    let now = new Date()
+    now = now.valueOf()
+    for (let i = 0; i < this.pays.length; i ++) {
+      if (!this.pays[i].payment && this.pays[i].plan < now) {
+        return true
+      }
+    }
+    return false
   }
 }
 

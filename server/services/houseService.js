@@ -3,6 +3,7 @@ import conf from 'config'
 import mongo from './mongo.js'
 import {ObjectId} from 'mongodb'
 import utils from './utils.js'
+import contractService from './contractService.js'
 
 class HouseService {
   constructor() {
@@ -23,6 +24,7 @@ class HouseService {
     )
   }
   getHouse(_id, next) {
+    let self = this
     mongo.findAll(
       'houses',
       {_id: ObjectId(_id), deleted: {$ne: true}},
@@ -32,10 +34,27 @@ class HouseService {
           next(error, null)
         }
         else {
-          next(null, results[0])
+          self.getRoomContract(results[0], 0, next)
         }
       }
     )
+  }
+  getRoomContract(house, index, next) {
+    let self = this
+    if (!house.rooms || index >= house.rooms.length) {
+      next(null, house)
+      return
+    }
+    contractService.getRoomContracts(house._id, house.rooms[index].number, (error, contracts) => {
+      if (error) {
+        next(error, null)
+        return
+      }
+      else {
+        house.rooms[index].contracts = contracts
+        self.getRoomContract(house, index + 1, next)
+      }
+    })
   }
   insertHouse(user, house, next) {
     house.cuser = user._id

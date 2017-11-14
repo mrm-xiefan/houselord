@@ -28,6 +28,22 @@ class House {
       }
     }
   }
+  isValid() {
+    if (!this.name) {
+      return false
+    }
+    if (!this.owner) {
+      return false
+    }
+    for (let i = 0; i < this.rooms.length - 1; i ++) {
+      for (let j = i + 1; j < this.rooms.length; j ++) {
+        if (this.rooms[i].number == this.rooms[j].number) {
+          return false
+        }
+      }
+    }
+    return true
+  }
   getPhoto() {
     if (this.photo) {
       return this.photo

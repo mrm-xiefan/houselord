@@ -12,13 +12,13 @@
       <div class="info-row">
         <div class="money-box">
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 契約金：</div><div class="money-amount">{{room.getKeyMoney()}}</div>
+            <div class="money-title"><i class="fa fa-money"></i> 礼金：</div><div class="money-amount">{{room.getKeyMoney()}}</div>
           </div>
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 賃貸料：</div><div class="money-amount">{{room.getRent()}} / 月</div>
+            <div class="money-title"><i class="fa fa-money"></i> 家賃：</div><div class="money-amount">{{room.getRent()}} / 月</div>
           </div>
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 保証金：</div><div class="money-amount">{{room.getDeposit()}}</div>
+            <div class="money-title"><i class="fa fa-money"></i> 敷金：</div><div class="money-amount">{{room.getDeposit()}}</div>
           </div>
         </div>
         <div class="status-box">
@@ -28,23 +28,29 @@
           <div class="badge bg-green" v-if="room.isRented()">
             レンタル中
           </div>
+          <div class="badge bg-blue" v-else>
+            空室
+          </div>
+          <div class="badge bg-green" v-if="room.getFutureRental()">
+            予約あり
+          </div>
           <div class="badge bg-red" v-if="room.isUnpaid()">
-            賃貸料未払い
+            未払いあり
           </div>
         </div>
       </div>
-      <div class="resident-row">
+      <div :class="['resident-row', room.isRented()? 'resident-green': 'resident-blue']">
         <div class="info-row">
           <div class="resident-box">
-            <div class="resident-title"><i class="fa fa-user"></i> 居住者：</div><div class="resident-content">山田太郎</div>
+            <div class="resident-title"><i class="fa fa-user"></i> 居住者：</div><div class="resident-content" v-if="room.getCurrentRental()">{{room.getCurrentRental().resident}}</div>
           </div>
           <div class="resident-box">
-            <div class="resident-title"><i class="fa fa-phone"></i> 連絡先：</div><div class="resident-content">08011112222</div>
+            <div class="resident-title"><i class="fa fa-phone"></i> 連絡先：</div><div class="resident-content" v-if="room.getCurrentRental()">{{room.getCurrentRental().phone}}</div>
           </div>
         </div>
         <div class="info-row">
           <div class="resident-note">
-            <div class="resident-title"><i class="fa fa-sticky-note"></i> 備 考：</div><div class="resident-content">連絡取れにくい。留守が多い。やばい！とにかくやばい！お金持ち。摂取対象！</div>
+            <div class="resident-title"><i class="fa fa-sticky-note"></i> 備 考：</div><div class="resident-content" v-if="room.getCurrentRental()">{{room.getCurrentRental().note}}</div>
           </div>
         </div>
       </div>
@@ -120,7 +126,7 @@
     display: flex;
   }
   .money-title {
-    width: 80px;
+    width: 70px;
   }
   .status-box {
     width: calc(30%);
@@ -131,8 +137,13 @@
   }
   .resident-row {
     padding: 10px 5px 10px 5px;
-    border: 1px solid #00a65a;
     border-radius: 5px;
+  }
+  .resident-green {
+    border: 1px solid #00a65a;
+  }
+  .resident-blue {
+    border: 1px solid #3c8dbc;
   }
   .resident-box {
     margin: 5px;
@@ -156,12 +167,13 @@
     justify-content: center;
   }
   .room-button {
-    color: #333;
+    color: #555;
     font-size: 15px;
     padding: 15px;
     cursor: pointer;
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
+    background: #eee;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     margin-left: 5px;
     margin-right: 5px;
   }

@@ -22,7 +22,7 @@ class Manager {
   login(data, next) {
     let self = this
     this.user.login(data.user)
-    this.initSocket(() => {
+    // this.initSocket(() => {
       utils.restGet('/api/getInitData').then(
         response => {
           if (response) {
@@ -32,7 +32,7 @@ class Manager {
           }
         }
       )
-    })
+    // })
   }
   logout() {
     this.user.logout()

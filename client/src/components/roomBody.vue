@@ -11,19 +11,23 @@
               </button>
             </div>
           </div>
-          <div class="box-body text-blue">
-            <div class="house-photo">
-              <img class="resize-picture" :src="manager.selectedHouse.getPhoto()"></img>
-            </div>
-            <div class="house-info">
-              <div class="house-row">
-                <div class="house-title"><i class="fa fa-user"></i> オーナー：</div><div class="house-content">{{manager.selectedHouse.owner}}</div>
+          <div class="box-body">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="house-photo">
+                  <img class="resize-picture" :src="manager.selectedHouse.getPhoto()"></img>
+                </div>
               </div>
-              <div class="house-row">
-                <div class="house-title"><i class="fa fa-map-pin"></i> アドレス：</div><div class="house-content">{{manager.selectedHouse.address}}</div>
-              </div>
-              <div class="house-row">
-                <div class="house-title"><i class="fa fa-sticky-note"></i> 備考：</div><div class="house-content">{{manager.selectedHouse.note}}</div>
+              <div class="col-md-8">
+                <div class="row house-row">
+                  <div class="house-title text-blue"><i class="fa fa-user"></i> オーナー：</div><div class="house-content">{{manager.selectedHouse.owner}}</div>
+                </div>
+                <div class="row house-row">
+                  <div class="house-title text-blue"><i class="fa fa-map-pin"></i> アドレス：</div><div class="house-content">{{manager.selectedHouse.address}}</div>
+                </div>
+                <div class="row house-row">
+                  <div class="house-title text-blue"><i class="fa fa-sticky-note"></i> 備考：</div><div class="house-content">{{manager.selectedHouse.note}}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -77,38 +81,37 @@
   section.content {
     height: 100%;
   }
-  .box-body {
-    display: flex;
-  }
   .house-photo {
-    border-radius: 3px;
-    width: 180px;
-    height: auto;
     margin: 10px;
   }
   .resize-picture {
     border-radius: 3px;
     width: 100%;
+    max-width: 300px;
     height: auto;
-    border: 1px solid #0073b7;
-  }
-  .house-info {
-    width: calc(100% - 180px);
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
   }
   .house-row {
     margin: 10px;
-    padding: 10px;
-    font-size: 18px;
+    padding: 5px;
+    font-size: 15px;
     overflow: hidden;
     background: #eee;
     border-radius: 5px;
   }
   .house-title {
-    width: 120px;
+    width: 110px;
     float: left;
+    padding: 5px;
   }
   .house-content {
     float: left;
-    width: calc(100% - 120px);
+    padding: 5px;
+    width: calc(100% - 110px);
   }
 </style>

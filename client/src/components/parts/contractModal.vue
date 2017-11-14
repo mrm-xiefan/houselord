@@ -35,15 +35,15 @@
 
             <div class="data-row box-3column category">
               <div class="modal-item">
-                <input v-model="keyMoney" type="number" class="form-control" placeholder="入力">
+                <input v-model="keyMoney" type="number" step=1000 class="form-control" placeholder="入力">
                 <span class="input-group-label">礼金:</span>
               </div>
               <div class="modal-item">
-                <input v-model="deposit" type="number" class="form-control" placeholder="入力">
+                <input v-model="deposit" type="number" step=1000 class="form-control" placeholder="入力">
                 <span class="input-group-label">敷金:</span>
               </div>
               <div class="modal-item">
-                <input v-model="rent" type="number" class="form-control" placeholder="入力">
+                <input v-model="rent" type="number" step=1000 class="form-control" placeholder="入力">
                 <span class="input-group-label">家賃:</span>
               </div>
             </div>
@@ -53,12 +53,12 @@
                 <span class="input-group-label">開始日:</span>
               </div>
               <div class="modal-item">
-                <input v-model="month" type="number" class="form-control" placeholder="入力">
-                <span class="input-group-label">賃貸月数:</span>
+                <input id="first-date" type="text" class="form-control" placeholder="選択">
+                <span class="input-group-label">初回支払:</span>
               </div>
               <div class="modal-item">
-                <input v-model="day" type="number" class="form-control" placeholder="入力">
-                <span class="input-group-label">支払日:</span>
+                <input id="end-date" type="text" class="form-control" placeholder="選択">
+                <span class="input-group-label">終了日:</span>
               </div>
             </div>
 
@@ -66,7 +66,7 @@
 
         <div class="modal-footer">
           <button type="button" id="close-contract-detail" class="btn btn-cancel" data-dismiss="modal" aria-label="Close">キャンセル</button>
-          <button type="button" id="save-contract-detail" class="btn btn-create" :disabled="!room" v-on:click="saveContract()">確定</button>
+          <button type="button" id="save-contract-detail" class="btn btn-create" :disabled="!isValid()" v-on:click="saveContract()">確定</button>
         </div>
       </div>
     </div>
@@ -78,6 +78,8 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
+  import moment from 'moment'
+  import Contract from '@/store/contract.js'
   export default {
     props: ['manager'],
     data() {
@@ -90,8 +92,8 @@
         deposit: 0,
         rent: 0,
         start: 0,
-        month: 0,
-        day: '毎月1日'
+        end: 0,
+        first: 0
       }
     },
     mounted() {
@@ -112,42 +114,150 @@
     },
     methods: {
       pickDate() {
-        console.log(111)
-        let self = this
-        // if (this.start) {
-        //   $('#start-date').val(utils.formatDate(this.start))
-        // }
-        // else {
-          $('#start-date').val('')
-        // }
-        $('#start-date').datepicker({
+        let options = {
           autoclose: true,
           language: 'ja',
           format: 'yyyy/mm/dd'
-        })
-        // .change(self.changeStart)
-        // .on('changeDate', self.changeStart)
+        }
+        $('#start-date').val('')
+        $('#start-date').datepicker(options)
+        $('#end-date').val('')
+        $('#end-date').datepicker(options)
+        $('#first-date').val('')
+        $('#first-date').datepicker(options)
       },
-      // changeStart() {
-      //   let start = new Date($('#start-date').val())
-      //   this.start = start.valueOf()
-      //   console.log(44444)
-      // },
+      isValid() {
+        if (!manager.selectedHouse) {
+          return false
+        }
+        if (!this.room) {
+          return false
+        }
+        if (!this.resident) {
+          return false
+        }
+        if (this.keyMoney < 0) {
+          return false
+        }
+        if (this.deposit < 0) {
+          return false
+        }
+        if (this.rent <= 0) {
+          return false
+        }
+        return true
+      },
+      checkDate() {
+        let tmp = new Date($('#start-date').val())
+        this.start = tmp.valueOf()
+        tmp = new Date($('#end-date').val())
+        this.end = tmp.valueOf()
+        tmp = new Date($('#first-date').val())
+        this.first = tmp.valueOf()
+        if (!this.start) {
+          return false
+        }
+        if (!this.end) {
+          return false
+        }
+        if (!this.first) {
+          return false
+        }
+        if (this.start > this.end) {
+          return false
+        }
+        if (this.start > this.first) {
+          return false
+        }
+        if (this.first > this.end) {
+          return false
+        }
+        return true
+      },
       saveContract() {
         let self = this
-        // let data = {
-        //   _id: self.contract.owner,
-        //   lord: manager.user._id
-        // }
-        // utils.restPost('/api/addOwner', data).then(
-        //   response => {
-        //     if (response) {
-        //       manager.owners.push(new Owner(response))
-        //       manager.sortOwner()
-        //       $('#contract-modal').modal('hide')
-        //     }
-        //   }
-        // )
+        if (self.checkDate()) {
+          let contract = {
+            lord: manager.user._id,
+            owner: manager.selectedHouse.owner,
+            house: manager.selectedHouse._id,
+            room: self.room.number,
+            resident: self.resident,
+            phone: self.phone,
+            note: self.note,
+            start: self.start,
+            end: self.end,
+            first: self.first
+          }
+          contract.pays = self.generatePays()
+          utils.restPost('/api/addContract', contract).then(
+            response => {
+              if (response) {
+                self.room.contracts.push(new Contract(response))
+                $('#contract-modal').modal('hide')
+              }
+            }
+          )
+        }
+        else {
+          utils.event.$emit('SHOW_MESSAGE', 'B005')
+        }
+      },
+      generatePays() {
+        let pays = []
+        let now = new Date()
+        now = now.valueOf()
+        if (this.keyMoney > 0) {
+          pays.push({
+            DRCR: 'DR',
+            type: 'keyMoney',
+            amount: this.keyMoney,
+            plan: this.start,
+            payment: now
+          })
+        }
+        if (this.deposit > 0) {
+          pays.push({
+            DRCR: 'DR',
+            type: 'deposit',
+            amount: this.deposit,
+            plan: this.start,
+            payment: now
+          })
+        }
+
+        pays.push({
+          DRCR: 'DR',
+          type: 'rent',
+          amount: this.rent,
+          plan: this.first
+        })
+
+        let end = moment(this.end)
+        let i = 0
+        while(true) {
+          i ++
+          let current = moment(this.first).add(i, 'months')
+          if (end < current) {
+            break
+          }
+          pays.push({
+            DRCR: 'DR',
+            type: 'rent',
+            amount: this.rent,
+            plan: current.toDate().valueOf()
+          })
+        }
+
+        if (this.deposit > 0) {
+          pays.push({
+            DRCR: 'CR',
+            type: 'deposit',
+            amount: this.deposit,
+            plan: this.end
+          })
+        }
+        return pays
       }
     }
   }
