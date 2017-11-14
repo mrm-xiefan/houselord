@@ -14,11 +14,8 @@
           <div class="select-data">
             <div class="data-row box-2column category">
               <div class="modal-item btn-group">
-                <input v-model="resident" type="text" class="form-control" data-toggle="dropdown" placeholder="入力">
+                <input v-model="resident" type="text" class="form-control" placeholder="入力">
                 <span class="input-group-label">居住者:</span>
-                <!-- <ul class="dropdown-menu">
-                  <li v-for="one in manager.residents" v-if="one.visible(resident)"><a v-on:click="setResident(one)">{{one._id}}</a></li>
-                </ul> -->
               </div>
               <div class="modal-item">
                 <input v-model="phone" type="text" class="form-control" placeholder="入力">
@@ -33,34 +30,34 @@
             </div>
           </div>
 
-            <div class="data-row box-3column category">
-              <div class="modal-item">
-                <input v-model="keyMoney" type="number" step=1000 class="form-control" placeholder="入力">
-                <span class="input-group-label">礼金:</span>
-              </div>
-              <div class="modal-item">
-                <input v-model="deposit" type="number" step=1000 class="form-control" placeholder="入力">
-                <span class="input-group-label">敷金:</span>
-              </div>
-              <div class="modal-item">
-                <input v-model="rent" type="number" step=1000 class="form-control" placeholder="入力">
-                <span class="input-group-label">家賃:</span>
-              </div>
+          <div class="data-row box-3column category">
+            <div class="modal-item">
+              <input v-model="keyMoney" type="number" step=1000 class="form-control" placeholder="入力">
+              <span class="input-group-label">礼金:</span>
             </div>
-            <div class="data-row box-3column category">
-              <div class="modal-item">
-                <input id="start-date" type="text" class="form-control" placeholder="選択">
-                <span class="input-group-label">開始日:</span>
-              </div>
-              <div class="modal-item">
-                <input id="first-date" type="text" class="form-control" placeholder="選択">
-                <span class="input-group-label">初回支払:</span>
-              </div>
-              <div class="modal-item">
-                <input id="end-date" type="text" class="form-control" placeholder="選択">
-                <span class="input-group-label">終了日:</span>
-              </div>
+            <div class="modal-item">
+              <input v-model="deposit" type="number" step=1000 class="form-control" placeholder="入力">
+              <span class="input-group-label">敷金:</span>
             </div>
+            <div class="modal-item">
+              <input v-model="rent" type="number" step=1000 class="form-control" placeholder="入力">
+              <span class="input-group-label">家賃:</span>
+            </div>
+          </div>
+          <div class="data-row box-3column category">
+            <div class="modal-item">
+              <input id="start-date" type="text" class="form-control" placeholder="選択">
+              <span class="input-group-label">開始日:</span>
+            </div>
+            <div class="modal-item">
+              <input id="first-date" type="text" class="form-control" placeholder="選択">
+              <span class="input-group-label">初回支払:</span>
+            </div>
+            <div class="modal-item">
+              <input id="end-date" type="text" class="form-control" placeholder="選択">
+              <span class="input-group-label">終了日:</span>
+            </div>
+          </div>
 
         </div>
 
@@ -98,7 +95,7 @@
     },
     mounted() {
       let self = this
-      utils.event.$on('CONTRACT_DETAIL', (room) => {
+      utils.event.$on('CONTRACT_DEAL', (room) => {
         self.room = room
         self.keyMoney = room.keyMoney
         self.deposit = room.deposit
@@ -110,7 +107,7 @@
       })
     },
     beforeDestroy() {
-      utils.event.$off('CONTRACT_DETAIL')
+      utils.event.$off('CONTRACT_DEAL')
     },
     methods: {
       pickDate() {

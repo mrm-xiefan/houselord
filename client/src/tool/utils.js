@@ -260,14 +260,14 @@ class Utils {
     if (!number && number !== 0) {
       return ''
     }
-    let fixed = number.toFixed(2)
+    let fixed = number.toFixed(0)
     let delimiter = '.'
     let splitedNum = fixed.toString().split(delimiter)
     let replacedNum = splitedNum[0].replace(/(\d)(?=(\d{3})+$)/g , '$1,')
     if (splitedNum[1]) {
       replacedNum = replacedNum + delimiter + splitedNum[1]
     }
-    return replacedNum + ' 円'
+    return replacedNum
   }
   formatNumber(number) {
     if (!number && number !== 0) {

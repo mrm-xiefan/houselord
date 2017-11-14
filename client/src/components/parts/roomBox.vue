@@ -15,7 +15,7 @@
             <div class="money-title"><i class="fa fa-money"></i> 礼金：</div><div class="money-amount">{{room.getKeyMoney()}}</div>
           </div>
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 家賃：</div><div class="money-amount">{{room.getRent()}} / 月</div>
+            <div class="money-title"><i class="fa fa-money"></i> 家賃：</div><div class="money-amount">{{room.getRent()}}</div>
           </div>
           <div class="money-row">
             <div class="money-title"><i class="fa fa-money"></i> 敷金：</div><div class="money-amount">{{room.getDeposit()}}</div>
@@ -62,7 +62,7 @@
       <div class="room-button">
         解約
       </div>
-      <div class="room-button">
+      <div class="room-button" v-on:click="pay(room)">
         支払
       </div>
     </div>
@@ -76,10 +76,27 @@
 
   export default {
     props: ['manager', 'room'],
+    mounted() {
+      let self = this
+      utils.event.$on('REFRESH_ROOM', () => {
+        self.$nextTick(() => {
+          self.$forceUpdate()
+          console.log(2323)
+        })
+      })
+    },
     methods: {
       deal(room) {
-        utils.event.$emit('CONTRACT_DETAIL', room)
+        utils.event.$emit('CONTRACT_DEAL', room)
+      },
+      pay(room) {
+        if (room.contracts.length > 0) {
+          utils.event.$emit('CONTRACT_PAY', room)
+        }
       }
+    },
+    beforeDestroy() {
+      utils.event.$off('REFRESH_ROOM')
     }
   }
 </script>

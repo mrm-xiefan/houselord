@@ -6,6 +6,7 @@
     <roomBody :manager="manager"></roomBody>
     <appFooter :manager="manager"></appFooter>
     <contractModal :manager="manager"></contractModal>
+    <paymentModal :manager="manager"></paymentModal>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
     <div class="control-sidebar-bg"></div>
@@ -22,6 +23,7 @@
   import appSideMenu from '@/components/appSideMenu'
   import roomBody from '@/components/roomBody'
   import appFooter from '@/components/appFooter'
+  import paymentModal from '@/components/parts/paymentModal'
   import contractModal from '@/components/parts/contractModal'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
@@ -33,6 +35,7 @@
       appSideMenu: appSideMenu,
       roomBody: roomBody,
       appFooter: appFooter,
+      paymentModal: paymentModal,
       contractModal: contractModal,
       messageModal: messageModal,
       appControlPanel: appControlPanel

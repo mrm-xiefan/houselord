@@ -31,6 +31,15 @@ class Contract {
     }
     return false
   }
+  getStart() {
+    return utils.formatDate(this.start)
+  }
+  getEnd() {
+    return utils.formatDate(this.end)
+  }
+  getFirst() {
+    return utils.formatDate(this.first)
+  }
 }
 
 export default Contract

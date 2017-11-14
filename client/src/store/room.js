@@ -25,13 +25,13 @@ class Room {
     return true
   }
   getKeyMoney() {
-    return utils.formatMoney(this.keyMoney)
+    return utils.formatMoney(this.keyMoney) + ' 円'
   }
   getRent() {
-    return utils.formatMoney(this.rent)
+    return utils.formatMoney(this.rent) + ' 円 / 月'
   }
   getDeposit() {
-    return utils.formatMoney(this.deposit)
+    return utils.formatMoney(this.deposit) + ' 円'
   }
   getCurrentRental() {
     let now = new Date()

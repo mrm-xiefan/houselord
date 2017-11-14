@@ -16,6 +16,6 @@
   .navbar-static-top,
   .gradient-header {
     background: -webkit-linear-gradient(left, #605ca8, #807ca8);
-    background: linear-gradient(to right, #605ca8, #80ace8);
+    background: linear-gradient(to right, #605ca8, #807ca8);
   }
 </style>
