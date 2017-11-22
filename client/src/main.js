@@ -31,10 +31,9 @@ import 'bootstrap-fileinput/js/fileinput.min.js'
 
 import manager from '@/store/manager.js'
 import utils from '@/tool/utils.js'
-utils.init(manager)
 import Vue from 'vue'
 import router from '@/tool/router.js'
-utils.router = router
+utils.init(manager.controller.cors, router)
 import app from './app'
 import {VueMasonryPlugin} from 'vue-masonry'
 Vue.config.productionTip = false

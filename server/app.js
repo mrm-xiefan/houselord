@@ -17,7 +17,8 @@ import dataService from './services/dataService.js'
 
 logger.info('NODE_ENV:', process.env.NODE_ENV)
 logger.info('session mode:', conf.session.mode)
-logger.info('s3 mode:', conf.s3.mode)
+logger.info('authentication mode:', conf.authentication.mode)
+logger.info('storagy mode:', conf.storagy.mode)
 
 let app = express()
 app.set('views', path.join(__dirname, '..', 'dist'))
@@ -125,9 +126,9 @@ app.get('/static/*', (req, res) => {
   let url = decodeURI(req.url)
   if (url.indexOf('/static/s3') == 0) {
     let client = knox.createClient({
-      key: conf.s3.key,
-      secret: conf.s3.secret,
-      bucket: conf.s3.bucket
+      key: conf.storagy.key,
+      secret: conf.storagy.secret,
+      bucket: conf.storagy.bucket
     })
     let s3path = url.substring(11, url.length)
     client.getFile(s3path, (err, s3res) => {
@@ -168,7 +169,7 @@ app.post('/uploadFiles', (req, res, next) => {
       logger.info('params: '+JSON.stringify(params))
       let files = []
       for (let i = 0; i < list.length; i ++) {
-        if (conf.s3.mode == 'local') {
+        if (conf.storagy.mode == 'local') {
           files.push({
             file: conf.endpoint + 'static/upload/' + list[i].folder + '/' + list[i].name,
             thumbnail: list[i].thumbnail? (conf.endpoint + 'static/upload/' + list[i].folder + '/' + list[i].thumbnail): null,
@@ -271,5 +272,5 @@ mongo.init(() => {
   server.listen(conf.port)
   server.on('listening', onListening)
 
-  // socketRouter.init(server, store)
+  // socketRouter.init(server, session)
 })

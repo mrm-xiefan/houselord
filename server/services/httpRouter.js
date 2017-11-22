@@ -71,5 +71,11 @@ router.post('/addContract', (req, res) => {
     res.json({error: error, data: contract})
   })
 })
+router.post('/fixPayment', (req, res) => {
+  logger.info('fixPayment:', JSON.stringify(req.body.params))
+  contractService.updateContract(req.session.user, req.body.params, (error, contract) => {
+    res.json({error: error, data: contract})
+  })
+})
 
 module.exports = router

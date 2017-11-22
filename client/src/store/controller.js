@@ -10,12 +10,7 @@ class Controller {
   setApp(route) {
     let blocks = route.path.replace('/', '').split('/')
     let target = blocks[0]? blocks[0]: ''
-    if (target == '') {
-      target = CONST.defaultApp
-    }
-    if (target != this.currentApp) {
-      this.currentApp = target
-    }
+    this.currentApp = target
   }
   checkAuth(route) {
     if (!manager.user.isLogin()) {

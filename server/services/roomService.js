@@ -11,7 +11,7 @@ class RoomService {
     this.chatRoom = new Room('chatroom')
   }
   spy() {
-    logger.debug('')
+    logger.debug('======================================================================')
     this.lobby.spy()
     this.chatRoom.spy()
     logger.debug('')

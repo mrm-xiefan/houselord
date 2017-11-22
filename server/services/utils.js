@@ -19,72 +19,91 @@ class Utils {
     }
     return true
   }
-  writeFile(filename, contents, cb) {
+  writeFile(filename, contents, next) {
     mkdirp(path.dirname(filename), (err) => {
       if (err) {
         logger.error(JSON.stringify(err))
-        cb('S002')
+        next('S002')
       }
       else {
         fs.writeFile(filename, contents, (err) => {
           if (err) {
             logger.error(JSON.stringify(err))
-            cb('S002')
+            next('S002')
           }
           else {
-            cb(null)
+            next(null)
           }
         })
       }
     })
   }
-  deleteFile(filename, cb) {
+  appendFile(filename, contents, next) {
+    mkdirp(path.dirname(filename), (err) => {
+      if (err) {
+        logger.error(JSON.stringify(err))
+        next('S002')
+      }
+      else {
+        fs.appendFile(filename, contents, (err) => {
+          if (err) {
+            logger.error(JSON.stringify(err))
+            next('S002')
+          }
+          else {
+            next(null)
+          }
+        })
+      }
+    })
+  }
+  deleteFile(filename, next) {
     fs.unlink(filename, (err) => {
       if (err) {
         logger.error(JSON.stringify(err))
-        cb('S002')
+        next('S002')
       }
       else {
-        cb(null)
+        next(null)
       }
     })
   }
-  readFile(filename, cb) {
+  readFile(filename, next) {
     fs.readFile(filename, 'utf8', (err, text) => {
       if (err) {
         logger.error(JSON.stringify(err))
-        cb('S002', null)
+        next('S002', null)
       }
       else {
-        cb(null, text)
+        next(null, text)
       }
     })
   }
-  getFileList(filepath, ext, cb) {
+  getFileList(filepath, ext, next) {
     let self = this
     fs.readdir(filepath, (err, files) => {
       if (err) {
         logger.error(JSON.stringify(err))
-        cb('S002', null)
+        next('S002', null)
       }
       else {
         let fileList = []
         let idx = 0
         self.filterFile(filepath, files, idx, ext, fileList, (err) => {
           if (err) {
-            cb(err, null)
+            next(err, null)
           }
           else {
-            cb(null, fileList)
+            next(null, fileList)
           }
         })
       }
     })
   }
-  filterFile(filepath, files, idx, ext, fileList, cb) {
+  filterFile(filepath, files, idx, ext, fileList, next) {
     let self = this
     if (idx >= files.length) {
-      cb(null)
+      next(null)
       return
     }
     else {
@@ -98,10 +117,10 @@ class Utils {
           name: name,
           date: udate
         })
-        self.filterFile(filepath, files, idx + 1, ext, fileList, cb)
+        self.filterFile(filepath, files, idx + 1, ext, fileList, next)
       }
       else {
-        self.filterFile(filepath, files, idx + 1, ext, fileList, cb)
+        self.filterFile(filepath, files, idx + 1, ext, fileList, next)
       }
     }
   }

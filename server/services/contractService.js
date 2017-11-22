@@ -48,28 +48,28 @@ class ContractService {
       }
     )
   }
-  // updateHouse(user, house, next) {
-  //   let id = house._id
-  //   delete house._id
-  //   house.uuser = user._id
-  //   let now = new Date()
-  //   house.udate = now.valueOf()
-  //   mongo.update(
-  //     'houses',
-  //     {_id: ObjectId(id)},
-  //     {$set: house},
-  //     {multi: false},
-  //     (error, result) => {
-  //       if (error) {
-  //         next(error)
-  //       }
-  //       else {
-  //         house._id = id
-  //         next(null, house)
-  //       }
-  //     }
-  //   )
-  // }
+  updateContract(user, contract, next) {
+    let id = contract._id
+    delete contract._id
+    contract.uuser = user._id
+    let now = new Date()
+    contract.udate = now.valueOf()
+    mongo.update(
+      'contracts',
+      {_id: ObjectId(id)},
+      {$set: contract},
+      {multi: false},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          contract._id = id
+          next(null, contract)
+        }
+      }
+    )
+  }
   deleteContract(user, contract, next) {
     let now = new Date()
     mongo.update(

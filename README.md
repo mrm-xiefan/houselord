@@ -14,9 +14,9 @@ google and install git
 
 google and install node.js(version >= 8.4)
 
-google and install python (version must be 2.7.x)
+google and install python(version == 2.7.x)
 
-install mongodb from https://www.mongodb.com/download-center#community
+google and install mongodb
 
 i recommend to use this IDE: https://studio3t.com/
 
@@ -24,23 +24,16 @@ i recommend to use this IDE: https://studio3t.com/
 
 ``` bash
 # clone source from github
-git clone https://github.com/mrm-xiefan/houselord
+git clone https://your-git-account@github.com/mrm-xiefan/houselord
 
 # install frontend dependencies
 cd houselord/client
 npm install
-# take care of these packages
-# npm install admin-lte@2.4.0
-# npm install bootstrap-fileinput@4.4.2
-# npm install socket.io@1.7.4
 
 # install backend dependencies
+# notice: if your system is 32bit architecture
+# delete sharp in server/package.json before install!!!
 cd houselord/server
-# if your system is 32bit
-# delete sharp in package.json!!!
-# take care of these packages
-# npm install socket.io@1.7.4
-# and install others
 npm install
 
 # install pm2 in global
@@ -67,11 +60,11 @@ NODE_ENV=development ./node_modules/.bin/babel-node app.js
 
 ## 2.2. if windows
 
-add `NODE_ENV`(value should be development or production) to your system environment. and then add /yourpath/houselord/server/node_modules/.bin/ to `PATH`.
+add `NODE_ENV`(value should be development or production) to your system environment.
 
 ``` bash
 cd houselord/server
-babel-node app.js
+npm run dev
 ```
 
 ## 3. deploy
@@ -87,7 +80,7 @@ npm run build
 # install pm2
 npm install -g pm2
 # start first time
-pm2 start pm2config.json
+pm2 start pm2production.json
 # confirm status
 pm2 list
 pm2 show dl

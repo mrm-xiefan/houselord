@@ -14,7 +14,7 @@
   },
   "session": {
     "mode": "mongo",
-    "redisHost": "",
+    "redisHost": "any-server",
     "redisPort": 6379,
     "redisdb": 0,
     "cookiePath": "/",
@@ -22,7 +22,10 @@
     "key": "xiefan",
     "secret": "xiefan-secret"
   },
-  "s3": {
+  "authentication": {
+    "mode": "basic"
+  },
+  "storagy": {
     "mode": "local",
     "bucket": "any-bucket",
     "key": "key-string",

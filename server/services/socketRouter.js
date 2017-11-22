@@ -6,11 +6,15 @@ class SocketRouter {
   constructor() {
     this.io = null
   }
-  init(server, store) {
+  init(server, session) {
     let self = this
     self.io = require('socket.io')(server, {path: conf.socketPath})
     // self.io.set('heartbeat interval', 1000)
     // self.io.set('heartbeat timeout', 5000)
+
+    self.io.use((socket, next) => {
+      session(socket.request, socket.request.res, next)
+    })
 
     self.io.sockets.on('connection', (socket) => {
       logger.info('connected: ' + socket.id)
@@ -20,15 +24,15 @@ class SocketRouter {
       socket.on('reinit', (params) => {
         logger.info(socket.id + ' reinit: ' + JSON.stringify(params))
         roomService.recovery(client, params)
-        let msg = {}
-        socket.emit('reinited', msg)
+        socket.emit('reinited', {})
         roomService.spy()
       })
 
       socket.on('enterLobby', (params) => {
         logger.info('enterLobby: ' + socket.id)
-        roomService.enterLobby(client)
-        roomService.spy()
+        if (roomService.enterLobby(client)) {
+          roomService.spy()
+        }
       })
 
       socket.on('enterChatRoom', (params) => {
@@ -42,8 +46,8 @@ class SocketRouter {
           //     socket.emit('initChatRoom', {chats: chats, count: count})
           //   }
           // })
+          roomService.spy()
         }
-        roomService.spy()
       })
 
       socket.on('disconnect', () => {

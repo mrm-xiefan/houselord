@@ -30,7 +30,7 @@
 
             <div class="box box-solid box-primary collapsed-box">
               <div class="box-header">
-                <h3 class="box-title">決済明細</h3>
+                <h3 class="box-title">明細</h3>
                 <div class="box-tools pull-right">
                   <div class="btn btn-sm" v-on:click="addIncome(contract)">
                     支出補正
@@ -49,8 +49,8 @@
                       <th>収支</th>
                       <th>科目</th>
                       <th class="right-row">金額(円)</th>
-                      <th>決済日</th>
-                      <th>決済</th>
+                      <th>支払日</th>
+                      <th>支払</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -184,27 +184,19 @@
         })
       },
       agreePayment(room, i, contract, j, pay) {
-        console.log('--------')
-        console.log(JSON.stringify(room.contracts[i].pays[j]))
-        console.log('--------')
-        console.log(JSON.stringify(contract.pays[j]))
-        console.log('--------')
-        console.log(JSON.stringify(pay))
-        console.log('--------')
-
+        let self = this
         let now = new Date()
         now = now.valueOf()
         room.contracts[i].pays[j].payment = now
-        this.$forceUpdate()
-        utils.event.$emit('REFRESH_ROOM')
 
-        console.log('＃＃＃＃＃')
-        console.log(JSON.stringify(room.contracts[i].pays[j]))
-        console.log('＃＃＃＃＃')
-        console.log(JSON.stringify(contract.pays[j]))
-        console.log('＃＃＃＃＃')
-        console.log(JSON.stringify(pay))
-        console.log('＃＃＃＃＃')
+        utils.restPost('/api/fixPayment', {_id: contract._id, pays: contract.pays, finished: contract.isFinished()}).then(
+          response => {
+            if (response) {
+              self.$forceUpdate()
+              utils.event.$emit('REFRESH_ROOM')
+            }
+          }
+        )
       }
     }
   }

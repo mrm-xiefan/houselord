@@ -21,6 +21,14 @@ class Contract {
       }
     }
   }
+  isFinished() {
+    for (let i = 0; i < this.pays.length; i ++) {
+      if (!this.pays[i].payment) {
+        return false
+      }
+    }
+    return 'finish'
+  }
   isUnpaid() {
     let now = new Date()
     now = now.valueOf()

@@ -75,7 +75,7 @@ export default new Router({
     {name: 'loading', path: '/', component: loading},
     {name: 'login', path: '/login', component: login},
     {name: 'register', path: '/register', component: register},
-    {name: 'logout', path: '/logout', beforeEnter: logout},
+    {name: 'logout', path: '/login', beforeEnter: logout},
     {name: 'error', path: '/error', component: error},
     {name: 'house', path: '/house', component: house, beforeEnter: preloadHouse},
     {name: 'room', path: '/room/:house', component: room, beforeEnter: preloadRoom},

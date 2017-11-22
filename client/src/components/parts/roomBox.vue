@@ -81,7 +81,6 @@
       utils.event.$on('REFRESH_ROOM', () => {
         self.$nextTick(() => {
           self.$forceUpdate()
-          console.log(2323)
         })
       })
     },

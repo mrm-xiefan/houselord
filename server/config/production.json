@@ -9,11 +9,11 @@
     "server": "127.0.0.1",
     "port": 27017,
     "db": "houselord",
-    "limit": 10
+    "limit": 50
   },
   "session": {
     "mode": "mongo",
-    "redisHost": "",
+    "redisHost": "any-server",
     "redisPort": 6379,
     "redisdb": 0,
     "cookiePath": "/",
@@ -21,7 +21,10 @@
     "key": "xiefan",
     "secret": "xiefan-secret"
   },
-  "s3": {
+  "authentication": {
+    "mode": "basic"
+  },
+  "storagy": {
     "mode": "local",
     "bucket": "any-bucket",
     "key": "key-string",

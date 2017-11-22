@@ -5,7 +5,7 @@ import Vue from 'vue'
 class Utils {
   constructor() {
   }
-  init(manager) {
+  init(cors, router) {
     let options = {
       timeout: CONST.httpTimeout,
       withCredentials: true,
@@ -14,12 +14,13 @@ class Utils {
         'Content-Type': 'application/json',
       }
     }
-    if (manager.controller.cors) {
+    if (cors) {
       options.baseURL = CONST.developHost
     }
     this.api = axios.create(options)
     this.event = new Vue()
     this.socket = null
+    this.router = router
   }
   async restGet(api, params, mockData = null, giveMeError = null) {
     var self = this
@@ -311,6 +312,16 @@ class Utils {
   }
   clone(orig) {
     return Object.assign(Object.create(Object.getPrototypeOf(orig)), orig)
+  }
+  copy(text) {
+    let copyFrom = document.createElement("textarea")
+    copyFrom.textContent = text
+    let bodyElm = document.getElementsByTagName("body")[0]
+    bodyElm.appendChild(copyFrom)
+    copyFrom.select()
+    let retVal = document.execCommand('copy')
+    bodyElm.removeChild(copyFrom)
+    return retVal
   }
 }
 

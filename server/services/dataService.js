@@ -152,7 +152,7 @@ class DataService {
     }
   }
   putToS3(fileList, next) {
-    if (conf.s3.mode == 'local') {
+    if (conf.storagy.mode == 'local') {
       next(null)
       return
     }
@@ -204,8 +204,8 @@ class DataService {
     }
     let sourceFile = path.join(__dirname, '..', 'upload', folder, filename)
     s3.putObject({
-      Bucket: conf.s3.bucket,
-      Key: path.join(conf.s3.upload, folder, filename),
+      Bucket: conf.storagy.bucket,
+      Key: path.join(conf.storagy.upload, folder, filename),
       ACL: 'public-read',
       Body: fs.createReadStream(sourceFile),
       ContentType: filetype
