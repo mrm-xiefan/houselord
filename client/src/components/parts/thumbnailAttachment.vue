@@ -75,7 +75,6 @@
         {
           uploadUrl: uploadUrl,
           allowedFileExtensions : ['JPG', 'JPEG', 'PNG', 'TIF', 'TIFF'],
-          // overwriteInitial: false,
           maxFilesNum: 1,
           maxFileSize: 2000000,
           initialPreview: initialPreview,
@@ -85,7 +84,7 @@
           showCaption: false,
           showUpload: false,
           showRemove: false,
-          // showCancel: false,
+          showCancel: false,
           showClose: false,
           showBrowse: true,
           browseOnZoneClick: false,

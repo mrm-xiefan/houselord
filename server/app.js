@@ -201,8 +201,6 @@ app.post('/uploadFiles', (req, res, next) => {
 
 
 
-// app.get('/', (req, res) => {})
-app.use(express.static(path.join(__dirname, '..', 'dist')))
 app.get('/autoLogin', (req, res) => {
   logger.debug('autoLogin:', JSON.stringify(req.session))
   if (!req.session || !req.session.user) {
@@ -252,6 +250,21 @@ app.get('/logout', (req, res) => {
     req.session.destroy()
   }
   res.json({error: null, data: {}})
+})
+
+
+
+
+// app.use(express.static(path.join(__dirname, '..', 'dist')))
+// let validUser = (req, res, next) => {
+//   if (conf.authentication.mode !== 'basic' && JSON.stringify(req.headers['user-agent']) !== "ELB-HealthChecker/2.0" && !req.user) {
+//     res.redirect(conf.redirect + 'login')
+//   } else {
+//     next()
+//   }
+// }
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'))
 })
 
 

@@ -4,12 +4,12 @@ import utils from '@/tool/utils.js'
 
 class Controller {
   constructor() {
-    this.cors = false
+    this.cors = true
     this.currentApp = ''
   }
   setApp(route) {
     let blocks = route.path.replace('/', '').split('/')
-    let target = blocks[0]? blocks[0]: ''
+    let target = blocks[0]? blocks[0]: CONST.defaultApp
     this.currentApp = target
   }
   checkAuth(route) {

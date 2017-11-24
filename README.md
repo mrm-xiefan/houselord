@@ -29,6 +29,7 @@ git clone https://your-git-account@github.com/mrm-xiefan/houselord
 # install frontend dependencies
 cd houselord/client
 npm install
+npm install bootstrap-fileinput@4.4.2
 
 # install backend dependencies
 # notice: if your system is 32bit architecture

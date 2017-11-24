@@ -37,7 +37,7 @@
         $('html, body').animate({scrollTop: 0}, 'fast')
       },
       triggerIcon() {
-        this.$router.push({name: CONST.defaultApp})
+        this.$router.push({path: '/'})
       }
     }
   }

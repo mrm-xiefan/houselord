@@ -92,7 +92,7 @@
           response => {
             if (response) {
               manager.login(response, () => {
-                self.$router.push({name: CONST.defaultApp})
+                self.$router.push({path: '/'})
               })
             }
           }

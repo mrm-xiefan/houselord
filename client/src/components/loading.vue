@@ -30,7 +30,7 @@
                   self.$router.push({path: path})
                 }
                 else {
-                  self.$router.push({name: CONST.defaultApp})
+                  self.$router.push({path: '/'})
                 }
               })
             }

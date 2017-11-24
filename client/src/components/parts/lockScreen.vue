@@ -16,16 +16,7 @@
   import utils from '@/tool/utils.js'
 
   export default {
-    props: ['manager'],
-    mounted() {
-      let self = this
-      utils.event.$on('LOCK_SCREEN', (locker) => {
-        manager.locker = locker
-      })
-    },
-    beforeDestroy() {
-      utils.event.$off('LOCK_SCREEN')
-    }
+    props: ['manager']
   }
 </script>
 

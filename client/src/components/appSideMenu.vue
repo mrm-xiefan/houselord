@@ -13,23 +13,18 @@
       <ul id='side-menu-tree' class="sidebar-menu" data-widget="tree">
         <li class="header">ナビゲーション</li>
         <li :class="{'active': manager.controller.currentApp == 'house'}">
-          <router-link to="/house">
-            <i class="fa fa-circle-o"></i> <span>シェアハウス</span>
+          <router-link to="/">
+            <i class="fa fa-circle-o"></i> <span>ハウス</span>
           </router-link>
         </li>
-        <li :class="{'active': manager.controller.currentApp == 'owner'}">
-          <router-link to="/owner">
-            <i class="fa fa-circle-o"></i> <span>オーナー</span>
+        <li :class="{'active': manager.controller.currentApp == 'meter'}">
+          <router-link to="/meter">
+            <i class="fa fa-circle-o"></i> <span>メーター</span>
           </router-link>
         </li>
-        <li :class="{'active': manager.controller.currentApp == 'publish'}">
-          <router-link to="/publish">
-            <i class="fa fa-circle-o"></i> <span>ルーム公開</span>
-          </router-link>
-        </li>
-        <li :class="{'active': manager.controller.currentApp == 'finance'}">
-          <router-link to="/finance">
-            <i class="fa fa-circle-o"></i> <span>財務管理</span>
+        <li :class="{'active': manager.controller.currentApp == 'report'}">
+          <router-link to="/report">
+            <i class="fa fa-circle-o"></i> <span>レポート</span>
           </router-link>
         </li>
       </ul>

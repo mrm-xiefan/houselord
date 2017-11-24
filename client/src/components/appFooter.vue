@@ -1,7 +1,7 @@
 <template>
   <footer class="main-footer">
     <div class="container">
-      <strong>Copyright &copy; 2017 <a href="http://www.miraimon.com/">Miraimon</a>.</strong> All rights reserved.
+      <strong>Copyright &copy; 2018 <a href="http://www.miraimon.com/">Miraimon</a>.</strong> All rights reserved.
     </div>
   </footer>
 </template>

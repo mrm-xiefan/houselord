@@ -39,6 +39,10 @@ import {VueMasonryPlugin} from 'vue-masonry'
 Vue.config.productionTip = false
 Vue.use(VueMasonryPlugin)
 
+utils.event.$on('LOCK_SCREEN', (locker) => {
+  manager.locker = locker
+})
+
 router.beforeEach((to, from, next) => {
   manager.controller.setApp(to)
   next()
