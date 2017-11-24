@@ -78,9 +78,6 @@
 </script>
 
 <style scoped>
-  section.content {
-    height: 100%;
-  }
   .house-photo {
     margin: 10px;
   }

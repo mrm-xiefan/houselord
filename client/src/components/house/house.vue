@@ -3,10 +3,9 @@
     <lockScreen :manager="manager"></lockScreen>
     <appHeader :manager="manager"></appHeader>
     <appSideMenu :manager="manager"></appSideMenu>
-    <houseBody :manager="manager"></houseBody>
+    <houseBody :manager="manager" v-if="manager.houses.length > 0"></houseBody>
+    <houseGuideBody :manager="manager" v-else></houseGuideBody>
     <appFooter :manager="manager"></appFooter>
-    <addHouseButton :manager="manager"></addHouseButton>
-    <houseModal :manager="manager"></houseModal>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
     <div class="control-sidebar-bg"></div>
@@ -22,9 +21,8 @@
   import appHeader from '@/components/appHeader'
   import appSideMenu from '@/components/appSideMenu'
   import houseBody from '@/components/house/houseBody'
+  import houseGuideBody from '@/components/house/houseGuideBody'
   import appFooter from '@/components/appFooter'
-  import addHouseButton from '@/components/house/addHouseButton'
-  import houseModal from '@/components/house/houseModal'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
   export default {
@@ -34,9 +32,8 @@
       appHeader: appHeader,
       appSideMenu: appSideMenu,
       houseBody: houseBody,
+      houseGuideBody: houseGuideBody,
       appFooter: appFooter,
-      addHouseButton: addHouseButton,
-      houseModal: houseModal,
       messageModal: messageModal,
       appControlPanel: appControlPanel
     },

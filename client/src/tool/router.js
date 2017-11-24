@@ -20,7 +20,15 @@ let preloadHouse = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
   }
-  next()
+  utils.restGet('/api/getHouseData').then(
+    response => {
+      if (response) {
+        manager.refreshHouse(response.houses)
+        manager.refreshOwner(response.owners)
+        next()
+      }
+    }
+  )
 }
 let preloadRoom = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {

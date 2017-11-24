@@ -7,7 +7,8 @@
         </div>
         <div class="pull-left info">
           <p>{{manager.user._id}}</p>
-          <a href="#" v-on:click="logout()" class="text-red"><i class="glyphicon glyphicon-log-out"></i> ログアウト</a>
+          <a v-if="manager.socket && manager.socket.connected" v-on:click="disconnect()"><i class="fa fa-circle text-success"></i> Online</a>
+          <a v-else v-on:click="connect()"><i class="fa fa-circle text-red"></i> Offline</a>
         </div>
       </div>
       <ul id='side-menu-tree' class="sidebar-menu" data-widget="tree">
@@ -48,21 +49,18 @@
       })
     },
     methods: {
-      logout() {
-        utils.restGet('/logout').then(
-          response => {
-            if (response) {
-              utils.router.push({name: 'login'})
-            }
-          }
-        )
+      connect() {
+        manager.initSocket(() => {})
+      },
+      disconnect() {
+        manager.socket.disconnect()
       }
     }
   }
 </script>
 
 <style scoped>
-  .small {
-    font-size: 60%;
+  a {
+    cursor: pointer;
   }
 </style>

@@ -13,9 +13,9 @@
 </script>
 
 <style>
-  .navbar-static-top,
+  /* .navbar-static-top,
   .gradient-header {
-    background: -webkit-linear-gradient(left, #605ca8, #807ca8);
-    background: linear-gradient(to right, #605ca8, #807ca8);
-  }
+    background: -webkit-linear-gradient(left, #00B5ED, #51DCE5);
+    background: linear-gradient(to right, #00B5ED, #51DCE5);
+  } */
 </style>

@@ -22,17 +22,7 @@ class Manager {
   login(data, next) {
     let self = this
     this.user.login(data.user)
-    this.initSocket(() => {
-      utils.restGet('/api/getInitData').then(
-        response => {
-          if (response) {
-            self.refreshHouse(response.houses)
-            self.refreshOwner(response.owners)
-            next()
-          }
-        }
-      )
-    })
+    this.initSocket(next)
   }
   logout() {
     this.user.logout()

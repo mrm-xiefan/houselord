@@ -11,8 +11,8 @@ import contractService from './contractService.js'
 
 let router = express.Router()
 
-router.get('/getInitData', (req, res) => {
-  logger.debug('getInitData:', JSON.stringify(req.session.passport.user))
+router.get('/getHouseData', (req, res) => {
+  logger.debug('getHouseData:', JSON.stringify(req.session.passport.user))
   houseService.getLordHouses(req.session.passport.user._id, (error, houses) => {
     if (error) {
       res.json({error: error, data: null})

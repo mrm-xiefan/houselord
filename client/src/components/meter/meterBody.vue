@@ -27,7 +27,5 @@
 </script>
 
 <style scoped>
-  section.content {
-    height: 100%;
-  }
+
 </style>

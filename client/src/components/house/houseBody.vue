@@ -4,8 +4,6 @@
       <div class="houses-area" v-masonry transition-duration="0.3s" item-selector=".house-box">
         <houseBox :manager="manager" :house="house" v-masonry-tile v-for="house in manager.houses" :key="house._id"></houseBox>
       </div>
-      <div class="room-area row">
-      </div>
     </section>
   </div>
 </template>

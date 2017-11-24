@@ -14,8 +14,11 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            <a href="#" v-on:click="logout()"><i class="glyphicon glyphicon-log-out"></i> ログアウト</a>
           </li>
+          <!-- <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          </li> -->
         </ul>
       </div>
     </nav>
@@ -38,6 +41,15 @@
       },
       triggerIcon() {
         this.$router.push({path: '/'})
+      },
+      logout() {
+        utils.restGet('/logout').then(
+          response => {
+            if (response) {
+              utils.router.push({name: 'login'})
+            }
+          }
+        )
       }
     }
   }
