@@ -12,13 +12,13 @@ import contractService from './contractService.js'
 let router = express.Router()
 
 router.get('/getInitData', (req, res) => {
-  logger.debug('getInitData:', JSON.stringify(req.session.user))
-  houseService.getLordHouses(req.session.user._id, (error, houses) => {
+  logger.debug('getInitData:', JSON.stringify(req.session.passport.user))
+  houseService.getLordHouses(req.session.passport.user._id, (error, houses) => {
     if (error) {
       res.json({error: error, data: null})
     }
     else {
-      ownerService.getAllOwners(req.session.user._id, (error, owners) => {
+      ownerService.getAllOwners(req.session.passport.user._id, (error, owners) => {
         if (error) {
           res.json({error: error, data: null})
         }
@@ -31,25 +31,25 @@ router.get('/getInitData', (req, res) => {
 })
 router.post('/addHouse', (req, res) => {
   logger.info('addHouse:', JSON.stringify(req.body.params))
-  houseService.insertHouse(req.session.user, req.body.params, (error, house) => {
+  houseService.insertHouse(req.session.passport.user, req.body.params, (error, house) => {
     res.json({error: error, data: house})
   })
 })
 router.post('/updateHouse', (req, res) => {
   logger.info('updateHouse:', JSON.stringify(req.body.params))
-  houseService.updateHouse(req.session.user, req.body.params, (error, house) => {
+  houseService.updateHouse(req.session.passport.user, req.body.params, (error, house) => {
     res.json({error: error, data: house})
   })
 })
 router.post('/deleteHouse', (req, res) => {
   logger.info('deleteHouse:', JSON.stringify(req.body.params))
-  houseService.deleteHouse(req.session.user, req.body.params, (error) => {
+  houseService.deleteHouse(req.session.passport.user, req.body.params, (error) => {
     res.json({error: error, data: {}})
   })
 })
 router.post('/addOwner', (req, res) => {
   logger.info('addOwner:', JSON.stringify(req.body.params))
-  ownerService.insertOwner(req.session.user, req.body.params, (error, owner) => {
+  ownerService.insertOwner(req.session.passport.user, req.body.params, (error, owner) => {
     res.json({error: error, data: owner})
   })
 })
@@ -67,13 +67,13 @@ router.get('/getHouseDetail', (req, res) => {
 })
 router.post('/addContract', (req, res) => {
   logger.info('addContract:', JSON.stringify(req.body.params))
-  contractService.insertContract(req.session.user, req.body.params, (error, contract) => {
+  contractService.insertContract(req.session.passport.user, req.body.params, (error, contract) => {
     res.json({error: error, data: contract})
   })
 })
 router.post('/fixPayment', (req, res) => {
   logger.info('fixPayment:', JSON.stringify(req.body.params))
-  contractService.updateContract(req.session.user, req.body.params, (error, contract) => {
+  contractService.updateContract(req.session.passport.user, req.body.params, (error, contract) => {
     res.json({error: error, data: contract})
   })
 })

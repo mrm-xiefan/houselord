@@ -6,11 +6,12 @@ import mongo from './mongo.js'
 class UserService {
   constructor() {
   }
-  recordLogin(req, next) {
+  recordLogin(user, next) {
+    let self = this
     let now = new Date()
     mongo.update(
       'users',
-      {_id: req.session.user._id},
+      {_id: user._id},
       {$set: {udate: now.valueOf()}},
       {multi: false},
       (error, result) => {
@@ -18,13 +19,14 @@ class UserService {
           next(error)
         }
         else {
-          req.session.user.udate = now.valueOf()
-          next(null)
+          self.getUser(user, (error, user) => {
+            next(error, user)
+          })
         }
       }
     )
   }
-  insertUser(req, user, next) {
+  insertUser(user, next) {
     mongo.find(
       'users',
       {_id: user._id},
@@ -49,7 +51,6 @@ class UserService {
                   next(error)
                 }
                 else {
-                  req.session.user = inserted.ops[0]
                   next(null, inserted.ops[0])
                 }
               }
@@ -62,7 +63,7 @@ class UserService {
       }
     )
   }
-  getUser(req, user, next) {
+  getUser(user, next) {
     mongo.find(
       'users',
       {_id: user._id, password: user.password},
@@ -72,10 +73,27 @@ class UserService {
           next(error)
         }
         else if (result.length <= 0) {
+          next('S002')
+        }
+        else {
+          next(null, result[0])
+        }
+      }
+    )
+  }
+  authenticate(_id, password, next) {
+    mongo.find(
+      'users',
+      {_id: _id, password: password},
+      {},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else if (result.length <= 0) {
           next('B002')
         }
         else {
-          req.session.user = result[0]
           next(null, result[0])
         }
       }

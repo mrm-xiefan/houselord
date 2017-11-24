@@ -69,7 +69,7 @@
           })
           return
         }
-        utils.restGet('/manualLogin', {_id: manager.user._id, password: manager.user.password}).then(
+        utils.authenticate({username: manager.user._id, password: manager.user.password}).then(
           response => {
             if (response) {
               manager.login(response, () => {

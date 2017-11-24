@@ -220,6 +220,44 @@ class Utils {
       }
     })
   }
+  async authenticate(user) {
+    var self = this
+
+    let responseData = null
+    self.event.$emit('LOCK_SCREEN', 'lock')
+    await this.api.post('/authenticate', user).then(
+      response => {
+        self.event.$emit('LOCK_SCREEN', 'unlock')
+        // server error
+        if (response.data.error) {
+          if (response.data.error == 'B900') {
+            this.router.push({name: 'error'})
+          }
+          else {
+            self.event.$emit('SHOW_MESSAGE', response.data.error)
+          }
+        }
+        responseData = response.data
+      }
+    ).catch(
+      error => {
+        self.event.$emit('LOCK_SCREEN', 'unlock')
+        // network error
+        self.event.$emit('SHOW_MESSAGE', 'S001')
+        responseData = {error: 'S001', data: null}
+      }
+    )
+
+    return new Promise((resolve, reject) => {
+      if (responseData.error) {
+        resolve(null)
+        // reject(responseData)
+      }
+      else {
+        resolve(responseData.data)
+      }
+    })
+  }
   socketEmit(event, params) {
     if (!this.socket) {
       return

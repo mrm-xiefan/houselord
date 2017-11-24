@@ -11,7 +11,7 @@ import logger from './services/logger.js'
 import mongo from './services/mongo.js'
 import utils from './services/utils.js'
 import httpRouter from './services/httpRouter.js'
-// import socketRouter from './services/socketRouter.js'
+import socketRouter from './services/socketRouter.js'
 import userService from './services/userService.js'
 import dataService from './services/dataService.js'
 
@@ -97,18 +97,66 @@ httpRouter.use(session)
 
 
 
-let checkAuth = (req, res, next) => {
-  if (req.session && req.session.user) {
-    userService.recordLogin(req, (error) => {
-      if (error) {
-        res.json({error: error, data: null})
+import passport from 'passport'
+import flash from 'connect-flash'
+let LocalStrategy = require('passport-local').Strategy
+let strategy = null
+if (conf.authentication.mode == 'basic') {
+  strategy = new LocalStrategy(
+    (username, password, next) => {
+      userService.authenticate(username, password, (error, user) => {
+        if (error) {
+          next(null, error)
+        }
+        else {
+          next(null, user)
+        }
+      })
+    }
+  )
+}
+passport.use(strategy)
+passport.serializeUser((user, done) => {
+  done(null, user)
+})
+passport.deserializeUser((user, done) => {
+  done(null, user)
+})
+app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+
+if (conf.authentication.mode == 'basic') {
+  app.post('/authenticate',
+    passport.authenticate('local'),
+    (req, res) => {
+      if (req.session && req.session.passport && req.session.passport.user && req.session.passport.user._id) {
+        res.redirect('login')
       }
       else {
-        next()
+        if (req.session && req.session.passport && req.session.passport.user) {
+          let error = req.session.passport.user
+          req.session.passport.user = null
+          res.json({error: error, data: null})
+        }
+        else {
+          res.json({error: 'S002', data: null})
+        }
       }
-    })
+    }
+  )
+}
+
+
+
+
+let checkAuth = (req, res, next) => {
+  if (req.session && req.session.passport && req.session.passport.user) {
+    next()
   } else {
-    logger.debug('miss session.')
+    logger.warn('miss session.')
     res.json({error: 'B900', data: null})
   }
 }
@@ -201,54 +249,45 @@ app.post('/uploadFiles', (req, res, next) => {
 
 
 
-app.get('/autoLogin', (req, res) => {
-  logger.debug('autoLogin:', JSON.stringify(req.session))
-  if (!req.session || !req.session.user) {
+app.get('/login', (req, res) => {
+  logger.info('login')
+  if (!req.session || !req.session.passport || !req.session.passport.user) {
     res.json({error: null, data: {user: null}})
   }
   else {
-    userService.recordLogin(req, (error) => {
+    logger.info('user:', JSON.stringify(req.session.passport.user))
+    userService.recordLogin(req.session.passport.user, (error, user) => {
       if (error) {
         res.json({error: error, data: null})
       }
       else {
-        res.json({error: null, data: {user: req.session.user}})
+        res.json({error: null, data: {user: user}})
       }
     })
   }
 })
-app.get('/manualLogin', (req, res) => {
-  let url_parts = url.parse(req.url, true)
-  logger.info('manualLogin:' + JSON.stringify(url_parts.query))
-
-  userService.getUser(req, url_parts.query, (error, user) => {
-    if (error) {
-      res.json({error: error, data: null})
-    }
-    else {
-      logger.info('session:' + JSON.stringify(req.session))
-      res.json({error: null, data: {user: user}})
-    }
-  })
-})
 app.post('/register', (req, res) => {
   logger.info('register:' + JSON.stringify(req.body.params))
-
-  userService.insertUser(req, req.body.params, (error, user) => {
+  userService.insertUser(req.body.params, (error, user) => {
     if (error) {
       res.json({error: error, data: null})
     }
     else {
-      logger.info('session:' + JSON.stringify(req.session))
       res.json({error: null, data: {user: user}})
     }
   })
 })
 app.get('/logout', (req, res) => {
-  logger.debug('logout:', JSON.stringify(req.session))
-  if (req.session) {
-    req.session.destroy()
+  logger.info('logout')
+  if (req.session && req.session.passport && req.session.passport.user) {
+    logger.info('user:', req.session.passport.user._id)
   }
+  if (req.session) {
+    req.session.destroy((error) => {
+      logger.debug('logouted:', error)
+    })
+  }
+  req.logout()
   res.json({error: null, data: {}})
 })
 
@@ -256,13 +295,6 @@ app.get('/logout', (req, res) => {
 
 
 // app.use(express.static(path.join(__dirname, '..', 'dist')))
-// let validUser = (req, res, next) => {
-//   if (conf.authentication.mode !== 'basic' && JSON.stringify(req.headers['user-agent']) !== "ELB-HealthChecker/2.0" && !req.user) {
-//     res.redirect(conf.redirect + 'login')
-//   } else {
-//     next()
-//   }
-// }
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'))
 })
@@ -285,5 +317,5 @@ mongo.init(() => {
   server.listen(conf.port)
   server.on('listening', onListening)
 
-  // socketRouter.init(server, session)
+  socketRouter.init(server, session)
 })

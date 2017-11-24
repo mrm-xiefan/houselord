@@ -53,15 +53,6 @@ let preloadReport = (to, from, next) => {
   }
   next()
 }
-let logout = (to, from, next) => {
-  utils.restGet('/logout').then(
-    response => {
-      if (response) {
-        utils.router.push({name: 'login'})
-      }
-    }
-  )
-}
 
 export default new Router({
   mode: 'history',
@@ -69,7 +60,6 @@ export default new Router({
     {name: 'loading', path: '/loading', component: loading},
     {name: 'login', path: '/login', component: login},
     {name: 'register', path: '/register', component: register},
-    {name: 'logout', path: '/login', beforeEnter: logout},
     {name: 'error', path: '/error', component: error},
     {name: 'house', path: '/', component: house, beforeEnter: preloadHouse},
     {name: 'room', path: '/room/:house', component: room, beforeEnter: preloadRoom},

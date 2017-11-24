@@ -18,6 +18,9 @@ class SocketRouter {
 
     self.io.sockets.on('connection', (socket) => {
       logger.info('connected: ' + socket.id)
+      if (socket.request && socket.request.session && socket.request.session.passport && socket.request.session.passport.user) {
+        logger.info('socket session: ' + JSON.stringify(socket.request.session.passport.user))
+      }
       let client = roomService.login(socket)
       roomService.spy()
 
@@ -30,24 +33,28 @@ class SocketRouter {
 
       socket.on('enterLobby', (params) => {
         logger.info('enterLobby: ' + socket.id)
-        if (roomService.enterLobby(client)) {
-          roomService.spy()
-        }
+        self.checkAuth(socket, () => {
+          if (roomService.enterLobby(client)) {
+            roomService.spy()
+          }
+        })
       })
 
       socket.on('enterChatRoom', (params) => {
         logger.info('enterChatRoom: ' + socket.id + '|' + JSON.stringify(params))
-        if (roomService.enterChatRoom(client)) {
-          // chatService.getChats((error, chats, count) => {
-          //   if (error) {
-          //     socket.emit('processError', error)
-          //   }
-          //   else {
-          //     socket.emit('initChatRoom', {chats: chats, count: count})
-          //   }
-          // })
-          roomService.spy()
-        }
+        self.checkAuth(socket, () => {
+          if (roomService.enterChatRoom(client)) {
+            // chatService.getChats((error, chats, count) => {
+            //   if (error) {
+            //     socket.emit('processError', error)
+            //   }
+            //   else {
+            //     socket.emit('initChatRoom', {chats: chats, count: count})
+            //   }
+            // })
+            roomService.spy()
+          }
+        })
       })
 
       socket.on('disconnect', () => {
@@ -55,6 +62,15 @@ class SocketRouter {
         roomService.spy()
       })
     })
+    logger.debug('socket init ok!')
+  }
+  checkAuth(socket, next) {
+    if (socket.request && socket.request.session && socket.request.session.passport && socket.request.session.passport.user) {
+      next()
+    }
+    else {
+      socket.emit('authenticateError', {})
+    }
   }
 }
 

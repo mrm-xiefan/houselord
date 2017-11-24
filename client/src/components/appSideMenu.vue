@@ -7,7 +7,7 @@
         </div>
         <div class="pull-left info">
           <p>{{manager.user._id}}</p>
-          <router-link to="/logout" class="text-red"><i class="glyphicon glyphicon-log-out"></i> ログアウト</router-link>
+          <a href="#" v-on:click="logout()" class="text-red"><i class="glyphicon glyphicon-log-out"></i> ログアウト</a>
         </div>
       </div>
       <ul id='side-menu-tree' class="sidebar-menu" data-widget="tree">
@@ -46,6 +46,17 @@
       this.$nextTick(() => {
         $('#side-menu-tree').tree()
       })
+    },
+    methods: {
+      logout() {
+        utils.restGet('/logout').then(
+          response => {
+            if (response) {
+              utils.router.push({name: 'login'})
+            }
+          }
+        )
+      }
     }
   }
 </script>

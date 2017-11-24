@@ -21,7 +21,7 @@
     mounted() {
       let self = this
       let path = this.$route.query.path
-      utils.restGet('/autoLogin').then(
+      utils.restGet('/login').then(
         response => {
           if (response) {
             if (response.user) {

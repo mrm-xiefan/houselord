@@ -91,9 +91,15 @@
         utils.restPost('/register', {_id: manager.user._id, password: manager.user.password}).then(
           response => {
             if (response) {
-              manager.login(response, () => {
-                self.$router.push({path: '/'})
-              })
+              utils.authenticate({username: manager.user._id, password: manager.user.password}).then(
+                response => {
+                  if (response) {
+                    manager.login(response, () => {
+                      self.$router.push({path: '/'})
+                    })
+                  }
+                }
+              )
             }
           }
         )
