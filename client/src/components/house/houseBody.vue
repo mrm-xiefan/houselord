@@ -44,9 +44,6 @@
 </script>
 
 <style scoped>
-  section.content {
-    height: 100%;
-  }
   .houses-area {
     width: 100%;
     overflow: hidden;

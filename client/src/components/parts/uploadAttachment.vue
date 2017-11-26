@@ -56,49 +56,47 @@
         uploadUrl = '/'
       }
       uploadUrl += 'uploadFiles'
-      $('#upload-input-attachment').fileinput(
-        {
-          uploadUrl: uploadUrl,
-          // allowedFileExtensions : null,
-          // overwriteInitial: false,
-          maxFilesNum: 20,
-          maxFileSize: 2000000,
-          // previewFileType: 'any',
-          showCaption: true,
+      $('#upload-input-attachment').fileinput({
+        uploadUrl: uploadUrl,
+        // allowedFileExtensions : null,
+        // overwriteInitial: false,
+        maxFilesNum: 20,
+        maxFileSize: 2000000,
+        // previewFileType: 'any',
+        showCaption: true,
+        showUpload: false,
+        // showRemove: false,
+        // showCancel: false,
+        showClose: false,
+        showBrowse: true,
+        showPreview: false,
+        browseOnZoneClick: false,
+        // removeFromPreviewOnError: false,
+        // previewFileIcon: '<i class="fa fa-file"></i>',
+        browseIcon: '<i class="fa fa-paperclip"></i>',
+        browseLabel: 'Attachment',
+        browseClass: 'btn btn-default',
+        removeIcon: '<i class="fa fa-chain-broken"></i>',
+        removeLabel: 'Clear',
+        removeClass: 'btn btn-default',
+        cancelIcon: '<i class="fa fa-ban"></i>',
+        cancelClass: 'btn btn-default',
+        uploadIcon: '<i class="fa fa-upload"></i>',
+        uploadClass: 'btn btn-default',
+        // msgValidationErrorIcon: '<i class="fa fa-info-circle"></i>',
+        fileActionSettings: {
+          showRemove: true,
+          removeIcon: '<i class="fa fa-trash"></i>',
           showUpload: false,
-          // showRemove: false,
-          // showCancel: false,
-          showClose: false,
-          showBrowse: true,
-          showPreview: false,
-          browseOnZoneClick: false,
-          // removeFromPreviewOnError: false,
-          // previewFileIcon: '<i class="fa fa-file"></i>',
-          browseIcon: '<i class="fa fa-paperclip"></i>',
-          browseLabel: 'Attachment',
-          browseClass: 'btn btn-default',
-          removeIcon: '<i class="fa fa-chain-broken"></i>',
-          removeLabel: 'Clear',
-          removeClass: 'btn btn-default',
-          cancelIcon: '<i class="fa fa-ban"></i>',
-          cancelClass: 'btn btn-default',
           uploadIcon: '<i class="fa fa-upload"></i>',
-          uploadClass: 'btn btn-default',
-          // msgValidationErrorIcon: '<i class="fa fa-info-circle"></i>',
-          fileActionSettings: {
-            showRemove: true,
-            removeIcon: '<i class="fa fa-trash"></i>',
-            showUpload: false,
-            uploadIcon: '<i class="fa fa-upload"></i>',
-            showZoom: false,
-            indicatorNew: ''
-          },
-          // slugCallback: (filename) => {
-          //   return filename.replace('(', '_').replace(']', '_')
-          // },
-          uploadAsync: false
-        }
-      )
+          showZoom: false,
+          indicatorNew: ''
+        },
+        // slugCallback: (filename) => {
+        //   return filename.replace('(', '_').replace(']', '_')
+        // },
+        uploadAsync: false
+      })
       $('#upload-input-attachment').on('filebatchuploadsuccess', (event, data, previewId, index) => {
         utils.event.$emit('LOCK_SCREEN', 'unlock')
         let form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader

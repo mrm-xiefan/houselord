@@ -71,67 +71,65 @@
       }
       uploadUrl += 'uploadFiles'
       let initialPreview = []
-      $('#thumbnail-attachment').fileinput(
-        {
-          uploadUrl: uploadUrl,
-          allowedFileExtensions : ['JPG', 'JPEG', 'PNG', 'TIF', 'TIFF'],
-          maxFilesNum: 1,
-          maxFileSize: 2000000,
-          initialPreview: initialPreview,
-          initialPreviewAsData: true,
-          overwriteInitial: true,
-          // previewFileType: 'any',
-          showCaption: false,
-          showUpload: false,
+      $('#thumbnail-attachment').fileinput({
+        uploadUrl: uploadUrl,
+        allowedFileExtensions : ['JPG', 'JPEG', 'PNG', 'TIF', 'TIFF'],
+        maxFilesNum: 1,
+        maxFileSize: 2000000,
+        initialPreview: initialPreview,
+        initialPreviewAsData: true,
+        overwriteInitial: true,
+        // previewFileType: 'any',
+        showCaption: false,
+        showUpload: false,
+        showRemove: false,
+        showCancel: false,
+        showClose: false,
+        showBrowse: true,
+        browseOnZoneClick: false,
+        // removeFromPreviewOnError: false,
+        // previewFileIcon: '<i class="fa fa-file"></i>',
+        browseIcon: '<i class="fa fa-folder-open-o"></i>',
+        browseLabel: 'Browse',
+        browseClass: 'btn btn-default btn-flat full-width',
+        removeIcon: '<i class="fa fa-trash"></i>',
+        removeLabel: 'Clear',
+        removeClass: 'btn btn-default',
+        cancelIcon: '<i class="fa fa-ban"></i>',
+        cancelClass: 'btn btn-default',
+        uploadIcon: '<i class="fa fa-upload"></i>',
+        uploadClass: 'btn btn-default',
+        // msgValidationErrorIcon: '<i class="fa fa-info-circle"></i>',
+        fileActionSettings: {
           showRemove: false,
-          showCancel: false,
-          showClose: false,
-          showBrowse: true,
-          browseOnZoneClick: false,
-          // removeFromPreviewOnError: false,
-          // previewFileIcon: '<i class="fa fa-file"></i>',
-          browseIcon: '<i class="fa fa-folder-open-o"></i>',
-          browseLabel: 'Browse',
-          browseClass: 'btn btn-default btn-flat full-width',
           removeIcon: '<i class="fa fa-trash"></i>',
-          removeLabel: 'Clear',
-          removeClass: 'btn btn-default',
-          cancelIcon: '<i class="fa fa-ban"></i>',
-          cancelClass: 'btn btn-default',
+          showUpload: false,
           uploadIcon: '<i class="fa fa-upload"></i>',
-          uploadClass: 'btn btn-default',
-          // msgValidationErrorIcon: '<i class="fa fa-info-circle"></i>',
-          fileActionSettings: {
-            showRemove: false,
-            removeIcon: '<i class="fa fa-trash"></i>',
-            showUpload: false,
-            uploadIcon: '<i class="fa fa-upload"></i>',
-            showZoom: false,
-            indicatorNew: ''
-          },
-          // slugCallback: (filename) => {
-          //   return filename.replace('(', '_').replace(']', '_')
-          // },
-          uploadAsync: false,
-          layoutTemplates: {
-            preview:
-              '<div class="file-preview">\n' +
-                '{close}' +
-                '<div class="file-preview-thumbnails">\n' +
-                '</div>\n' +
-                '<div class="clearfix"></div>' +
-              '</div>',
-          },
-          previewTemplates: {
-            image:
-              '<div class="file-preview-frame{frameClass}" id="{previewId}" data-fileindex="{fileindex}" data-template="{template}">\n' +
-                '<div class="kv-file-content">' +
-                  '<img src="{data}" class="kv-preview-data file-preview-image" title="{caption}" alt="{caption}" ' + 'style="width: 100%; height: 100%;"' + '>\n' +
-                '</div>\n' +
-              '</div>\n'
-          }
+          showZoom: false,
+          indicatorNew: ''
+        },
+        // slugCallback: (filename) => {
+        //   return filename.replace('(', '_').replace(']', '_')
+        // },
+        uploadAsync: false,
+        layoutTemplates: {
+          preview:
+            '<div class="file-preview">\n' +
+              '{close}' +
+              '<div class="file-preview-thumbnails">\n' +
+              '</div>\n' +
+              '<div class="clearfix"></div>' +
+            '</div>',
+        },
+        previewTemplates: {
+          image:
+            '<div class="file-preview-frame{frameClass}" id="{previewId}" data-fileindex="{fileindex}" data-template="{template}">\n' +
+              '<div class="kv-file-content">' +
+                '<img src="{data}" class="kv-preview-data file-preview-image" title="{caption}" alt="{caption}" ' + 'style="width: 100%; height: 100%;"' + '>\n' +
+              '</div>\n' +
+            '</div>\n'
         }
-      )
+      })
       $('#thumbnail-attachment').on('filebatchuploadsuccess', (event, data, previewId, index) => {
         utils.event.$emit('LOCK_SCREEN', 'unlock')
         let form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader

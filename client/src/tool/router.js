@@ -5,6 +5,7 @@ import login from '@/components/login'
 import register from '@/components/register'
 import error from '@/components/error'
 import house from '@/components/house/house'
+import addHouse from '@/components/addHouse/addHouse'
 import room from '@/components/room/room'
 import meter from '@/components/meter/meter'
 import report from '@/components/report/report'
@@ -29,6 +30,12 @@ let preloadHouse = (to, from, next) => {
       }
     }
   )
+}
+let preloadAddHouse = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  next()
 }
 let preloadRoom = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
@@ -70,6 +77,7 @@ export default new Router({
     {name: 'register', path: '/register', component: register},
     {name: 'error', path: '/error', component: error},
     {name: 'house', path: '/', component: house, beforeEnter: preloadHouse},
+    {name: 'addHouse', path: '/addHouse', component: addHouse, beforeEnter: preloadAddHouse},
     {name: 'room', path: '/room/:house', component: room, beforeEnter: preloadRoom},
     {name: 'meter', path: '/meter', component: meter, beforeEnter: preloadMeter},
     {name: 'report', path: '/report', component: report, beforeEnter: preloadReport},

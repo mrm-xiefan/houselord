@@ -52,45 +52,43 @@
         uploadUrl = '/'
       }
       uploadUrl += 'uploadFiles'
-      $('#upload-input').fileinput(
-        {
-          uploadUrl: uploadUrl,
-          // allowedFileExtensions : null,
-          // overwriteInitial: false,
-          maxFilesNum: 20,
-          maxFileSize: 2000000,
-          // previewFileType: 'any',
-          // showCaption: true,
-          // showUpload: false,
-          // showRemove: false,
-          showCancel: false,
-          showClose: false,
-          showBrowse: true,
-          browseOnZoneClick: true,
-          // removeFromPreviewOnError: false,
-          // previewFileIcon: '<i class="fa fa-file"></i>',
-          browseIcon: '<i class="fa fa-folder-open-o"></i>',
+      $('#upload-input').fileinput({
+        uploadUrl: uploadUrl,
+        // allowedFileExtensions : null,
+        // overwriteInitial: false,
+        maxFilesNum: 20,
+        maxFileSize: 2000000,
+        // previewFileType: 'any',
+        // showCaption: true,
+        // showUpload: false,
+        // showRemove: false,
+        showCancel: false,
+        showClose: false,
+        showBrowse: true,
+        browseOnZoneClick: true,
+        // removeFromPreviewOnError: false,
+        // previewFileIcon: '<i class="fa fa-file"></i>',
+        browseIcon: '<i class="fa fa-folder-open-o"></i>',
+        removeIcon: '<i class="fa fa-trash"></i>',
+        removeClass: 'btn btn-primary',
+        cancelIcon: '<i class="fa fa-ban"></i>',
+        cancelClass: 'btn btn-primary',
+        uploadIcon: '<i class="fa fa-upload"></i>',
+        uploadClass: 'btn btn-primary',
+        // msgValidationErrorIcon: '<i class="fa fa-info-circle"></i>',
+        fileActionSettings: {
+          showRemove: true,
           removeIcon: '<i class="fa fa-trash"></i>',
-          removeClass: 'btn btn-primary',
-          cancelIcon: '<i class="fa fa-ban"></i>',
-          cancelClass: 'btn btn-primary',
+          showUpload: false,
           uploadIcon: '<i class="fa fa-upload"></i>',
-          uploadClass: 'btn btn-primary',
-          // msgValidationErrorIcon: '<i class="fa fa-info-circle"></i>',
-          fileActionSettings: {
-            showRemove: true,
-            removeIcon: '<i class="fa fa-trash"></i>',
-            showUpload: false,
-            uploadIcon: '<i class="fa fa-upload"></i>',
-            showZoom: false,
-            indicatorNew: ''
-          },
-          // slugCallback: (filename) => {
-          //   return filename.replace('(', '_').replace(']', '_')
-          // },
-          uploadAsync: false
-        }
-      )
+          showZoom: false,
+          indicatorNew: ''
+        },
+        // slugCallback: (filename) => {
+        //   return filename.replace('(', '_').replace(']', '_')
+        // },
+        uploadAsync: false
+      })
       $('#upload-input').on('filepreajax', (event, previewId, index) => {
         $('#close-upload').hide()
         utils.event.$emit('LOCK_SCREEN', 'lock')

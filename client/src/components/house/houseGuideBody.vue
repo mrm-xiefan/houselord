@@ -5,7 +5,7 @@
     </div>
     <section class="content" v-on:click="closeSide">
       <div class="add-house-guide">
-        <div class="add-house-button">
+        <div class="add-house-button" v-on:click="addHouse()">
           <i class="fa fa-plus"></i> ハウスを登録する
         </div>
       </div>
@@ -28,6 +28,9 @@
         if ($('.control-sidebar').hasClass('control-sidebar-open')) {
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
+      },
+      addHouse() {
+        this.$router.push({path: '/addHouse'})
       }
     }
   }
