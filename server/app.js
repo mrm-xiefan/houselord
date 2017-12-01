@@ -10,6 +10,7 @@ import cookieParser from 'cookie-parser'
 import logger from './services/logger.js'
 import mongo from './services/mongo.js'
 import utils from './services/utils.js'
+import compression from 'compression'
 import httpRouter from './services/httpRouter.js'
 import socketRouter from './services/socketRouter.js'
 import userService from './services/userService.js'
@@ -22,6 +23,17 @@ logger.info('storagy mode:', conf.storagy.mode)
 
 let app = express()
 app.set('views', path.join(__dirname, '..', 'dist'))
+app.use(
+  compression({
+    filter: (req, res) => {
+      const contentType = res.get('Content-Type')
+      if (contentType && contentType.indexOf("application/json") === -1) {
+        return false
+      }
+      return compression.filter(req, res)
+    }
+  })
+)
 app.use(bodyParser.json({limit: '2gb'}))
 app.use(bodyParser.urlencoded({limit: '2gb', extended: true}))
 app.use(log4js.connectLogger(logger))

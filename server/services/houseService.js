@@ -12,7 +12,8 @@ class HouseService {
     mongo.findAll(
       'houses',
       {lord: lord, deleted: {$ne: true}},
-      {sort: {'udate': -1}},
+      {},
+      {'udate': -1},
       (error, houses) => {
         if (error) {
           next(error, null)
@@ -28,6 +29,7 @@ class HouseService {
     mongo.findAll(
       'houses',
       {_id: ObjectId(_id), deleted: {$ne: true}},
+      {},
       {},
       (error, results) => {
         if (error) {

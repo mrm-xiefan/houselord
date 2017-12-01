@@ -2,7 +2,7 @@
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
       <div class="bg-gray add-header text-black">
-        <i class="fa fa-plus"></i> ハウスを登録する
+        <i class="fa fa-plus-circle"></i> ハウスを登録する
       </div>
       <div class="bg-gray-light add-body">
         <h4>1.ハウス情報を登録する</h4>
@@ -28,6 +28,14 @@
           <label class="input-label">備考：</label>
           <div class="input-text">
             <input type="text" class="form-control" placeholder="入力">
+          </div>
+        </div>
+
+        <h4 class="margin-top">2.部屋情報を登録する</h4>
+        <div class="input-group">
+          <label class="input-label"><span class="text-red require">(＊)</span>部屋数：</label>
+          <div class="input-text">
+            <input type="number" class="form-control" max="30" placeholder="入力">
           </div>
         </div>
       </div>
@@ -56,6 +64,14 @@
 </script>
 
 <style scoped>
+  h4 {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  .margin-top {
+    margin-top: 40px;
+  }
   .add-header {
     padding: 15px;
     border: 1px solid #aaa;

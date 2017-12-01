@@ -1,6 +1,6 @@
 import conf from 'config'
 import logger from './logger.js'
-import roomService from './roomService.js'
+import socketService from './socketService.js'
 
 class SocketRouter {
   constructor() {
@@ -21,21 +21,21 @@ class SocketRouter {
       if (socket.request && socket.request.session && socket.request.session.passport && socket.request.session.passport.user) {
         logger.info('socket session: ' + JSON.stringify(socket.request.session.passport.user))
       }
-      let client = roomService.login(socket)
-      roomService.spy()
+      let client = socketService.login(socket)
+      socketService.spy()
 
       socket.on('reinit', (params) => {
         logger.info(socket.id + ' reinit: ' + JSON.stringify(params))
-        roomService.recovery(client, params)
+        socketService.recovery(client, params)
         socket.emit('reinited', {})
-        roomService.spy()
+        socketService.spy()
       })
 
       socket.on('enterLobby', (params) => {
         logger.info('enterLobby: ' + socket.id)
         self.checkAuth(socket, () => {
-          if (roomService.enterLobby(client)) {
-            roomService.spy()
+          if (socketService.enterLobby(client)) {
+            socketService.spy()
           }
         })
       })
@@ -43,7 +43,7 @@ class SocketRouter {
       socket.on('enterChatRoom', (params) => {
         logger.info('enterChatRoom: ' + socket.id + '|' + JSON.stringify(params))
         self.checkAuth(socket, () => {
-          if (roomService.enterChatRoom(client)) {
+          if (socketService.enterChatRoom(client)) {
             // chatService.getChats((error, chats, count) => {
             //   if (error) {
             //     socket.emit('processError', error)
@@ -52,14 +52,14 @@ class SocketRouter {
             //     socket.emit('initChatRoom', {chats: chats, count: count})
             //   }
             // })
-            roomService.spy()
+            socketService.spy()
           }
         })
       })
 
       socket.on('disconnect', () => {
-        roomService.logout(client)
-        roomService.spy()
+        socketService.logout(client)
+        socketService.spy()
       })
     })
     logger.debug('socket init ok!')

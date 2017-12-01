@@ -10,7 +10,8 @@ class OwnerService {
     mongo.findAll(
       'owners',
       {lord: lord, deleted: {$ne: true}},
-      {sort: {'udate': -1}},
+      {},
+      {'udate': -1},
       (error, owners) => {
         if (error) {
           next(error, null)

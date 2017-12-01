@@ -17,7 +17,8 @@ class ContractService {
     mongo.findAll(
       'contracts',
       filter,
-      {sort: {'cdate': -1}},
+      {},
+      {'cdate': -1},
       (error, contracts) => {
         if (error) {
           next(error, null)

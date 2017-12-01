@@ -60,10 +60,25 @@ class Mongo {
       }
     })
   }
-  findAll(collection_name, criteria, projection, next) {
+  findAll(collection_name, criteria, projection, sort, next) {
     if (!this.db) {
       next('S003', null)
       return
+    }
+    if (typeof(criteria) === 'function') {
+      next = criteria
+      criteria = {}
+      projection = null
+      sort = null
+    }
+    else if (typeof(projection) === 'function') {
+      next = projection
+      projection = null
+      sort = null
+    }
+    else if (typeof(sort) === 'function') {
+      next = sort
+      sort = null
     }
     this.db.collection(collection_name, (outer_error, collection) => {
       if (outer_error) {
@@ -71,7 +86,14 @@ class Mongo {
         next('S003', null)
       }
       else {
-        collection.find(criteria, projection).toArray((inner_error, result) => {
+        let cursor = collection.find(criteria)
+        if (projection) {
+          cursor = cursor.project(projection)
+        }
+        if (sort) {
+          cursor = cursor.sort(sort)
+        }
+        cursor.toArray((inner_error, result) => {
           if (inner_error) {
             logger.error('findAll error:' + JSON.stringify(inner_error))
             next('S003', null)
