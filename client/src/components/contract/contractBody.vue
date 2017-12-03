@@ -43,7 +43,7 @@
             <div class="input-group">
               <label class="input-label">礼金：</label>
               <div class="input-text">
-                <input v-model="manager.contract.room.keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
               </div>
             </div>
           </div>
@@ -51,7 +51,7 @@
             <div class="input-group">
               <label class="input-label"><span class="text-red require">(＊)</span>家賃：</label>
               <div class="input-text">
-                <input v-model="manager.contract.room.rent" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.rent" type="number" class="form-control" step="1000" placeholder="入力">
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@
             <div class="input-group">
               <label class="input-label">敷金：</label>
               <div class="input-text">
-                <input v-model="manager.contract.room.deposit" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.deposit" type="number" class="form-control" step="1000" placeholder="入力">
               </div>
             </div>
           </div>
@@ -120,19 +120,7 @@
     },
     computed: {
       isValid() {
-        if (!manager.contract.contract.resident) {
-          return false
-        }
-        if (manager.contract.room.keyMoney < 0) {
-          return false
-        }
-        if (manager.contract.room.deposit < 0) {
-          return false
-        }
-        if (manager.contract.room.rent <= 0) {
-          return false
-        }
-        return true
+        return manager.contract.contract.isValueValid()
       }
     },
     methods: {
@@ -174,9 +162,9 @@
       },
       saveContract() {
         let self = this
-        manager.contract.room.keyMoney = Number(manager.contract.room.keyMoney)
-        manager.contract.room.rent = Number(manager.contract.room.rent)
-        manager.contract.room.deposit = Number(manager.contract.room.deposit)
+        manager.contract.contract.keyMoney = Number(manager.contract.contract.keyMoney)
+        manager.contract.contract.rent = Number(manager.contract.contract.rent)
+        manager.contract.contract.deposit = Number(manager.contract.contract.deposit)
         if (self.checkDate()) {
           let contract = {
             lord: manager.user._id,
@@ -188,9 +176,9 @@
             start: manager.contract.contract.start,
             end: manager.contract.contract.end,
             first: manager.contract.contract.first,
-            keyMoney: manager.contract.room.keyMoney,
-            rent: manager.contract.room.rent,
-            deposit: manager.contract.room.deposit
+            keyMoney: manager.contract.contract.keyMoney,
+            rent: manager.contract.contract.rent,
+            deposit: manager.contract.contract.deposit
           }
           let payments = self.generatePayments()
           utils.restPost('/api/saveContract', {contract: contract, payments: payments}).then(
@@ -210,20 +198,20 @@
         let now = new Date()
         let contract = manager.contract.contract
         now = now.valueOf()
-        if (manager.contract.room.keyMoney > 0) {
+        if (manager.contract.contract.keyMoney > 0) {
           payments.push({
             DRCR: 'DR',
             type: 'keyMoney',
-            amount: manager.contract.room.keyMoney,
+            amount: manager.contract.contract.keyMoney,
             plan: contract.start,
             pay: now
           })
         }
-        if (manager.contract.room.deposit > 0) {
+        if (manager.contract.contract.deposit > 0) {
           payments.push({
             DRCR: 'DR',
             type: 'deposit',
-            amount: manager.contract.room.deposit,
+            amount: manager.contract.contract.deposit,
             plan: contract.start,
             pay: now
           })
@@ -232,7 +220,7 @@
         payments.push({
           DRCR: 'DR',
           type: 'rent',
-          amount: manager.contract.room.rent,
+          amount: manager.contract.contract.rent,
           plan: contract.first
         })
 
@@ -247,16 +235,16 @@
           payments.push({
             DRCR: 'DR',
             type: 'rent',
-            amount: manager.contract.room.rent,
+            amount: manager.contract.contract.rent,
             plan: current.toDate().valueOf()
           })
         }
 
-        if (manager.contract.room.deposit > 0) {
+        if (manager.contract.contract.deposit > 0) {
           payments.push({
             DRCR: 'CR',
             type: 'deposit',
-            amount: manager.contract.room.deposit,
+            amount: manager.contract.contract.deposit,
             plan: contract.end
           })
         }
@@ -270,49 +258,49 @@
 </script>
 
 <style scoped>
-    h4 {
-      margin-bottom: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #ccc;
-    }
-    .margin-top {
-      margin-top: 40px;
-    }
-    .contract-header {
-      padding: 15px;
-      border: 1px solid #aaa;
-      border-radius: 3px;
-      margin-bottom: 10px;
-    }
-    .contract-body {
-      padding: 15px;
-      border: 1px solid #aaa;
-      border-radius: 3px;
-    }
-    .input-group {
-      display: flex;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-    .input-label {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      width: 120px;
-      padding: 5px;
-      margin: 0px;
-    }
-    .input-text {
-      width: calc(100% - 120px);
-      /* margin-right: 20px; */
-    }
-    .contract-action {
-      margin-top: 20px;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-    }
-    .contract-action button {
-      width: 120px;
-    }
+  h4 {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  .margin-top {
+    margin-top: 40px;
+  }
+  .contract-header {
+    padding: 15px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+  .contract-body {
+    padding: 15px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+  }
+  .input-group {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .input-label {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 120px;
+    padding: 5px;
+    margin: 0px;
+  }
+  .input-text {
+    width: calc(100% - 120px);
+    /* margin-right: 20px; */
+  }
+  .contract-action {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .contract-action button {
+    width: 120px;
+  }
 </style>

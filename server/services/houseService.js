@@ -11,7 +11,7 @@ class HouseService {
   getHouse(_id, next) {
     mongo.findAll(
       'houses',
-      {_id: ObjectId(_id)},
+      {_id: ObjectId(_id), deleted: {$ne: true}},
       {},
       {},
       (error, result) => {
@@ -39,40 +39,6 @@ class HouseService {
         }
       }
     )
-  }
-  getHouse(_id, next) {
-    let self = this
-    mongo.findAll(
-      'houses',
-      {_id: ObjectId(_id), deleted: {$ne: true}},
-      {},
-      {},
-      (error, results) => {
-        if (error) {
-          next(error, null)
-        }
-        else {
-          self.getRoomContract(results[0], 0, next)
-        }
-      }
-    )
-  }
-  getRoomContract(house, index, next) {
-    let self = this
-    if (!house.rooms || index >= house.rooms.length) {
-      next(null, house)
-      return
-    }
-    contractService.getContracts(house._id, house.rooms[index].number, (error, contracts) => {
-      if (error) {
-        next(error, null)
-        return
-      }
-      else {
-        house.rooms[index].contracts = contracts
-        self.getRoomContract(house, index + 1, next)
-      }
-    })
   }
   insertHouse(user, house, next) {
     house.cuser = user._id

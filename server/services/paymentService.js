@@ -100,6 +100,45 @@ class PaymentService {
       }
     )
   }
+  updatePayment(user, payment, next) {
+    let id = payment._id
+    delete payment._id
+    payment.uuser = user._id
+    let now = new Date()
+    payment.udate = now.valueOf()
+    mongo.update(
+      'payments',
+      {_id: ObjectId(id)},
+      {$set: payment},
+      {multi: false},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          payment._id = id
+          next(null, payment)
+        }
+      }
+    )
+  }
+  deletePayment(user, payment, next) {
+    let now = new Date()
+    mongo.update(
+      'payments',
+      {_id: ObjectId(payment._id)},
+      {$set: {deleted: true, uuser: user._id, udate: now.valueOf()}},
+      {multi: false},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          next(null)
+        }
+      }
+    )
+  }
 }
 
 export default new PaymentService()

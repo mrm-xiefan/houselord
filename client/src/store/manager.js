@@ -39,6 +39,13 @@ class Manager {
       room: null,
       contract: null
     }
+
+    // for payment page
+    this.payment = {
+      query: null,
+      house: null,
+      room: null
+    }
   }
 
   login(data, next) {

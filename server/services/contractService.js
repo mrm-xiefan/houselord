@@ -24,28 +24,6 @@ class ContractService {
       }
     )
   }
-  getContracts(house, room, next) {
-    let filter = {
-      deleted: {$ne: true},
-      finished: {$ne: true},
-      house: house.toString(),
-      room: room
-    }
-    mongo.findAll(
-      'contracts',
-      filter,
-      {},
-      {cdate: -1},
-      (error, contracts) => {
-        if (error) {
-          next(error, null)
-        }
-        else {
-          next(null, contracts)
-        }
-      }
-    )
-  }
   assignContractsToRooms(rooms, next) {
     const roomMap = new Map(rooms.map((room) => {
       return [String(room._id), room]
@@ -55,7 +33,7 @@ class ContractService {
     })
     mongo.findAll(
       'contracts',
-      {room: {$in: roomIDs}, deleted: {$ne: true}},
+      {room: {$in: roomIDs}, over: {$exists: false}, deleted: {$ne: true}},
       null,
       {start: 1},
       (error, results) => {
@@ -130,6 +108,23 @@ class ContractService {
       {_id: ObjectId(contract._id)},
       {$set: {deleted: true, uuser: user._id, udate: now.valueOf()}},
       {multi: false},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          next(null)
+        }
+      }
+    )
+  }
+  reviveContract(user, _id, next) {
+    let now = new Date()
+    mongo.update(
+      'contracts',
+      {_id: ObjectId(_id)},
+      {$set: {uuser: user._id, udate: now.valueOf()}, $unset: {over: 1}},
+      {},
       (error, result) => {
         if (error) {
           next(error)

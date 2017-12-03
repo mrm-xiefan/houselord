@@ -158,6 +158,98 @@ router.post('/saveContract', (req, res) => {
     }
   })
 })
+router.get('/getPaymentData', (req, res) => {
+  let url_parts = url.parse(req.url, true)
+  logger.info('getPaymentData:', JSON.stringify(url_parts.query))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      houseService.getHouse(url_parts.query.house, (error, house) => {
+        if (error) return reject(error)
+        resolve(house)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      roomService.getRoom(url_parts.query.room, (error, room) => {
+        if (error) return reject(error)
+        contractService.assignContractsToRooms([room], (error) => {
+          resolve(room)
+        })
+      })
+    })
+  ]).then((values) => {
+    res.json({
+      error: null,
+      data: {
+        house: values[0],
+        room: values[1]
+      }
+    })
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+router.post('/fixPayment', (req, res) => {
+  logger.info('fixPayment:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      let payment = {
+        _id: req.body.params.payment,
+        pay: req.body.params.pay
+      }
+      paymentService.updatePayment(req.session.passport.user, payment, (error) => {
+        if (error) return reject(error)
+        resolve()
+      })
+    }),
+    new Promise((resolve, reject) => {
+      if (req.body.params.over) {
+        let contract = {
+          _id: req.body.params.contract,
+          over: req.body.params.over
+        }
+        contractService.updateContract(req.session.passport.user, contract, (error) => {
+          if (error) return reject(error)
+          resolve()
+        })
+      }
+      else {
+        resolve()
+      }
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {}})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+router.post('/addPayment', (req, res) => {
+  logger.info('addPayment:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      paymentService.insertPayments(req.session.passport.user, req.body.params.contract, req.body.params.payments, (error, payments) => {
+        if (error) return reject(error)
+        resolve(payments)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      if (req.body.params.revive) {
+        contractService.reviveContract(req.session.passport.user, req.body.params.contract._id, (error) => {
+          if (error) return reject(error)
+          resolve()
+        })
+      }
+      else {
+        resolve()
+      }
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {payments: values[0]}})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+
+
 
 
 
@@ -190,12 +282,6 @@ router.get('/getHouseDetail', (req, res) => {
     else {
       res.json({error: null, data: {house: house}})
     }
-  })
-})
-router.post('/fixPayment', (req, res) => {
-  logger.info('fixPayment:', JSON.stringify(req.body.params))
-  contractService.updateContract(req.session.passport.user, req.body.params, (error, contract) => {
-    res.json({error: error, data: contract})
   })
 })
 

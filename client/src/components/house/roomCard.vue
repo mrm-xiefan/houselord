@@ -76,14 +76,6 @@
 
   export default {
     props: ['manager', 'room'],
-    mounted() {
-      let self = this
-      utils.event.$on('REFRESH_ROOM', () => {
-        self.$nextTick(() => {
-          self.$forceUpdate()
-        })
-      })
-    },
     methods: {
       deal(room) {
         manager.contract.query = {
@@ -95,12 +87,16 @@
       },
       pay(room) {
         if (room.contracts.length > 0) {
-          utils.event.$emit('CONTRACT_PAY', room)
+          manager.payment.query = {
+            house: room.house,
+            room: room._id
+          }
+          this.$router.push({name: 'payment'})
+        }
+        else {
+          utils.event.$emit('SHOW_MESSAGE', 'B007')
         }
       }
-    },
-    beforeDestroy() {
-      utils.event.$off('REFRESH_ROOM')
     }
   }
 </script>

@@ -4,7 +4,7 @@ import utils from '@/tool/utils.js'
 
 class Controller {
   constructor() {
-    this.cors = false
+    this.cors = true
     this.currentApp = ''
   }
   setApp(route) {

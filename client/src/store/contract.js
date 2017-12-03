@@ -46,9 +46,24 @@ class Contract {
     }
     return true
   }
-  isFinished() {
+  isValueValid() {
+    if (!this.resident) {
+      return false
+    }
+    if (this.keyMoney < 0) {
+      return false
+    }
+    if (this.deposit < 0) {
+      return false
+    }
+    if (this.rent <= 0) {
+      return false
+    }
+    return true
+  }
+  isOver() {
     for (let i = 0; i < this.payments.length; i ++) {
-      if (!this.payments[i].payment) {
+      if (!this.payments[i].pay) {
         return false
       }
     }

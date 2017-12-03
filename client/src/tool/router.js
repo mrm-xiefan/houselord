@@ -8,6 +8,7 @@ import house from '@/components/house/house'
 import addHouse from '@/components/addHouse/addHouse'
 // import room from '@/components/room/room'
 import contract from '@/components/contract/contract'
+import payment from '@/components/payment/payment'
 import meter from '@/components/meter/meter'
 import report from '@/components/report/report'
 
@@ -80,11 +81,32 @@ let preloadContract = (to, from, next) => {
             resident: '',
             phone: '',
             note: '',
+            keyMoney: manager.contract.room.keyMoney,
+            rent: manager.contract.room.rent,
+            deposit: manager.contract.room.deposit,
             start: 0,
             end: 0,
             first: 0
           })
         }
+        next()
+      }
+    }
+  )
+}
+let preloadPayment = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  if (!manager.payment.query || !manager.payment.query.house || !manager.payment.query.room) {
+    utils.router.push({path: '/'})
+    return
+  }
+  utils.restGet('/api/getPaymentData', {house: manager.payment.query.house, room: manager.payment.query.room}).then(
+    response => {
+      if (response) {
+        manager.payment.house = new House(response.house)
+        manager.payment.room = new Room(response.room)
         next()
       }
     }
@@ -114,6 +136,7 @@ export default new Router({
     {name: 'addHouse', path: '/addHouse', component: addHouse, beforeEnter: preloadAddHouse},
     // {name: 'room', path: '/room/:room', component: room, beforeEnter: preloadRoom},
     {name: 'contract', path: '/contract', component: contract, beforeEnter: preloadContract},
+    {name: 'payment', path: '/payment', component: payment, beforeEnter: preloadPayment},
     {name: 'meter', path: '/meter', component: meter, beforeEnter: preloadMeter},
     {name: 'report', path: '/report', component: report, beforeEnter: preloadReport},
     {path: '*', redirect: '/loading'}
