@@ -21,6 +21,27 @@ class Contract {
       }
     }
   }
+  isDateValid() {
+    if (!this.start) {
+      return false
+    }
+    if (!this.end) {
+      return false
+    }
+    if (!this.first) {
+      return false
+    }
+    if (this.start > this.end) {
+      return false
+    }
+    if (this.start > this.first) {
+      return false
+    }
+    if (this.first > this.end) {
+      return false
+    }
+    return true
+  }
   isFinished() {
     for (let i = 0; i < this.pays.length; i ++) {
       if (!this.pays[i].payment) {

@@ -1,0 +1,312 @@
+<template>
+  <div class="content-wrapper">
+    <section class="content" v-on:click="closeSide">
+
+      <div class="bg-gray contract-header text-black">
+        <i class="fa fa-edit"></i> 契約 - {{manager.contract.house.name}} - {{manager.contract.room.number}}
+      </div>
+
+      <div class="bg-gray-light contract-body">
+        <h4>1.居住者情報を入力する</h4>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group">
+              <label class="input-label"><span class="text-red require">(＊)</span>居住者：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.contract.resident" type="text" class="form-control" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <label class="input-label">電話番号：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.contract.phone" type="text" class="form-control" placeholder="入力">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="input-group">
+              <label class="input-label">備考：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.contract.note" type="text" class="form-control" placeholder="入力">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4>2.契約情報を入力する</h4>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label">礼金：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.room.keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label"><span class="text-red require">(＊)</span>家賃：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.room.rent" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label">敷金：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.room.deposit" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label"><span class="text-red require">(＊)</span>開始日：</label>
+              <div class="input-text">
+                <input id="start-date" type="text" class="form-control" placeholder="選択">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label"><span class="text-red require">(＊)</span>初回支払：</label>
+              <div class="input-text">
+                <input id="first-date" type="text" class="form-control" placeholder="選択">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label"><span class="text-red require">(＊)</span>終了日：</label>
+              <div class="input-text">
+                <input id="end-date" type="text" class="form-control" placeholder="選択">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contract-action">
+          <button type="button" class="btn btn-primary" :disabled="!isValid" v-on:click="saveContract">
+            <i class="fa fa-save"></i> 保存
+          </button>
+          <button type="button" class="btn btn-default text-blue" v-on:click="backward">
+            <i class="fa fa-reply"></i> 戻る
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</template>
+
+<script>
+  import CONST from '@/store/const.js'
+  import manager from '@/store/manager.js'
+  import utils from '@/tool/utils.js'
+
+  import moment from 'moment'
+  import Contract from '@/store/contract.js'
+  export default {
+    props: ['manager'],
+    mounted() {
+      $('body').layout('fix')
+      this.pickDate()
+    },
+    computed: {
+      isValid() {
+        if (!manager.contract.contract.resident) {
+          return false
+        }
+        if (manager.contract.room.keyMoney < 0) {
+          return false
+        }
+        if (manager.contract.room.deposit < 0) {
+          return false
+        }
+        if (manager.contract.room.rent <= 0) {
+          return false
+        }
+        return true
+      }
+    },
+    methods: {
+      closeSide() {
+        if ($('.control-sidebar').hasClass('control-sidebar-open')) {
+          $('.control-sidebar').removeClass('control-sidebar-open')
+        }
+      },
+      pickDate() {
+        let options = {
+          autoclose: true,
+          language: 'ja',
+          format: 'yyyy/mm/dd'
+        }
+        $('#start-date').val('')
+        if (manager.contract.contract.start) {
+          $('#start-date').val(utils.formatDate(manager.contract.contract.start))
+        }
+        $('#start-date').datepicker(options)
+        $('#end-date').val('')
+        if (manager.contract.contract.end) {
+          $('#end-date').val(utils.formatDate(manager.contract.contract.end))
+        }
+        $('#end-date').datepicker(options)
+        $('#first-date').val('')
+        if (manager.contract.contract.first) {
+          $('#first-date').val(utils.formatDate(manager.contract.contract.first))
+        }
+        $('#first-date').datepicker(options)
+      },
+      checkDate() {
+        let tmp = new Date($('#start-date').val())
+        manager.contract.contract.start = tmp.valueOf()
+        tmp = new Date($('#end-date').val())
+        manager.contract.contract.end = tmp.valueOf()
+        tmp = new Date($('#first-date').val())
+        manager.contract.contract.first = tmp.valueOf()
+        return manager.contract.contract.isDateValid()
+      },
+      saveContract() {
+        let self = this
+        if (self.checkDate()) {
+          let contract = {
+            lord: manager.user._id,
+            house: manager.contract.house._id,
+            room: manager.contract.room._id,
+            resident: manager.contract.contract.resident,
+            phone: manager.contract.contract.phone,
+            note: manager.contract.contract.note,
+            start: manager.contract.contract.start,
+            end: manager.contract.contract.end,
+            first: manager.contract.contract.first
+          }
+          let payments = self.generatePayments()
+          utils.restPost('/api/saveContract', {contract: contract, payments: payments}).then(
+            response => {
+              if (response) {
+                self.$router.push({name: 'house'})
+              }
+            }
+          )
+        }
+        else {
+          utils.event.$emit('SHOW_MESSAGE', 'B005')
+        }
+      },
+      generatePayments() {
+        let payments = []
+        let now = new Date()
+        let contract = manager.contract.contract
+        now = now.valueOf()
+        if (contract.keyMoney > 0) {
+          payments.push({
+            DRCR: 'DR',
+            type: 'keyMoney',
+            amount: manager.contract.room.keyMoney,
+            plan: contract.start,
+            payment: now
+          })
+        }
+        if (contract.deposit > 0) {
+          payments.push({
+            DRCR: 'DR',
+            type: 'deposit',
+            amount: manager.contract.room.deposit,
+            plan: contract.start,
+            payment: now
+          })
+        }
+
+        payments.push({
+          DRCR: 'DR',
+          type: 'rent',
+          amount: manager.contract.room.rent,
+          plan: contract.first
+        })
+
+        let end = moment(contract.end)
+        let i = 0
+        while(true) {
+          i ++
+          let current = moment(contract.first).add(i, 'months')
+          if (end < current) {
+            break
+          }
+          payments.push({
+            DRCR: 'DR',
+            type: 'rent',
+            amount: manager.contract.room.rent,
+            plan: current.toDate().valueOf()
+          })
+        }
+
+        if (contract.deposit > 0) {
+          payments.push({
+            DRCR: 'CR',
+            type: 'deposit',
+            amount: manager.contract.room.deposit,
+            plan: contract.end
+          })
+        }
+        return payments
+      },
+      backward() {
+        this.$router.go(-1)
+      }
+    }
+  }
+</script>
+
+<style scoped>
+    h4 {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+    .margin-top {
+      margin-top: 40px;
+    }
+    .contract-header {
+      padding: 15px;
+      border: 1px solid #aaa;
+      border-radius: 3px;
+      margin-bottom: 10px;
+    }
+    .contract-body {
+      padding: 15px;
+      border: 1px solid #aaa;
+      border-radius: 3px;
+    }
+    .input-group {
+      display: flex;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .input-label {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: 120px;
+      padding: 5px;
+      margin: 0px;
+    }
+    .input-text {
+      width: calc(100% - 120px);
+      /* margin-right: 20px; */
+    }
+    .contract-action {
+      margin-top: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
+    .contract-action button {
+      width: 120px;
+    }
+</style>

@@ -4,7 +4,7 @@
       {{room.number}}<span class="text-gray" v-if="room.size">（{{room.size}}）</span>
       <div class="pull-right box-tools">
         <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']">
-          <i class="fa fa-calendar"></i>
+          <i class="fa fa-edit"></i>
         </button>
       </div>
     </div>
@@ -86,7 +86,12 @@
     },
     methods: {
       deal(room) {
-        utils.event.$emit('CONTRACT_DEAL', room)
+        manager.contract.query = {
+          house: room.house,
+          room: room._id,
+          contract: null
+        }
+        this.$router.push({name: 'contract'})
       },
       pay(room) {
         if (room.contracts.length > 0) {
@@ -101,9 +106,6 @@
 </script>
 
 <style scoped>
-  .room-card {
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
-  }
   .bg-rent-gradient {
     background: #00a65a;
     background: -webkit-linear-gradient(bottom, #00a65a, #00ca6d);

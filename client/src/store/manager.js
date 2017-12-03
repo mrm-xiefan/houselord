@@ -5,6 +5,7 @@ import User from './user.js'
 import io from 'socket.io-client/dist/socket.io.js'
 import House from './house.js'
 import Room from './room.js'
+import Contract from './contract.js'
 
 class Manager {
   constructor() {
@@ -16,8 +17,28 @@ class Manager {
 
     this.feeTypes = CONST.feeTypes
 
+    // for house list page
     this.houses = []
     this.rooms = []
+
+    // for house page
+    this.house = {
+      house: null
+    }
+
+    // for room page
+    this.room = {
+      house: null,
+      room: null
+    }
+
+    // for contract page
+    this.contract = {
+      query: null,
+      house: null,
+      room: null,
+      contract: null
+    }
   }
 
   login(data, next) {

@@ -8,6 +8,8 @@ import mongo from './mongo.js'
 import userService from './userService.js'
 import houseService from './houseService.js'
 import roomService from './roomService.js'
+import contractService from './contractService.js'
+import paymentService from './paymentService.js'
 
 let router = express.Router()
 
@@ -15,7 +17,7 @@ router.get('/getHouseData', (req, res) => {
   logger.debug('getHouseData:', JSON.stringify(req.session.passport.user))
   Promise.all([
     new Promise((resolve, reject) => {
-      houseService.getLordHouses(req.session.passport.user._id, (error, houses) => {
+      houseService.getHouses(req.session.passport.user._id, (error, houses) => {
         if (error) return reject(error)
         resolve(houses)
       })
@@ -32,10 +34,13 @@ router.get('/getHouseData', (req, res) => {
       }
     })
   ]).then((values) => {
-    res.json({error: null, data: {
-      houses: values[0],
-      rooms: values[1]
-    }})
+    res.json({
+      error: null,
+      data: {
+        houses: values[0],
+        rooms: values[1]
+      }
+    })
   }, (reason) => {
     res.json({error: reason, data: null})
   })
@@ -90,6 +95,63 @@ router.post('/selectHouse', (req, res) => {
     }
   })
 })
+router.get('/getContractData', (req, res) => {
+  let url_parts = url.parse(req.url, true)
+  logger.debug('getContractData:', JSON.stringify(url_parts.query))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      houseService.getHouse(url_parts.query.house, (error, house) => {
+        if (error) return reject(error)
+        resolve(house)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      roomService.getRoom(url_parts.query.room, (error, room) => {
+        if (error) return reject(error)
+        resolve(room)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      if (url_parts.query.contract) {
+        contractService.getcontract(url_parts.query.contract, (error, contract) => {
+          if (error) return reject(error)
+          resolve(contract)
+        })
+      }
+      else {
+        resolve(null)
+      }
+    })
+  ]).then((values) => {
+    res.json({
+      error: null,
+      data: {
+        house: values[0],
+        room: values[1],
+        contract: values[2]
+      }
+    })
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+router.post('/saveContract', (req, res) => {
+  logger.info('saveContract:', JSON.stringify(req.body.params))
+  contractService.insertContract(req.session.passport.user, req.body.params.contract, (error, contract) => {
+    if (error) {
+      res.json({error: error, data: null})
+    }
+    else {
+      paymentService.insertPayments(req.session.passport.user, contract, req.body.params.payments, (error, payments) => {
+        res.json({error: error, data: {}})
+      })
+    }
+  })
+})
+
+
+
+
 router.post('/updateHouse', (req, res) => {
   logger.info('updateHouse:', JSON.stringify(req.body.params))
   houseService.updateHouse(req.session.passport.user, req.body.params, (error, house) => {
@@ -118,12 +180,6 @@ router.get('/getHouseDetail', (req, res) => {
     else {
       res.json({error: null, data: {house: house}})
     }
-  })
-})
-router.post('/addContract', (req, res) => {
-  logger.info('addContract:', JSON.stringify(req.body.params))
-  contractService.insertContract(req.session.passport.user, req.body.params, (error, contract) => {
-    res.json({error: error, data: contract})
   })
 })
 router.post('/fixPayment', (req, res) => {

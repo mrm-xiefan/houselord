@@ -55,10 +55,10 @@ let CONST = {
     'I002': 'select'
   },
   feeTypes: [
-    {'name': '上水道代', 'value': 1},
-    {'name': '下水道代', 'value': 2},
-    {'name': '電気代', 'value': 3},
-    {'name': 'ガス代', 'value': 4},
+    {'name': '上水道代', 'value': 1, 'meter': true},
+    {'name': '下水道代', 'value': 2, 'meter': true},
+    {'name': '電気代', 'value': 3, 'meter': true},
+    {'name': 'ガス代', 'value': 4, 'meter': true},
     {'name': '管理費用', 'value': 5},
     {'name': '共益費', 'value': 6},
     {'name': '更新料金', 'value': 7},

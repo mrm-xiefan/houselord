@@ -2,8 +2,9 @@
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
       <div class="bg-gray add-header text-black">
-        <i class="fa fa-plus-circle"></i> ハウスを登録する
+        <i class="fa fa-edit"></i> ハウス詳細
       </div>
+
       <div class="bg-gray-light add-body">
         <h4>1.ハウス情報を入力する</h4>
         <div class="input-group">
@@ -89,7 +90,7 @@
 
         <div class="house-action">
           <button type="button" class="btn btn-primary" :disabled="!isValid" v-on:click="saveHouse">
-            <i class="fa fa-plus-circle"></i> 登録
+            <i class="fa fa-save"></i> 保存
           </button>
           <button type="button" class="btn btn-default text-blue" v-on:click="backward">
             <i class="fa fa-reply"></i> 戻る

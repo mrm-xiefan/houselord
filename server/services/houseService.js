@@ -8,7 +8,23 @@ import contractService from './contractService.js'
 class HouseService {
   constructor() {
   }
-  getLordHouses(lord, next) {
+  getHouse(_id, next) {
+    mongo.findAll(
+      'houses',
+      {_id: ObjectId(_id)},
+      {},
+      {},
+      (error, result) => {
+        if (error) {
+          next(error, null)
+        }
+        else {
+          next(null, result[0])
+        }
+      }
+    )
+  }
+  getHouses(lord, next) {
     mongo.findAll(
       'houses',
       {lord: lord, deleted: {$ne: true}},

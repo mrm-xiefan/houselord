@@ -7,6 +7,22 @@ import utils from './utils.js'
 class ContractService {
   constructor() {
   }
+  getContract(_id, next) {
+    mongo.findAll(
+      'contracts',
+      {_id: ObjectId(_id)},
+      {},
+      {},
+      (error, result) => {
+        if (error) {
+          next(error, null)
+        }
+        else {
+          next(null, result[0])
+        }
+      }
+    )
+  }
   getRoomContracts(house, room, next) {
     let filter = {
       deleted: {$ne: true},

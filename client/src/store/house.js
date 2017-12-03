@@ -1,7 +1,6 @@
 import manager from '@/store/manager.js'
 import CONST from './const.js'
 import utils from '@/tool/utils.js'
-import Room from '@/store/room.js'
 
 class House {
   constructor(data) {

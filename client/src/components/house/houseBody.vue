@@ -25,12 +25,15 @@
       </div>
 
       <div class="room-area">
-        <div class="row" v-for="index in Math.ceil(manager.rooms.length / 2)">
-          <div class="col-md-6">
-            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 2]"></roomCard>
+        <div class="row" v-for="index in Math.ceil(manager.rooms.length / 3)">
+          <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3]">
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3]"></roomCard>
           </div>
-          <div class="col-md-6" v-if="manager.rooms[(index - 1) * 2 + 1]">
-            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 2 + 1]"></roomCard>
+          <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3 + 1]">
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 1]"></roomCard>
+          </div>
+          <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3 + 2]">
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 2]"></roomCard>
           </div>
         </div>
       </div>

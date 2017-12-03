@@ -7,6 +7,22 @@ import utils from './utils.js'
 class RoomService {
   constructor() {
   }
+  getRoom(_id, next) {
+    mongo.findAll(
+      'rooms',
+      {_id: ObjectId(_id)},
+      {},
+      {},
+      (error, result) => {
+        if (error) {
+          next(error, null)
+        }
+        else {
+          next(null, result[0])
+        }
+      }
+    )
+  }
   getRooms(lord, house, next) {
     let self = this
     mongo.findAll(
