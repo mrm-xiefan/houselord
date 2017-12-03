@@ -14,7 +14,7 @@ import paymentService from './paymentService.js'
 let router = express.Router()
 
 router.get('/getHouseData', (req, res) => {
-  logger.debug('getHouseData:', JSON.stringify(req.session.passport.user))
+  logger.info('getHouseData:', JSON.stringify(req.session.passport.user))
   Promise.all([
     new Promise((resolve, reject) => {
       houseService.getHouses(req.session.passport.user._id, (error, houses) => {
@@ -26,7 +26,10 @@ router.get('/getHouseData', (req, res) => {
       if (req.session.passport.user.selectedHouse) {
         roomService.getRooms(req.session.passport.user._id, req.session.passport.user.selectedHouse, (error, rooms) => {
           if (error) return reject(error)
-          resolve(rooms)
+          contractService.assignContractsToRooms(rooms, (error) => {
+            if (error) return reject(error)
+            resolve(rooms)
+          })
         })
       }
       else {
@@ -90,14 +93,21 @@ router.post('/selectHouse', (req, res) => {
     }
     else {
       roomService.getRooms(req.session.passport.user._id, req.body.params._id, (error, rooms) => {
-        res.json({error: error, data: rooms})
+        if (error) {
+          res.json({error: error, data: null})
+        }
+        else {
+          contractService.assignContractsToRooms(rooms, (error) => {
+            res.json({error: error, data: rooms})
+          })
+        }
       })
     }
   })
 })
 router.get('/getContractData', (req, res) => {
   let url_parts = url.parse(req.url, true)
-  logger.debug('getContractData:', JSON.stringify(url_parts.query))
+  logger.info('getContractData:', JSON.stringify(url_parts.query))
   Promise.all([
     new Promise((resolve, reject) => {
       houseService.getHouse(url_parts.query.house, (error, house) => {
@@ -113,7 +123,7 @@ router.get('/getContractData', (req, res) => {
     }),
     new Promise((resolve, reject) => {
       if (url_parts.query.contract) {
-        contractService.getcontract(url_parts.query.contract, (error, contract) => {
+        contractService.getContract(url_parts.query.contract, (error, contract) => {
           if (error) return reject(error)
           resolve(contract)
         })

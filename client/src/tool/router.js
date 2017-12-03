@@ -64,7 +64,7 @@ let preloadContract = (to, from, next) => {
     return
   }
   if (!manager.contract.query || !manager.contract.query.house || !manager.contract.query.room) {
-    utils.event.$emit('SHOW_MESSAGE', 'B001')
+    utils.router.push({path: '/'})
     return
   }
   utils.restGet('/api/getContractData', {house: manager.contract.query.house, room: manager.contract.query.room, contract: manager.contract.query.contract}).then(

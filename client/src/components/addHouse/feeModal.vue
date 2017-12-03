@@ -64,7 +64,7 @@
         },
         name: '',
         price: 0,
-        day: 0
+        day: ''
       }
     },
     mounted() {
@@ -117,6 +117,11 @@
         if (this.next) {
           this.next(fee)
         }
+        this.type.value = ''
+        this.type.name = ''
+        this.name = ''
+        this.price = 0
+        this.day = ''
         $('#fee-modal').modal('hide')
       }
     }

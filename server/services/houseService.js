@@ -63,7 +63,7 @@ class HouseService {
       next(null, house)
       return
     }
-    contractService.getRoomContracts(house._id, house.rooms[index].number, (error, contracts) => {
+    contractService.getContracts(house._id, house.rooms[index].number, (error, contracts) => {
       if (error) {
         next(error, null)
         return

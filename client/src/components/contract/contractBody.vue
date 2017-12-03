@@ -174,6 +174,9 @@
       },
       saveContract() {
         let self = this
+        manager.contract.room.keyMoney = Number(manager.contract.room.keyMoney)
+        manager.contract.room.rent = Number(manager.contract.room.rent)
+        manager.contract.room.deposit = Number(manager.contract.room.deposit)
         if (self.checkDate()) {
           let contract = {
             lord: manager.user._id,
@@ -184,7 +187,10 @@
             note: manager.contract.contract.note,
             start: manager.contract.contract.start,
             end: manager.contract.contract.end,
-            first: manager.contract.contract.first
+            first: manager.contract.contract.first,
+            keyMoney: manager.contract.room.keyMoney,
+            rent: manager.contract.room.rent,
+            deposit: manager.contract.room.deposit
           }
           let payments = self.generatePayments()
           utils.restPost('/api/saveContract', {contract: contract, payments: payments}).then(
@@ -204,22 +210,22 @@
         let now = new Date()
         let contract = manager.contract.contract
         now = now.valueOf()
-        if (contract.keyMoney > 0) {
+        if (manager.contract.room.keyMoney > 0) {
           payments.push({
             DRCR: 'DR',
             type: 'keyMoney',
             amount: manager.contract.room.keyMoney,
             plan: contract.start,
-            payment: now
+            pay: now
           })
         }
-        if (contract.deposit > 0) {
+        if (manager.contract.room.deposit > 0) {
           payments.push({
             DRCR: 'DR',
             type: 'deposit',
             amount: manager.contract.room.deposit,
             plan: contract.start,
-            payment: now
+            pay: now
           })
         }
 
@@ -246,7 +252,7 @@
           })
         }
 
-        if (contract.deposit > 0) {
+        if (manager.contract.room.deposit > 0) {
           payments.push({
             DRCR: 'CR',
             type: 'deposit',

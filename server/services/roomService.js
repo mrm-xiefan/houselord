@@ -47,7 +47,7 @@ class RoomService {
         let now = new Date()
         documents.push({
           lord: user._id,
-          house: house._id,
+          house: ObjectId(house._id),
           number: '' + (i + 1) + ('00' + (j + 1)).slice(-2),
           keyMoney: keyMoney,
           rent: rent,

@@ -1,6 +1,7 @@
 import manager from '@/store/manager.js'
 import CONST from './const.js'
 import utils from '@/tool/utils.js'
+import Payment from './payment.js'
 
 class Contract {
   constructor(data) {
@@ -9,15 +10,18 @@ class Contract {
     this.resident = data.resident
     this.phone = data.phone
     this.note = data.note
+    this.keyMoney = Number(data.keyMoney)
+    this.rent = Number(data.rent)
+    this.deposit = Number(data.deposit)
 
     this.start = data.start
     this.end = data.end
     this.first = data.first
 
-    this.pays = []
-    if (data.pays) {
-      for (let i = 0; i < data.pays.length; i ++) {
-        this.pays.push(data.pays[i])
+    this.payments = []
+    if (data.payments) {
+      for (let i = 0; i < data.payments.length; i ++) {
+        this.payments.push(new Payment(data.payments[i]))
       }
     }
   }
@@ -43,8 +47,8 @@ class Contract {
     return true
   }
   isFinished() {
-    for (let i = 0; i < this.pays.length; i ++) {
-      if (!this.pays[i].payment) {
+    for (let i = 0; i < this.payments.length; i ++) {
+      if (!this.payments[i].payment) {
         return false
       }
     }
@@ -53,8 +57,8 @@ class Contract {
   isUnpaid() {
     let now = new Date()
     now = now.valueOf()
-    for (let i = 0; i < this.pays.length; i ++) {
-      if (!this.pays[i].payment && this.pays[i].plan < now) {
+    for (let i = 0; i < this.payments.length; i ++) {
+      if (this.payments[i].isUnpaid()) {
         return true
       }
     }

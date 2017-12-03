@@ -4,6 +4,7 @@ import mongo from './mongo.js'
 import {ObjectId} from 'mongodb'
 import utils from './utils.js'
 
+import paymentService from './paymentService.js'
 class ContractService {
   constructor() {
   }
@@ -23,7 +24,7 @@ class ContractService {
       }
     )
   }
-  getRoomContracts(house, room, next) {
+  getContracts(house, room, next) {
     let filter = {
       deleted: {$ne: true},
       finished: {$ne: true},
@@ -45,7 +46,42 @@ class ContractService {
       }
     )
   }
+  assignContractsToRooms(rooms, next) {
+    const roomMap = new Map(rooms.map((room) => {
+      return [String(room._id), room]
+    }))
+    const roomIDs = rooms.map((room) => {
+      return ObjectId(room._id)
+    })
+    mongo.findAll(
+      'contracts',
+      {room: {$in: roomIDs}, deleted: {$ne: true}},
+      null,
+      {start: 1},
+      (error, results) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          paymentService.assignPaymentsToContracts(results, (error) => {
+            if (error) return next(error)
+            results.forEach((contract) => {
+              const room = roomMap.get(String(contract.room))
+              if (room.contracts) {
+                room.contracts.push(contract)
+              } else {
+                room.contracts = [contract]
+              }
+            })
+            next(null)
+          })
+        }
+      }
+    )
+  }
   insertContract(user, contract, next) {
+    contract.house = ObjectId(contract.house)
+    contract.room = ObjectId(contract.room)
     contract.cuser = user._id
     contract.uuser = user._id
     let now = new Date()
