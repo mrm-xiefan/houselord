@@ -25,7 +25,6 @@ let preloadHouse = (to, from, next) => {
     response => {
       if (response) {
         manager.refreshHouse(response.houses)
-        manager.refreshOwner(response.owners)
         next()
       }
     }

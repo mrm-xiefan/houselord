@@ -30,7 +30,7 @@
         }
       },
       addHouse() {
-        this.$router.push({path: '/addHouse'})
+        this.$router.push({name: 'addHouse'})
       }
     }
   }

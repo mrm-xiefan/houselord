@@ -1,8 +1,8 @@
 <template>
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
-      <div class="houses-area" v-masonry transition-duration="0.3s" item-selector=".house-box">
-        <houseBox :manager="manager" :house="house" v-masonry-tile v-for="house in manager.houses" :key="house._id"></houseBox>
+      <div class="houses-area">
+
       </div>
     </section>
   </div>
@@ -13,22 +13,13 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
-  import houseBox from '@/components/house/houseBox'
   export default {
     props: ['manager'],
     mounted() {
       $('body').layout('fix')
     },
     components: {
-      houseBox: houseBox
-    },
-    created() {
-      let self = this
-      utils.event.$on('REFRESH_HOUSE', () => {
-        self.$nextTick(() => {
-          self.$redrawVueMasonry()
-        })
-      })
+      // houseBox: houseBox
     },
     methods: {
       closeSide() {
@@ -36,9 +27,6 @@
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
       }
-    },
-    beforeDestroy() {
-      utils.event.$off('REFRESH_HOUSE')
     }
   }
 </script>

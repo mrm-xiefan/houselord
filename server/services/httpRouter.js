@@ -6,6 +6,7 @@ import logger from './logger.js'
 import conf from 'config'
 import mongo from './mongo.js'
 import houseService from './houseService.js'
+import roomService from './roomService.js'
 import ownerService from './ownerService.js'
 import contractService from './contractService.js'
 
@@ -18,21 +19,34 @@ router.get('/getHouseData', (req, res) => {
       res.json({error: error, data: null})
     }
     else {
-      ownerService.getAllOwners(req.session.passport.user._id, (error, owners) => {
-        if (error) {
-          res.json({error: error, data: null})
-        }
-        else {
-          res.json({error: null, data: {houses: houses, owners: owners}})
-        }
-      })
+      res.json({error: null, data: {houses: houses}})
     }
   })
 })
 router.post('/addHouse', (req, res) => {
   logger.info('addHouse:', JSON.stringify(req.body.params))
-  houseService.insertHouse(req.session.passport.user, req.body.params, (error, house) => {
-    res.json({error: error, data: house})
+  let document = {
+    name: req.body.params.name,
+    address: req.body.params.address,
+    floor: req.body.params.floor,
+    note: req.body.params.note
+  }
+  houseService.insertHouse(req.session.passport.user, document, (error, house) => {
+    if (error) {
+      res.json({error: error, data: null})
+    }
+    else {
+      roomService.insertRooms(
+        req.session.passport.user,
+        house,
+        req.body.params.floor,
+        req.body.params.room,
+        req.body.params.fees,
+        (error, rooms) => {
+          res.json({error: error, data: {house: house, rooms, rooms}})
+        }
+      )
+    }
   })
 })
 router.post('/updateHouse', (req, res) => {

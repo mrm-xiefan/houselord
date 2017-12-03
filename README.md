@@ -56,6 +56,8 @@ npm run dev
 
 ``` bash
 cd houselord/server
+npm run dev
+# or
 NODE_ENV=development ./node_modules/.bin/babel-node app.js
 ```
 

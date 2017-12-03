@@ -16,6 +16,8 @@ class Manager {
     this.houses = []
     this.owners = []
 
+    this.feeTypes = CONST.feeTypes
+
     this.selectedHouse = null
   }
 
@@ -65,7 +67,6 @@ class Manager {
     for (let i = 0; i < houses.length; i ++) {
       this.houses.push(new House(houses[i]))
     }
-    this.sortHouse()
   }
   sortHouse() {
     this.houses.sort((a, b) => {
