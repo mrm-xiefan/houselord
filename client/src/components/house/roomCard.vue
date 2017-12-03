@@ -1,5 +1,5 @@
 <template>
-  <div :class="['box', 'box-solid', room.isRented()? 'bg-rent-gradient': 'bg-not-rent-gradient', 'room-box']">
+  <div :class="['box', 'box-solid', room.isRented()? 'bg-rent-gradient': 'bg-not-rent-gradient', 'room-card']">
     <div class="box-header">
       {{room.number}}<span class="text-gray" v-if="room.size">（{{room.size}}）</span>
       <div class="pull-right box-tools">
@@ -101,7 +101,7 @@
 </script>
 
 <style scoped>
-  .room-box {
+  .room-card {
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
   }
   .bg-rent-gradient {

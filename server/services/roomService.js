@@ -24,7 +24,7 @@ class RoomService {
       }
     )
   }
-  insertRooms(user, house, floor, room, fees, next) {
+  insertRooms(user, house, floor, room, keyMoney, rent, deposit, fees, next) {
     let documents = []
     for (let i = 0; i < floor; i ++) {
       for (let j = 0; j < room; j ++) {
@@ -33,6 +33,9 @@ class RoomService {
           lord: user._id,
           house: house._id,
           number: '' + (i + 1) + ('00' + (j + 1)).slice(-2),
+          keyMoney: keyMoney,
+          rent: rent,
+          deposit: deposit,
           fees: fees,
           cuser: user._id,
           uuser: user._id,

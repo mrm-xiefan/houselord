@@ -11,12 +11,9 @@ class Room {
     this.number = data.number
     this.fees = data.fees
     this.udate = data.udate
-
-    // this.size = data.size
-    // this.floor = data.floor
-    // this.keyMoney = Number(data.keyMoney)
-    // this.rent = Number(data.rent)
-    // this.deposit = Number(data.deposit)
+    this.keyMoney = Number(data.keyMoney)
+    this.rent = Number(data.rent)
+    this.deposit = Number(data.deposit)
     // this.contracts = []
     // if (data.contracts) {
     //   for (let i = 0; i < data.contracts.length; i ++) {
@@ -24,22 +21,16 @@ class Room {
     //   }
     // }
   }
-  // isValid() {
-  //   if (!this.number || this.number == '') {
-  //     return false
-  //   }
-  //   return true
-  // }
-  // getKeyMoney() {
-  //   return utils.formatMoney(this.keyMoney) + ' 円'
-  // }
-  // getRent() {
-  //   return utils.formatMoney(this.rent) + ' 円 / 月'
-  // }
-  // getDeposit() {
-  //   return utils.formatMoney(this.deposit) + ' 円'
-  // }
-  // getCurrentRental() {
+  getKeyMoney() {
+    return utils.formatMoney(this.keyMoney) + ' 円'
+  }
+  getRent() {
+    return utils.formatMoney(this.rent) + ' 円 / 月'
+  }
+  getDeposit() {
+    return utils.formatMoney(this.deposit) + ' 円'
+  }
+  getCurrentRental() {
   //   let now = new Date()
   //   now = now.valueOf()
   //   for (let i = 0; i < this.contracts.length; i ++) {
@@ -47,9 +38,9 @@ class Room {
   //       return this.contracts[i]
   //     }
   //   }
-  //   return null
-  // }
-  // getFutureRental() {
+    return null
+  }
+  getFutureRental() {
   //   let now = new Date()
   //   now = now.valueOf()
   //   for (let i = 0; i < this.contracts.length; i ++) {
@@ -57,40 +48,30 @@ class Room {
   //       return this.contracts[i]
   //     }
   //   }
-  //   return null
-  // }
-  // isReserved() {
-  //   return true
-  // }
-  // isRented() {
-  //   if (this.getCurrentRental()) {
-  //     return true
-  //   }
-  //   else {
-  //     return false
-  //   }
-  // }
-  // isUnpaid() {
-  //   for (let i = 0; i < this.contracts.length; i ++) {
-  //     let contract = this.contracts[i]
-  //     if (contract) {
-  //       if (contract.isUnpaid()) {
-  //         return true
-  //       }
-  //     }
-  //   }
-  //   return false
-  // }
-  // toJSON() {
-  //   return {
-  //     number: this.number,
-  //     size: this.size,
-  //     floor: this.floor,
-  //     keyMoney: Number(this.keyMoney),
-  //     rent: Number(this.rent),
-  //     deposit: Number(this.deposit)
-  //   }
-  // }
+    return null
+  }
+  isReserved() {
+    return true
+  }
+  isRented() {
+    // if (this.getCurrentRental()) {
+    //   return true
+    // }
+    // else {
+      return false
+    // }
+  }
+  isUnpaid() {
+    // for (let i = 0; i < this.contracts.length; i ++) {
+    //   let contract = this.contracts[i]
+    //   if (contract) {
+    //     if (contract.isUnpaid()) {
+    //       return true
+    //     }
+    //   }
+    // }
+    return false
+  }
 }
 
 export default Room

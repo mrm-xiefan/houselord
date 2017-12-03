@@ -24,6 +24,16 @@
         </div>
       </div>
 
+      <div class="room-area">
+        <div class="row" v-for="index in Math.ceil(manager.rooms.length / 2)">
+          <div class="col-md-6">
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 2]"></roomCard>
+          </div>
+          <div class="col-md-6" v-if="manager.rooms[(index - 1) * 2 + 1]">
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 2 + 1]"></roomCard>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -33,13 +43,14 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
+  import roomCard from '@/components/house/roomCard'
   export default {
     props: ['manager'],
     mounted() {
       $('body').layout('fix')
     },
     components: {
-      // houseBox: houseBox
+      roomCard: roomCard
     },
     methods: {
       closeSide() {
@@ -84,7 +95,6 @@
   }
   .house-items {
     width: 100%;
-    /* overflow: hidden; */
   }
   .house-items ul {
     display: flex;
@@ -121,5 +131,10 @@
   }
   .house-item-selected {
     background: #605ca8 !important;
+  }
+
+  .room-area {
+    width: 100%;
+    overflow: hidden;
   }
 </style>

@@ -32,14 +32,44 @@
         </div>
 
         <h4 class="margin-top">2.部屋情報を入力する</h4>
-        <div class="input-group">
-          <label class="input-label"><span class="text-red require">(＊)</span>部屋数：</label>
-          <div class="input-text">
-            <input v-model="room" type="number" class="form-control" max="30" placeholder="入力">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group">
+              <label class="input-label"><span class="text-red require">(＊)</span>部屋数：</label>
+              <div class="input-text">
+                <input v-model="room" type="number" class="form-control" max="30" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <label class="input-label"><span class="text-red require">(＊)</span>家賃：</label>
+              <div class="input-text">
+                <input v-model="rent" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group">
+              <label class="input-label">礼金：</label>
+              <div class="input-text">
+                <input v-model="keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <label class="input-label">敷金：</label>
+              <div class="input-text">
+                <input v-model="deposit" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
           </div>
         </div>
 
-        <label class="input-label fee-title">費用：</label>
+        <label class="input-label fee-title">定常費用：</label>
         <div class="fee-list">
           <div class="fee-item" v-for="(fee, index) in fees" v-on:click="editFee(fee)">
             <div class="fee-info">
@@ -84,6 +114,9 @@
         floor: 0,
         note: '',
         room: 0,
+        keyMoney: 0,
+        rent: 0,
+        deposit: 0,
         fees: []
       }
     },
@@ -96,6 +129,7 @@
         if (!this.address) return false
         if (this.floor <= 0) return false
         if (this.room <= 0) return false
+        if (this.rent <= 0) return false
         return true
       }
     },
@@ -136,13 +170,15 @@
           floor: Number(this.floor),
           note: this.note,
           room: Number(this.room),
+          keyMoney: Number(this.keyMoney),
+          rent: Number(this.rent),
+          deposit: Number(this.deposit),
           fees: this.fees
         }
         utils.restPost('/api/addHouse', data).then(
           response => {
             if (response) {
-              // manager.houses.push(new House(response))
-              // manager.sortHouse()
+              manager.user.selectedHouse = response.house._id
               self.$router.push({name: 'house'})
             }
           }

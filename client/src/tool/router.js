@@ -6,7 +6,7 @@ import register from '@/components/register'
 import error from '@/components/error'
 import house from '@/components/house/house'
 import addHouse from '@/components/addHouse/addHouse'
-import room from '@/components/room/room'
+// import room from '@/components/room/room'
 import meter from '@/components/meter/meter'
 import report from '@/components/report/report'
 
@@ -37,25 +37,25 @@ let preloadAddHouse = (to, from, next) => {
   }
   next()
 }
-let preloadRoom = (to, from, next) => {
-  if (!manager.controller.checkAuth(to)) {
-    return
-  }
-  if (to.params.house) {
-    utils.restGet('/api/getHouseDetail', {_id: to.params.house}).then(
-      response => {
-        if (response) {
-          manager.selectedHouse = new House(response.house)
-          next()
-        }
-      }
-    )
-  }
-  else {
-    manager.selectedHouse = null
-    next()
-  }
-}
+// let preloadRoom = (to, from, next) => {
+//   if (!manager.controller.checkAuth(to)) {
+//     return
+//   }
+//   if (to.params.house) {
+//     utils.restGet('/api/getHouseDetail', {_id: to.params.house}).then(
+//       response => {
+//         if (response) {
+//           manager.selectedHouse = new House(response.house)
+//           next()
+//         }
+//       }
+//     )
+//   }
+//   else {
+//     manager.selectedHouse = null
+//     next()
+//   }
+// }
 let preloadMeter = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
@@ -78,7 +78,7 @@ export default new Router({
     {name: 'error', path: '/error', component: error},
     {name: 'house', path: '/', component: house, beforeEnter: preloadHouse},
     {name: 'addHouse', path: '/addHouse', component: addHouse, beforeEnter: preloadAddHouse},
-    {name: 'room', path: '/room/:house', component: room, beforeEnter: preloadRoom},
+    // {name: 'room', path: '/room/:room', component: room, beforeEnter: preloadRoom},
     {name: 'meter', path: '/meter', component: meter, beforeEnter: preloadMeter},
     {name: 'report', path: '/report', component: report, beforeEnter: preloadReport},
     {path: '*', redirect: '/loading'}

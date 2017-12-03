@@ -59,9 +59,19 @@ router.post('/addHouse', (req, res) => {
         house,
         req.body.params.floor,
         req.body.params.room,
+        req.body.params.keyMoney,
+        req.body.params.rent,
+        req.body.params.deposit,
         req.body.params.fees,
         (error, rooms) => {
-          res.json({error: error, data: {house: house, rooms, rooms}})
+          userService.selectHouse(req.session.passport.user, house._id, (error) => {
+            if (error) {
+              res.json({error: error, data: null})
+            }
+            else {
+              res.json({error: error, data: {house: house, rooms, rooms}})
+            }
+          })
         }
       )
     }
