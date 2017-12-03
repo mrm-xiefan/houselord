@@ -7,19 +7,19 @@ import utils from './utils.js'
 class RoomService {
   constructor() {
   }
-  getRoom(_id, next) {
+  getRooms(lord, house, next) {
     let self = this
     mongo.findAll(
       'rooms',
-      {_id: ObjectId(_id), deleted: {$ne: true}},
+      {lord: lord, house: ObjectId(house), deleted: {$ne: true}},
       {},
-      {},
+      {udate: -1},
       (error, results) => {
         if (error) {
           next(error, null)
         }
         else {
-          // self.getRoomContract(results[0], 0, next)
+          next(error, results)
         }
       }
     )

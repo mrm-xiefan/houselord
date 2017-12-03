@@ -4,7 +4,7 @@ import Controller from './controller.js'
 import User from './user.js'
 import io from 'socket.io-client/dist/socket.io.js'
 import House from './house.js'
-import Owner from './owner.js'
+import Room from './room.js'
 
 class Manager {
   constructor() {
@@ -13,12 +13,11 @@ class Manager {
     this.socket = null
     this.oldsocket = null
     this.locker = 'unlock'
-    this.houses = []
-    this.owners = []
 
     this.feeTypes = CONST.feeTypes
 
-    this.selectedHouse = null
+    this.houses = []
+    this.rooms = []
   }
 
   login(data, next) {
@@ -75,27 +74,18 @@ class Manager {
       else return 0
     })
   }
-  refreshOwner(owners) {
-    this.owners.splice(0, this.owners.length)
-    for (let i = 0; i < owners.length; i ++) {
-      this.owners.push(new Owner(owners[i]))
+  refreshRoom(rooms) {
+    this.rooms.splice(0, this.rooms.length)
+    for (let i = 0; i < rooms.length; i ++) {
+      this.rooms.push(new Room(rooms[i]))
     }
-    this.sortOwner()
   }
-  sortOwner() {
-    this.owners.sort((a, b) => {
-      if (a._id > b._id) return 1
-      else if (a._id < b._id) return -1
+  sortRoom() {
+    this.rooms.sort((a, b) => {
+      if (a.udate > b.udate) return -1
+      else if (a.udate < b.udate) return 1
       else return 0
     })
-  }
-  isNewOwner(owner) {
-    for (let i = 0; i < this.owners.length; i ++) {
-      if (this.owners[i]._id == owner) {
-        return false
-      }
-    }
-    return true
   }
 }
 

@@ -5,27 +5,45 @@ import url from 'url'
 import logger from './logger.js'
 import conf from 'config'
 import mongo from './mongo.js'
+import userService from './userService.js'
 import houseService from './houseService.js'
 import roomService from './roomService.js'
-import ownerService from './ownerService.js'
-import contractService from './contractService.js'
 
 let router = express.Router()
 
 router.get('/getHouseData', (req, res) => {
   logger.debug('getHouseData:', JSON.stringify(req.session.passport.user))
-  houseService.getLordHouses(req.session.passport.user._id, (error, houses) => {
-    if (error) {
-      res.json({error: error, data: null})
-    }
-    else {
-      res.json({error: null, data: {houses: houses}})
-    }
+  Promise.all([
+    new Promise((resolve, reject) => {
+      houseService.getLordHouses(req.session.passport.user._id, (error, houses) => {
+        if (error) return reject(error)
+        resolve(houses)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      if (req.session.passport.user.selectedHouse) {
+        roomService.getRooms(req.session.passport.user._id, req.session.passport.user.selectedHouse, (error, rooms) => {
+          if (error) return reject(error)
+          resolve(rooms)
+        })
+      }
+      else {
+        resolve([])
+      }
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {
+      houses: values[0],
+      rooms: values[1]
+    }})
+  }, (reason) => {
+    res.json({error: reason, data: null})
   })
 })
 router.post('/addHouse', (req, res) => {
   logger.info('addHouse:', JSON.stringify(req.body.params))
   let document = {
+    lord: req.body.params.lord,
     name: req.body.params.name,
     address: req.body.params.address,
     floor: req.body.params.floor,
@@ -46,6 +64,19 @@ router.post('/addHouse', (req, res) => {
           res.json({error: error, data: {house: house, rooms, rooms}})
         }
       )
+    }
+  })
+})
+router.post('/selectHouse', (req, res) => {
+  logger.info('selectHouse:', JSON.stringify(req.body.params))
+  userService.selectHouse(req.session.passport.user, req.body.params._id, (error) => {
+    if (error) {
+      res.json({error: error, data: null})
+    }
+    else {
+      roomService.getRooms(req.session.passport.user._id, req.body.params._id, (error, rooms) => {
+        res.json({error: error, data: rooms})
+      })
     }
   })
 })

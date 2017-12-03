@@ -10,6 +10,7 @@ class Room {
     this.house = data.house
     this.number = data.number
     this.fees = data.fees
+    this.udate = data.udate
 
     // this.size = data.size
     // this.floor = data.floor

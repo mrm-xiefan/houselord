@@ -6,6 +6,7 @@ class User {
   constructor() {
     this._id = ''
     this.password = ''
+    this.selectedHouse = ''
   }
   isLogin() {
     return !(this._id == '')
@@ -13,6 +14,7 @@ class User {
   login(user) {
     this._id = user._id
     this.password = user.password
+    this.selectedHouse = user.selectedHouse || ''
   }
   logout() {
     this._id = ''

@@ -25,6 +25,7 @@ let preloadHouse = (to, from, next) => {
     response => {
       if (response) {
         manager.refreshHouse(response.houses)
+        manager.refreshRoom(response.rooms)
         next()
       }
     }

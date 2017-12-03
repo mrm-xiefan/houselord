@@ -18,7 +18,7 @@ class ContractService {
       'contracts',
       filter,
       {},
-      {'cdate': -1},
+      {cdate: -1},
       (error, contracts) => {
         if (error) {
           next(error, null)

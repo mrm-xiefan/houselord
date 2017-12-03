@@ -13,7 +13,7 @@ class HouseService {
       'houses',
       {lord: lord, deleted: {$ne: true}},
       {},
-      {'udate': -1},
+      {udate: -1},
       (error, houses) => {
         if (error) {
           next(error, null)

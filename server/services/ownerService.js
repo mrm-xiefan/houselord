@@ -11,7 +11,7 @@ class OwnerService {
       'owners',
       {lord: lord, deleted: {$ne: true}},
       {},
-      {'udate': -1},
+      {udate: -1},
       (error, owners) => {
         if (error) {
           next(error, null)
