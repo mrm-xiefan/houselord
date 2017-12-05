@@ -3,7 +3,7 @@
     <section class="content" v-on:click="closeSide">
 
       <div class="bg-gray contract-header text-black">
-        <i class="fa fa-edit"></i> 契約 - {{manager.contract.house.name}} - {{manager.contract.room.number}}
+        <i class="fa fa-legal"></i> 契約 - {{manager.contract.house.name}} - {{manager.contract.room.number}}
       </div>
 
       <div class="bg-gray-light contract-body">
@@ -292,7 +292,6 @@
   }
   .input-text {
     width: calc(100% - 120px);
-    /* margin-right: 20px; */
   }
   .contract-action {
     margin-top: 20px;

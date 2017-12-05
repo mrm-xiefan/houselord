@@ -24,6 +24,8 @@ class Contract {
         this.payments.push(new Payment(data.payments[i]))
       }
     }
+
+    this.over = data.over
   }
   isDateValid() {
     if (!this.start) {
@@ -62,6 +64,7 @@ class Contract {
     return true
   }
   isOver() {
+    if (this.over) return this.over
     for (let i = 0; i < this.payments.length; i ++) {
       if (!this.payments[i].pay) {
         return false

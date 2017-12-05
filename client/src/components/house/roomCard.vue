@@ -4,7 +4,7 @@
       {{room.number}}<span class="text-gray" v-if="room.size">（{{room.size}}）</span>
       <div class="pull-right box-tools">
         <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']">
-          <i class="fa fa-edit"></i>
+          <i class="glyphicon glyphicon-pencil"></i>
         </button>
       </div>
     </div>
@@ -59,8 +59,11 @@
       <div class="room-button" v-on:click="deal(room)">
         契約
       </div>
-      <div class="room-button">
+      <div class="room-button" v-on:click="pay(room)">
         解約
+      </div>
+      <div class="room-button" v-on:click="pay(room)">
+        延長
       </div>
       <div class="room-button" v-on:click="pay(room)">
         支払

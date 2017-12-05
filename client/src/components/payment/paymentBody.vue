@@ -3,7 +3,7 @@
     <section class="content" v-on:click="closeSide">
 
       <div class="bg-gray payment-header text-black">
-        <i class="fa fa-money"></i> 支払 - {{manager.payment.house.name}} - {{manager.payment.room.number}}
+        <i class="glyphicon glyphicon-pencil"></i> {{manager.payment.house.name}} - {{manager.payment.room.number}}
       </div>
 
       <div class="bg-gray-light payment-body">
@@ -30,15 +30,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(payment, j) in contract.payments" :class="{'unpaid-row': payment.isUnpaid()}">
+                  <tr v-for="(payment, j) in contract.payments" :class="{'unpaid-row': payment.isUnpaid() && contract.over != 'cancel'}">
                     <td>
                       <span :class="{'label': true, 'bg-blue': payment.DRCR == 'DR', 'bg-yellow': payment.DRCR == 'CR'}">
                         {{payment.getDRCR()}}
                       </span>
                     </td>
                     <td>{{payment.getType()}}</td>
-                    <td :class="{'unpay-input': !payment.pay, 'right-row': true}">
-                      <template v-if="payment.pay">
+                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel', 'text-cancel': !payment.pay && contract.over == 'cancel', 'right-row': true}">
+                      <template v-if="payment.pay || contract.over == 'cancel'">
                         {{payment.getAmount()}}
                       </template>
                       <template v-else>
@@ -46,9 +46,12 @@
                       </template>
                     </td>
                     <td :class="{'unpay-row': !payment.pay}">{{payment.getDate()}}</td>
-                    <td :class="{'unpay-input': !payment.pay}">
-                      <div class="btn btn-primary btn-minimum" v-if="!payment.pay" v-on:click="agreePayment(contract, payment)">
+                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel'}">
+                      <div class="btn btn-primary btn-minimum" v-if="!payment.pay && contract.over != 'cancel'" v-on:click="agreePayment(contract, payment)">
                         支払
+                      </div>
+                      <div class="badge bg-red" v-else-if="!payment.pay && contract.over == 'cancel'">
+                        取消
                       </div>
                       <div class="badge bg-green" v-else>
                         済み
@@ -59,15 +62,26 @@
               </table>
             </div>
             <div class="box-footer">
-              <button class="btn btn-warning pull-right" v-on:click="addExpense(contract)">
+              <button class="btn btn-warning pull-left" v-on:click="addExpense(contract)" :disabled="contract.over == 'cancel'">
                 <i class="fa fa-plus-circle"></i> 支出補正
               </button>
-              <button class="btn btn-primary pull-right" v-on:click="addIncome(contract)">
+              <button class="btn btn-primary pull-left" v-on:click="addIncome(contract)" :disabled="contract.over == 'cancel'">
                   <i class="fa fa-plus-circle"></i> 収入補正
+              </button>
+              <button class="btn btn-primary pull-right" v-on:click="reContract(contract)" :disabled="contract.over == 'cancel'">
+                <i class="fa fa-legal"></i> 契約延長
+              </button>
+              <button class="btn btn-danger pull-right" v-on:click="cancel(contract)" :disabled="contract.over == 'cancel'">
+                <i class="glyphicon glyphicon-erase"></i> 契約解除
               </button>
             </div>
           </div>
 
+        </div>
+        <div class="payment-action">
+          <button type="button" class="btn btn-default text-blue" v-on:click="backward">
+            <i class="fa fa-reply"></i> 戻る
+          </button>
         </div>
       </div>
 
@@ -98,7 +112,7 @@
         now = now.valueOf()
         let payment = {
           DRCR: 'DR',
-          type: 'other',
+          type: '99',
           amount: 0,
           plan: now
         }
@@ -114,7 +128,7 @@
         now = now.valueOf()
         let payment = {
           DRCR: 'CR',
-          type: 'other',
+          type: '99',
           amount: 0,
           plan: now
         }
@@ -148,6 +162,19 @@
             }
           }
         )
+      },
+      reContract(contract) {
+      },
+      cancel(contract) {
+        utils.event.$emit('SHOW_MESSAGE', 'I003', () => {
+          utils.restPost('/api/cancelContract', {_id: contract._id, over: 'cancel'}).then(
+            response => {
+              if (response) {
+                contract.over = 'cancel'
+              }
+            }
+          )
+        })
       },
       backward() {
         this.$router.go(-1)
@@ -185,10 +212,23 @@
   .unpay-row {
     color: #aaa;
   }
+  .text-cancel {
+    text-decoration: line-through;
+    color: #aaa;
+  }
   .btn-minimum {
     padding: 6px;
   }
   .box-footer .btn {
     margin-right: 10px;
+  }
+  .payment-action {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .payment-action button {
+    width: 120px;
   }
 </style>

@@ -164,6 +164,10 @@
           utils.event.$emit('SHOW_MESSAGE', 'B006')
           return
         }
+        if (this.room > 99) {
+          utils.event.$emit('SHOW_MESSAGE', 'B008')
+          return
+        }
         let data = {
           lord: manager.user._id,
           name: this.name,

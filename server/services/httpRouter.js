@@ -248,6 +248,12 @@ router.post('/addPayment', (req, res) => {
     res.json({error: reason, data: null})
   })
 })
+router.post('/cancelContract', (req, res) => {
+  logger.info('cancelContract:', JSON.stringify(req.body.params))
+  contractService.updateContract(req.session.passport.user, req.body.params, (error) => {
+    res.json({error: error, data: {}})
+  })
+})
 
 
 

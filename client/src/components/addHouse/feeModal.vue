@@ -19,7 +19,7 @@
                   <span class="dropdown-text" v-else>{{type.name}}</span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li v-for="type in manager.feeTypes" class="selection-item"><a v-on:click="setType(type)">{{type.name}}</a></li>
+                  <li v-for="type in manager.feeTypes" v-if="type.type != 'once'" class="selection-item"><a v-on:click="setType(type)">{{type.name}}</a></li>
                 </ul>
               </div>
             </div>
@@ -103,8 +103,11 @@
       setType(type) {
         this.type.name = type.name
         this.type.value = type.value
-        if (this.type.value != 99 && !this.name) {
+        if (this.type.value != '30') {
           this.name = this.type.name
+        }
+        else {
+          this.name = ''
         }
       },
       save() {

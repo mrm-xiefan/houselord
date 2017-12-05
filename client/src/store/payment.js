@@ -34,8 +34,13 @@ class Payment {
     else if (this.type == 'rent') {
       return '家賃'
     }
-    else if (this.type == 'other') {
-      return '補正'
+    else {
+      if (CONST.feeTypes[this.type]) {
+        return CONST.feeTypes[this.type].name
+      }
+      else {
+        return null
+      }
     }
   }
   getAmount() {
