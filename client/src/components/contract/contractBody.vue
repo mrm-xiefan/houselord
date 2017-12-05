@@ -196,8 +196,8 @@
       generatePayments() {
         let payments = []
         let now = new Date()
-        let contract = manager.contract.contract
         now = now.valueOf()
+        let contract = manager.contract.contract
         if (manager.contract.contract.keyMoney > 0) {
           payments.push({
             DRCR: 'DR',

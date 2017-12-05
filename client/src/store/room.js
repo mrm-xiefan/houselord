@@ -22,30 +22,30 @@ class Room {
     }
   }
   getKeyMoney() {
-    if (this.getCurrentRental()) {
-      return utils.formatMoney(this.getCurrentRental().keyMoney) + ' 円'
+    if (this.getCurrentContract()) {
+      return utils.formatMoney(this.getCurrentContract().keyMoney) + ' 円'
     }
     else {
       return utils.formatMoney(this.keyMoney) + ' 円'
     }
   }
   getRent() {
-    if (this.getCurrentRental()) {
-      return utils.formatMoney(this.getCurrentRental().rent) + ' 円'
+    if (this.getCurrentContract()) {
+      return utils.formatMoney(this.getCurrentContract().rent) + ' 円'
     }
     else {
       return utils.formatMoney(this.rent) + ' 円 / 月'
     }
   }
   getDeposit() {
-    if (this.getCurrentRental()) {
-      return utils.formatMoney(this.getCurrentRental().deposit) + ' 円'
+    if (this.getCurrentContract()) {
+      return utils.formatMoney(this.getCurrentContract().deposit) + ' 円'
     }
     else {
       return utils.formatMoney(this.deposit) + ' 円'
     }
   }
-  getCurrentRental() {
+  getCurrentContract() {
     let now = new Date()
     now = now.valueOf()
     for (let i = 0; i < this.contracts.length; i ++) {
@@ -55,7 +55,7 @@ class Room {
     }
     return null
   }
-  getFutureRental() {
+  getFutureContract() {
     let now = new Date()
     now = now.valueOf()
     for (let i = 0; i < this.contracts.length; i ++) {
@@ -65,11 +65,8 @@ class Room {
     }
     return null
   }
-  isReserved() {
-    return true
-  }
   isRented() {
-    if (this.getCurrentRental()) {
+    if (this.getCurrentContract()) {
       return true
     }
     else {

@@ -254,6 +254,41 @@ router.post('/cancelContract', (req, res) => {
     res.json({error: error, data: {}})
   })
 })
+router.post('/recontract', (req, res) => {
+  logger.info('recontract:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      contractService.updateContract(req.session.passport.user, req.body.params.contract, (error) => {
+        if (error) return reject(error)
+        contractService.reviveContract(req.session.passport.user, req.body.params.contract._id, (error) => {
+          if (error) return reject(error)
+          resolve()
+        })
+      })
+    }),
+    new Promise((resolve, reject) => {
+      paymentService.updatePayment(req.session.passport.user, req.body.params.deposit, (error) => {
+        if (error) return reject(error)
+        resolve()
+      })
+    }),
+    new Promise((resolve, reject) => {
+      let contract = req.body.params.contract
+      contract.house = req.body.params.house
+      contract.room = req.body.params.room
+      paymentService.insertPayments(req.session.passport.user, contract, req.body.params.payments, (error, payments) => {
+        if (error) return reject(error)
+        resolve(payments)
+      })
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {
+      payments: values[2]
+    }})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
 
 
 

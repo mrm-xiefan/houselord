@@ -204,29 +204,12 @@
 
   /* responsive */
   @media (max-width: 992px) {
-    .select-form-row {
-      flex-direction: column;
-    }
-    .select-form-row .select-image {
-      margin: 0 auto 20px;
-      width: 100%;
-      max-width: 300px;
-    }
     .modal-footer {
       display: flex;
       justify-content: space-between;;
     }
     .modal-footer .btn {
       width: 50%;
-    }
-  }
-  @media (max-width: 480px) {
-    .data-row {
-      flex-direction: column;
-      margin: 0;
-    }
-    .data-row .modal-item {
-      margin: 0 0 10px;
     }
   }
 </style>

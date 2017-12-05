@@ -68,7 +68,7 @@
               <button class="btn btn-primary pull-left" v-on:click="addIncome(contract)" :disabled="contract.over == 'cancel'">
                   <i class="fa fa-plus-circle"></i> 収入補正
               </button>
-              <button class="btn btn-primary pull-right" v-on:click="reContract(contract)" :disabled="contract.over == 'cancel'">
+              <button class="btn btn-primary pull-right" v-on:click="recontract(contract)" :disabled="contract.over == 'cancel'">
                 <i class="fa fa-legal"></i> 契約延長
               </button>
               <button class="btn btn-danger pull-right" v-on:click="cancel(contract)" :disabled="contract.over == 'cancel'">
@@ -145,6 +145,7 @@
             if (response) {
               for (let i = 0; i < response.payments.length; i ++) {
                 contract.payments.push(new Payment(response.payments[i]))
+                contract.sortPayments()
               }
             }
           }
@@ -163,7 +164,8 @@
           }
         )
       },
-      reContract(contract) {
+      recontract(contract) {
+        utils.event.$emit('RECONTRACT', contract)
       },
       cancel(contract) {
         utils.event.$emit('SHOW_MESSAGE', 'I003', () => {

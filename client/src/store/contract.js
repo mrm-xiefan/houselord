@@ -82,6 +82,15 @@ class Contract {
     }
     return false
   }
+  getKeyMoney() {
+    return utils.formatMoney(this.keyMoney) + ' 円'
+  }
+  getRent() {
+    return utils.formatMoney(this.rent) + ' 円 / 月'
+  }
+  getDeposit() {
+    return utils.formatMoney(this.deposit) + ' 円'
+  }
   getStart() {
     return utils.formatDate(this.start)
   }
@@ -90,6 +99,13 @@ class Contract {
   }
   getFirst() {
     return utils.formatDate(this.first)
+  }
+  sortPayments() {
+    this.payments.sort((a, b) => {
+      if (a.plan > b.plan) return 1
+      if (a.plan < b.plan) return -1
+      return 0
+    })
   }
 }
 

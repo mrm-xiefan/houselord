@@ -22,16 +22,13 @@
           </div>
         </div>
         <div class="status-box">
-          <!-- <div class="badge bg-blue" v-if="room.isReserved()">
-            予約中
-          </div> -->
           <div class="badge bg-green" v-if="room.isRented()">
             レンタル中
           </div>
           <div class="badge bg-blue" v-else>
             空室
           </div>
-          <div class="badge bg-green" v-if="room.getFutureRental()">
+          <div class="badge bg-green" v-if="room.getFutureContract()">
             予約あり
           </div>
           <div class="badge bg-red" v-if="room.isUnpaid()">
@@ -42,15 +39,15 @@
       <div :class="['resident-row', room.isRented()? 'resident-green': 'resident-blue']">
         <div class="info-row">
           <div class="resident-box">
-            <div class="resident-title"><i class="fa fa-user"></i> 居住者：</div><div class="resident-content" v-if="room.getCurrentRental()">{{room.getCurrentRental().resident}}</div>
+            <div class="resident-title"><i class="fa fa-user"></i> 居住者：</div><div class="resident-content" v-if="room.getCurrentContract()">{{room.getCurrentContract().resident}}</div>
           </div>
           <div class="resident-box">
-            <div class="resident-title"><i class="fa fa-phone"></i> 連絡先：</div><div class="resident-content" v-if="room.getCurrentRental()">{{room.getCurrentRental().phone}}</div>
+            <div class="resident-title"><i class="fa fa-phone"></i> 連絡先：</div><div class="resident-content" v-if="room.getCurrentContract()">{{room.getCurrentContract().phone}}</div>
           </div>
         </div>
         <div class="info-row">
           <div class="resident-note">
-            <div class="resident-title"><i class="fa fa-sticky-note"></i> 備 考：</div><div class="resident-content" v-if="room.getCurrentRental()">{{room.getCurrentRental().note}}</div>
+            <div class="resident-title"><i class="fa fa-sticky-note"></i> 備 考：</div><div class="resident-content" v-if="room.getCurrentContract()">{{room.getCurrentContract().note}}</div>
           </div>
         </div>
       </div>
