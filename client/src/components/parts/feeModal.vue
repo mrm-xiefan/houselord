@@ -71,10 +71,18 @@
       let self = this
       utils.event.$on('FEE_DETAIL', (fee, next) => {
         if (fee) {
-          self.type = fee.type
+          self.type.value = fee.type
+          self.type.name = CONST.feeTypes[fee.type].name
           self.name = fee.name
           self.price = fee.price
           self.day = fee.day
+        }
+        else {
+          self.type.name = ''
+          self.type.value = ''
+          self.name = ''
+          self.price = 0
+          self.day = ''
         }
         if (next) {
           self.next = next

@@ -262,6 +262,7 @@
           amount: Number(this.rent),
           plan: new Date(this.first).valueOf()
         })
+        this.generateFees(payments, moment(new Date(this.first)), moment(new Date(this.start)), moment(new Date(this.end)))
         // rents
         let end = moment(new Date(this.end))
         let i = 0
@@ -277,9 +278,36 @@
             amount: Number(this.rent),
             plan: current.toDate().valueOf()
           })
+          this.generateFees(payments, current, moment(new Date(this.start)), moment(new Date(this.end)))
         }
 
         return payments
+      },
+      generateFees(payments, base, start, end) {
+        for (let i = 0; i < this.contract.fees.length; i ++) {
+          let fee = this.contract.fees[i]
+          let plan = null
+          if (moment([base.year(), base.month(), fee.day]).isValid()) {
+            plan = moment([base.year(), base.month(), fee.day])
+          }
+          else if (moment([base.year(), base.month(), fee.day - 1]).isValid()) {
+            plan = moment([base.year(), base.month(), fee.day - 1])
+          }
+          else if (moment([base.year(), base.month(), fee.day - 2]).isValid()) {
+            plan = moment([base.year(), base.month(), fee.day - 2])
+          }
+          else if (moment([base.year(), base.month(), fee.day - 3]).isValid()) {
+            plan = moment([base.year(), base.month(), fee.day - 3])
+          }
+          if (plan > start && plan <= end) {
+            payments.push({
+              DRCR: 'DR',
+              type: fee.type,
+              amount: CONST.feeTypes[fee.type].type == 'meter'? -1: fee.price,
+              plan: plan.toDate().valueOf()
+            })
+          }
+        }
       }
     }
   }

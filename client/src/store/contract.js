@@ -13,6 +13,7 @@ class Contract {
     this.keyMoney = Number(data.keyMoney)
     this.rent = Number(data.rent)
     this.deposit = Number(data.deposit)
+    this.fees = data.fees || []
 
     this.start = data.start
     this.end = data.end

@@ -3,8 +3,7 @@
     <lockScreen :manager="manager"></lockScreen>
     <appHeader :manager="manager"></appHeader>
     <appSideMenu :manager="manager"></appSideMenu>
-    <addHouseBody :manager="manager"></addHouseBody>
-    <feeModal :manager="manager"></feeModal>
+    <expenseBody :manager="manager"></expenseBody>
     <appFooter :manager="manager"></appFooter>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
@@ -20,8 +19,7 @@
   import lockScreen from '@/components/parts/lockScreen'
   import appHeader from '@/components/appHeader'
   import appSideMenu from '@/components/appSideMenu'
-  import addHouseBody from '@/components/addHouse/addHouseBody'
-  import feeModal from '@/components/parts/feeModal'
+  import expenseBody from '@/components/expense/expenseBody'
   import appFooter from '@/components/appFooter'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
@@ -31,8 +29,7 @@
       lockScreen: lockScreen,
       appHeader: appHeader,
       appSideMenu: appSideMenu,
-      addHouseBody: addHouseBody,
-      feeModal: feeModal,
+      expenseBody: expenseBody,
       appFooter: appFooter,
       messageModal: messageModal,
       appControlPanel: appControlPanel

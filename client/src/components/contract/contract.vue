@@ -4,6 +4,7 @@
     <appHeader :manager="manager"></appHeader>
     <appSideMenu :manager="manager"></appSideMenu>
     <contractBody :manager="manager"></contractBody>
+    <feeModal :manager="manager"></feeModal>
     <appFooter :manager="manager"></appFooter>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
@@ -20,6 +21,7 @@
   import appHeader from '@/components/appHeader'
   import appSideMenu from '@/components/appSideMenu'
   import contractBody from '@/components/contract/contractBody'
+  import feeModal from '@/components/parts/feeModal'
   import appFooter from '@/components/appFooter'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
@@ -30,6 +32,7 @@
       appHeader: appHeader,
       appSideMenu: appSideMenu,
       contractBody: contractBody,
+      feeModal: feeModal,
       appFooter: appFooter,
       messageModal: messageModal,
       appControlPanel: appControlPanel

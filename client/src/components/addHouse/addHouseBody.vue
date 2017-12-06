@@ -147,7 +147,6 @@
         })
       },
       editFee(fee) {
-        let self = this
         utils.event.$emit('FEE_DETAIL', fee, (newfee) => {
           fee.type = newfee.type
           fee.name = newfee.name

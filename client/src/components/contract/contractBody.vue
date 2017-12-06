@@ -91,6 +91,24 @@
           </div>
         </div>
 
+        <h4>3.定常費用を確定する</h4>
+        <div class="fee-list">
+          <div class="fee-item" v-for="(fee, index) in manager.contract.contract.fees" v-on:click="editFee(fee)">
+            <div class="fee-info">
+              {{fee.name}}
+            </div>
+            <div class="fee-info">
+              {{fee.price}}
+            </div>
+            <div class="fee-delete" v-on:click.stop="deleteFee(index)">
+              <i class="fa fa-close"></i>
+            </div>
+          </div>
+          <div class="fee-add" v-on:click="addFee">
+            <i class="fa fa-plus-square-o"></i>
+          </div>
+        </div>
+
         <div class="contract-action">
           <button type="button" class="btn btn-primary" :disabled="!isValid" v-on:click="saveContract">
             <i class="fa fa-save"></i> 保存
@@ -151,6 +169,22 @@
         }
         $('#first-date').datepicker(options)
       },
+      addFee() {
+        utils.event.$emit('FEE_DETAIL', null, (fee) => {
+          manager.contract.contract.fees.push(fee)
+        })
+      },
+      editFee(fee) {
+        utils.event.$emit('FEE_DETAIL', fee, (newfee) => {
+          fee.type = newfee.type
+          fee.name = newfee.name
+          fee.price = newfee.price
+          fee.day = newfee.day
+        })
+      },
+      deleteFee(index) {
+        manager.contract.contract.fees.splice(index, 1)
+      },
       checkDate() {
         let tmp = new Date($('#start-date').val())
         manager.contract.contract.start = tmp.valueOf()
@@ -178,7 +212,8 @@
             first: manager.contract.contract.first,
             keyMoney: manager.contract.contract.keyMoney,
             rent: manager.contract.contract.rent,
-            deposit: manager.contract.contract.deposit
+            deposit: manager.contract.contract.deposit,
+            fees: manager.contract.contract.fees
           }
           let payments = self.generatePayments()
           utils.restPost('/api/saveContract', {contract: contract, payments: payments}).then(
@@ -223,6 +258,7 @@
           amount: manager.contract.contract.rent,
           plan: contract.first
         })
+        this.generateFees(payments, moment(contract.first), moment(contract.start), moment(contract.end))
 
         let end = moment(contract.end)
         let i = 0
@@ -238,6 +274,7 @@
             amount: manager.contract.contract.rent,
             plan: current.toDate().valueOf()
           })
+          this.generateFees(payments, current, moment(contract.start), moment(contract.end))
         }
 
         if (manager.contract.contract.deposit > 0) {
@@ -249,6 +286,32 @@
           })
         }
         return payments
+      },
+      generateFees(payments, base, start, end) {
+        for (let i = 0; i < manager.contract.contract.fees.length; i ++) {
+          let fee = manager.contract.contract.fees[i]
+          let plan = null
+          if (moment([base.year(), base.month(), fee.day]).isValid()) {
+            plan = moment([base.year(), base.month(), fee.day])
+          }
+          else if (moment([base.year(), base.month(), fee.day - 1]).isValid()) {
+            plan = moment([base.year(), base.month(), fee.day - 1])
+          }
+          else if (moment([base.year(), base.month(), fee.day - 2]).isValid()) {
+            plan = moment([base.year(), base.month(), fee.day - 2])
+          }
+          else if (moment([base.year(), base.month(), fee.day - 3]).isValid()) {
+            plan = moment([base.year(), base.month(), fee.day - 3])
+          }
+          if (plan > start && plan <= end) {
+            payments.push({
+              DRCR: 'DR',
+              type: fee.type,
+              amount: CONST.feeTypes[fee.type].type == 'meter'? -1: fee.price,
+              plan: plan.toDate().valueOf()
+            })
+          }
+        }
       },
       backward() {
         this.$router.go(-1)
@@ -292,6 +355,60 @@
   }
   .input-text {
     width: calc(100% - 120px);
+  }
+  .fee-list {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+  }
+  .fee-item {
+    float: left;
+    height: 60px;
+    width: 120px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-top: 4px solid #605ca8;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+  }
+  .fee-info {
+    padding: 5px 5px 0px 5px;
+  }
+  .fee-delete {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 15px;
+    background: #d2d6de;
+  }
+  .fee-delete:hover {
+    background: #605ca8;
+  }
+  .fee-delete i {
+    font-size: 25px;
+    color: #fff;
+  }
+  .fee-add {
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .fee-add i {
+    font-size: 60px;
+    cursor: pointer;
+  }
+  .fee-add i:hover {
+    opacity: 0.7;
   }
   .contract-action {
     margin-top: 20px;

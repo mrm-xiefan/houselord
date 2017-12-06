@@ -11,6 +11,9 @@ import contract from '@/components/contract/contract'
 import payment from '@/components/payment/payment'
 import meter from '@/components/meter/meter'
 import report from '@/components/report/report'
+import owner from '@/components/owner/owner'
+import layout from '@/components/layout/layout'
+import expense from '@/components/expense/expense'
 
 import CONST from '@/store/const.js'
 import manager from '@/store/manager.js'
@@ -84,6 +87,7 @@ let preloadContract = (to, from, next) => {
             keyMoney: manager.contract.room.keyMoney,
             rent: manager.contract.room.rent,
             deposit: manager.contract.room.deposit,
+            fees: JSON.parse(JSON.stringify(manager.contract.room.fees)) || [],
             start: 0,
             end: 0,
             first: 0
@@ -124,6 +128,24 @@ let preloadReport = (to, from, next) => {
   }
   next()
 }
+let preloadOwner = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  next()
+}
+let preloadLayout = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  next()
+}
+let preloadExpense = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  next()
+}
 
 export default new Router({
   mode: 'history',
@@ -139,6 +161,9 @@ export default new Router({
     {name: 'payment', path: '/payment', component: payment, beforeEnter: preloadPayment},
     {name: 'meter', path: '/meter', component: meter, beforeEnter: preloadMeter},
     {name: 'report', path: '/report', component: report, beforeEnter: preloadReport},
+    {name: 'owner', path: '/owner', component: owner, beforeEnter: preloadOwner},
+    {name: 'layout', path: '/layout', component: layout, beforeEnter: preloadLayout},
+    {name: 'expense', path: '/expense', component: expense, beforeEnter: preloadExpense},
     {path: '*', redirect: '/loading'}
   ]
 })
