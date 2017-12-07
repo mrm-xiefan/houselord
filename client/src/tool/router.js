@@ -4,6 +4,7 @@ import loading from '@/components/loading'
 import login from '@/components/login'
 import register from '@/components/register'
 import error from '@/components/error'
+import home from '@/components/home/home'
 import house from '@/components/house/house'
 import addHouse from '@/components/addHouse/addHouse'
 // import room from '@/components/room/room'
@@ -24,6 +25,12 @@ import Contract from '@/store/contract.js'
 
 Vue.use(Router)
 
+let preloadHome = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  next()
+}
 let preloadHouse = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
@@ -154,7 +161,8 @@ export default new Router({
     {name: 'login', path: '/login', component: login},
     {name: 'register', path: '/register', component: register},
     {name: 'error', path: '/error', component: error},
-    {name: 'house', path: '/', component: house, beforeEnter: preloadHouse},
+    {name: 'home', path: '/', component: home, beforeEnter: preloadHome},
+    {name: 'house', path: '/house', component: house, beforeEnter: preloadHouse},
     {name: 'addHouse', path: '/addHouse', component: addHouse, beforeEnter: preloadAddHouse},
     // {name: 'room', path: '/room/:room', component: room, beforeEnter: preloadRoom},
     {name: 'contract', path: '/contract', component: contract, beforeEnter: preloadContract},

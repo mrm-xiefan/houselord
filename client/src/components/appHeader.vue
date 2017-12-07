@@ -13,6 +13,51 @@
       </a>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-primary">5</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">リマインド</li>
+              <li>
+                <ul class="menu">
+                  <li>
+                    <router-link to="/">
+                      <i class="fa fa-warning text-yellow"></i> 賃金催促
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/">
+                      <i class="fa fa-info-circle text-blue"></i> 年末調整
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/">
+                      <i class="fa fa-exclamation-triangle text-red"></i> 返済日だよ！
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/">
+                      <i class="fa fa-info-circle text-blue"></i> もう〜サボらないと生きていけなくなってしまっているから
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/">
+                      <i class="fa fa-info-circle text-blue"></i> メーター故障中
+                    </router-link>
+                  </li>
+                </ul>
+              </li>
+              <li class="footer">
+                <router-link to="/">
+                  <i class="fa fa-calendar"></i> タスク管理へ
+                </router-link>
+              </li>
+            </ul>
+          </li>
+
           <li>
             <a href="#" v-on:click="logout()"><i class="glyphicon glyphicon-log-out"></i> ログアウト</a>
           </li>

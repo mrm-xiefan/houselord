@@ -2,7 +2,7 @@ let CONST = {
   httpTimeout: 120000,
   developHost: 'http://localhost:3000/',
   socketpath: '/socket.io/',
-  defaultApp: 'house',
+  defaultApp: 'home',
   title: {
     'S001': 'エラー',
     'S002': 'エラー',

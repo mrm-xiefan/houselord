@@ -2,7 +2,7 @@
   <aside class="main-sidebar">
     <section class="sidebar">
       <div class="user-panel">
-        <div class="pull-left image">
+        <div class="pull-left image" v-on:click="toHome()">
           <img src="../assets/avatar.png" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
@@ -23,7 +23,7 @@
           </a>
           <ul class="treeview-menu">
             <li :class="{'active': manager.controller.currentApp == 'house'}">
-              <router-link to="/">
+              <router-link to="/house">
                 <i class="fa fa-circle-o"></i> ハウス一覧
               </router-link>
             </li>
@@ -85,6 +85,9 @@
       },
       disconnect() {
         manager.socket.disconnect()
+      },
+      toHome() {
+        this.$router.push({name: 'home'})
       }
     }
   }
@@ -92,6 +95,9 @@
 
 <style scoped>
   a {
+    cursor: pointer;
+  }
+  .image {
     cursor: pointer;
   }
 </style>
