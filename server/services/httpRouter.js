@@ -248,6 +248,36 @@ router.post('/addPayment', (req, res) => {
     res.json({error: reason, data: null})
   })
 })
+router.post('/deletePayment', (req, res) => {
+  logger.info('deletePayment:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      paymentService.deletePayment(req.session.passport.user, req.body.params.payment, (error, payment) => {
+        if (error) return reject(error)
+        resolve(payment)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      if (req.body.params.over) {
+        let contract = {
+          _id: req.body.params.contract,
+          over: req.body.params.over
+        }
+        contractService.updateContract(req.session.passport.user, contract, (error) => {
+          if (error) return reject(error)
+          resolve()
+        })
+      }
+      else {
+        resolve()
+      }
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {payment: values[0]}})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
 router.post('/cancelContract', (req, res) => {
   logger.info('cancelContract:', JSON.stringify(req.body.params))
   contractService.updateContract(req.session.passport.user, req.body.params, (error) => {
