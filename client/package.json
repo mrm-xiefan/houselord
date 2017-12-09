@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "admin-lte": "^2.4.0",
+    "amcharts3": "github:amcharts/amcharts3",
     "autoprefixer": "^6.7.2",
     "axios": "^0.16.1",
     "babel-core": "^6.22.1",
