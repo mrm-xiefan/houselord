@@ -27,6 +27,7 @@
                     <th class="right-row">金額(円)</th>
                     <th>支払日</th>
                     <th>支払</th>
+                    <th>操作</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -58,6 +59,11 @@
                       </div>
                       <div class="badge bg-green" v-else>
                         済み
+                      </div>
+                    </td>
+                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel'}">
+                      <div class="btn bg-red btn-minimum" v-if="!payment.pay && contract.over != 'cancel'" v-on:click="removePayment(contract, payment,j)">
+                        削除
                       </div>
                     </td>
                   </tr>
@@ -159,8 +165,16 @@
         let now = new Date()
         now = now.valueOf()
         payment.pay = now
-
         utils.restPost('/api/fixPayment', {payment: payment._id, pay: payment.pay, contract: contract._id, over: contract.isOver()}).then(
+          response => {
+            if (response) {
+            }
+          }
+        )
+      },
+      removePayment(contract, payment,j) {
+        contract.payments.splice(j, 1)
+        utils.restPost('/api/deletePayment', {payment: payment, contract: contract._id, over: contract.isOver()}).then(
           response => {
             if (response) {
             }
