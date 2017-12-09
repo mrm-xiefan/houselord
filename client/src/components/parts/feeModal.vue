@@ -15,8 +15,8 @@
             <div class="col-sm-6 column-block">
               <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle block-button" data-toggle="dropdown">
-                  <span class="dropdown-text" v-if="type.value == ''">費用種類</span>
-                  <span class="dropdown-text" v-else>{{type.name}}</span>
+                  <span class="dropdown-text" v-if="type == ''">費用種類</span>
+                  <span class="dropdown-text" v-else>{{typeName}}</span>
                 </button>
                 <ul class="dropdown-menu">
                   <li v-for="type in manager.feeTypes" v-if="type.type != 'once'" class="selection-item"><a v-on:click="setType(type)">{{type.name}}</a></li>
@@ -58,10 +58,7 @@
     props: ['manager'],
     data() {
       return {
-        type: {
-          name: '',
-          value: ''
-        },
+        type: '',
         name: '',
         price: 0,
         day: ''
@@ -71,15 +68,13 @@
       let self = this
       utils.event.$on('FEE_DETAIL', (fee, next) => {
         if (fee) {
-          self.type.value = fee.type
-          self.type.name = CONST.feeTypes[fee.type].name
+          self.type = fee.type
           self.name = fee.name
           self.price = fee.price
           self.day = fee.day
         }
         else {
-          self.type.name = ''
-          self.type.value = ''
+          self.type = ''
           self.name = ''
           self.price = 0
           self.day = ''
@@ -99,8 +94,11 @@
       utils.event.$off('FEE_DETAIL')
     },
     computed: {
+      typeName() {
+        return this.type? CONST.feeTypes[this.type].name: ''
+      },
       isValid() {
-        if (!this.type.value) return false
+        if (!this.type) return false
         if (!this.name) return false
         if (this.price <= 0) return false
         if (this.day <= 0 || this.day > 31) return false
@@ -109,10 +107,9 @@
     },
     methods: {
       setType(type) {
-        this.type.name = type.name
-        this.type.value = type.value
-        if (this.type.value != '30') {
-          this.name = this.type.name
+        this.type = type.value
+        if (this.type != '30') {
+          this.name = type.name
         }
         else {
           this.name = ''
@@ -120,7 +117,7 @@
       },
       save() {
         let fee = {
-          type: this.type.value,
+          type: this.type,
           name: this.name,
           price: Number(this.price),
           day: Number(this.day)
@@ -128,8 +125,7 @@
         if (this.next) {
           this.next(fee)
         }
-        this.type.value = ''
-        this.type.name = ''
+        this.type = ''
         this.name = ''
         this.price = 0
         this.day = ''
@@ -162,8 +158,9 @@
     outline: none;
   }
   .gradient-header {
-    background: -webkit-linear-gradient(left, #00B5ED, #51DCE5);
-    background: linear-gradient(to right, #00B5ED, #51DCE5);
+    background: #00B5ED;
+    /* background: -webkit-linear-gradient(left, #00B5ED, #51DCE5);
+    background: linear-gradient(to right, #00B5ED, #51DCE5); */
   }
 
   /* body */

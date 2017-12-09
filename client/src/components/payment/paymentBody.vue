@@ -2,7 +2,7 @@
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
 
-      <div class="bg-gray payment-header text-black">
+      <div class="bg-blue payment-header">
         <i class="glyphicon glyphicon-pencil"></i> {{manager.payment.house.name}} - {{manager.payment.room.number}}
       </div>
 
@@ -37,8 +37,11 @@
                       </span>
                     </td>
                     <td>{{payment.getType()}}</td>
-                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel', 'text-cancel': !payment.pay && contract.over == 'cancel', 'right-row': true}">
-                      <template v-if="payment.pay || contract.over == 'cancel'">
+                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel' && !payment.meter, 'text-cancel': !payment.pay && contract.over == 'cancel', 'right-row': true}">
+                      <template v-if="payment.meter">
+                        未検針
+                      </template>
+                      <template v-else-if="payment.pay || contract.over == 'cancel'">
                         {{payment.getAmount()}}
                       </template>
                       <template v-else>
@@ -188,7 +191,6 @@
 <style scoped>
   .payment-header {
     padding: 15px;
-    border: 1px solid #aaa;
     border-radius: 3px;
     margin-bottom: 10px;
   }
@@ -199,7 +201,9 @@
   }
 
   thead {
-    background: #eee;
+    background: #3c8dbc;
+    opacity: 0.7;
+    color: #fff;
   }
   .unpaid-row {
     background: rgb(240, 197, 197);

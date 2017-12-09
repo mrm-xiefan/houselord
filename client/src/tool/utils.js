@@ -334,19 +334,33 @@ class Utils {
     if (size < 1000) {
       return size + ' Byte'
     }
-    else if (size < 1024 * 1024 * 5) {
+    else if (size < 1024 * 1000) {
       let ksize = size / 1024
+      ksize = ksize.toFixed(2)
       let delimiter = '.'
       let splitedNum = ksize.toString().split(delimiter)
-      let replacedNum = splitedNum[0].replace(/(\d)(?=(\d{3})+$)/g , '$1,')
-      return replacedNum + ' KB'
-    } else {
-      let ksize = size / 1024 / 1024
-      let delimiter = '.'
-      let splitedNum = ksize.toString().split(delimiter)
-      let replacedNum = splitedNum[0].replace(/(\d)(?=(\d{3})+$)/g , '$1,')
-      return replacedNum + ' MB'
+      let replacedNum = splitedNum[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+      return replacedNum + delimiter + splitedNum[1] + ' KB'
     }
+    else if (size < 1024 * 1024 * 1000) {
+      let msize = size / 1024 / 1024
+      msize = msize.toFixed(2)
+      let delimiter = '.'
+      let splitedNum = msize.toString().split(delimiter)
+      let replacedNum = splitedNum[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+      return replacedNum + delimiter + splitedNum[1] + ' MB'
+    }
+    else {
+      let gsize = size / 1024 / 1024 / 1024
+      gsize = gsize.toFixed(2)
+      let delimiter = '.'
+      let splitedNum = gsize.toString().split(delimiter)
+      let replacedNum = splitedNum[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+      return replacedNum + delimiter + splitedNum[1] + ' GB'
+    }
+  }
+  precise(number) {
+    return Math.round(number * 100000) / 100000
   }
   clone(orig) {
     return Object.assign(Object.create(Object.getPrototypeOf(orig)), orig)
@@ -360,6 +374,9 @@ class Utils {
     let retVal = document.execCommand('copy')
     bodyElm.removeChild(copyFrom)
     return retVal
+  }
+  getBytes(text) {
+    return(encodeURIComponent(text).replace(/%../g,"x").length)
   }
 }
 

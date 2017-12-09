@@ -17,7 +17,7 @@
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-primary">5</span>
+              <span class="label label-success">5</span>
             </a>
             <ul class="dropdown-menu">
               <li class="header">リマインド</li>
@@ -85,7 +85,7 @@
         $('html, body').animate({scrollTop: 0}, 'fast')
       },
       triggerIcon() {
-        this.$router.push({path: '/'})
+        // this.$router.push({path: '/'})
       },
       logout() {
         utils.restGet('/logout').then(

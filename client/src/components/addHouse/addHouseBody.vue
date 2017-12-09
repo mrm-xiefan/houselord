@@ -1,7 +1,7 @@
 <template>
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
-      <div class="bg-gray add-header text-black">
+      <div class="bg-blue add-header">
         <i class="fa fa-edit"></i> ハウス詳細
       </div>
 
@@ -143,6 +143,7 @@
       addFee() {
         let self = this
         utils.event.$emit('FEE_DETAIL', null, (fee) => {
+          fee.read = 0
           self.fees.push(fee)
         })
       },
@@ -206,7 +207,6 @@
   }
   .add-header {
     padding: 15px;
-    border: 1px solid #aaa;
     border-radius: 3px;
     margin-bottom: 10px;
   }

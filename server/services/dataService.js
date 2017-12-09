@@ -129,25 +129,14 @@ class DataService {
       }
     }
     else {
-      if ((localFileList[idx].type.split('/')[0] == 'image') && (localFileList[idx].type.split('/')[1].indexOf('octet-stream') != -1 || localFileList[idx].type.split('/')[1].indexOf('photoshop') != -1 || localFileList[idx].type.split('/')[1].indexOf('psd') != -1)) {
-        fileList.push({
-          extname: localFileList[idx].extname,
-          type: localFileList[idx].type,
-          size: localFileList[idx].size,
-          folder: localFileList[idx].folder,
-          name: localFileList[idx].name,
-          thumbnail: localFileList[idx].name
-        })
-      } else {
-        fileList.push({
-          extname: localFileList[idx].extname,
-          type: localFileList[idx].type,
-          size: localFileList[idx].size,
-          folder: localFileList[idx].folder,
-          name: localFileList[idx].name,
-          thumbnail: null
-        })
-      }
+      fileList.push({
+        extname: localFileList[idx].extname,
+        type: localFileList[idx].type,
+        size: localFileList[idx].size,
+        folder: localFileList[idx].folder,
+        name: localFileList[idx].name,
+        thumbnail: null
+      })
       self.thumbnail(localFileList, idx + 1, fileList, next)
     }
   }

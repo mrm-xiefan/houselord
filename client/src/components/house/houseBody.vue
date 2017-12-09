@@ -108,12 +108,12 @@
   .house-items li {
     margin: 3px;
     padding: 5px;
-    color: #fff;
+    color: #333;
     font-size: 12px;
     font-weight: 100;
     text-align: center;
     list-style: none;
-    background: #333;
+    background: #d4d4d4;
     border-radius: 2px;
     cursor: pointer;
   }
@@ -133,7 +133,8 @@
     opacity: 0.7;
   }
   .house-item-selected {
-    background: #605ca8 !important;
+    color: #fff !important;
+    background: #3c8dbc !important;
   }
 
   .room-area {

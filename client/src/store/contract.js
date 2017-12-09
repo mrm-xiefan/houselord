@@ -28,6 +28,20 @@ class Contract {
 
     this.over = data.over
   }
+  checkFee() {
+    for (let i = 0; i < this.fees.length; i ++) {
+      let fee = this.fees[i]
+      if (fee.price <= 0) {
+        return 'B009'
+      }
+      if (CONST.feeTypes[fee.type].type == 'meter') {
+        if (fee.read <= 0) {
+          return 'B010'
+        }
+      }
+    }
+    return null
+  }
   isDateValid() {
     if (!this.start) {
       return false

@@ -99,6 +99,7 @@
   import utils from '@/tool/utils.js'
 
   import moment from 'moment'
+  import uuid from 'uuid'
   import Payment from '@/store/payment.js'
   export default {
     props: ['manager'],
@@ -336,8 +337,9 @@
     outline: none;
   }
   .gradient-header {
-    background: -webkit-linear-gradient(left, #00B5ED, #51DCE5);
-    background: linear-gradient(to right, #00B5ED, #51DCE5);
+    background: #00B5ED;
+    /* background: -webkit-linear-gradient(left, #00B5ED, #51DCE5);
+    background: linear-gradient(to right, #00B5ED, #51DCE5); */
   }
 
   /* body */

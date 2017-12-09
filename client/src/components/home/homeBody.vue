@@ -223,6 +223,7 @@
   import utils from '@/tool/utils.js'
 
   import moment from 'moment'
+  import 'jquery-ui-touch-punch/jquery.ui.touch-punch.js'
   export default {
     props: ['manager'],
     mounted() {

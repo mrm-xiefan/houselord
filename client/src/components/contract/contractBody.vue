@@ -2,7 +2,7 @@
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
 
-      <div class="bg-gray contract-header text-black">
+      <div class="contract-header bg-blue">
         <i class="fa fa-legal"></i> 契約 - {{manager.contract.house.name}} - {{manager.contract.room.number}}
       </div>
 
@@ -92,20 +92,51 @@
         </div>
 
         <h4>3.定常費用を確定する</h4>
-        <div class="fee-list">
-          <div class="fee-item" v-for="(fee, index) in manager.contract.contract.fees" v-on:click="editFee(fee)">
-            <div class="fee-info">
-              {{fee.name}}
-            </div>
-            <div class="fee-info">
-              {{fee.price}}
-            </div>
-            <div class="fee-delete" v-on:click.stop="deleteFee(index)">
-              <i class="fa fa-close"></i>
-            </div>
+
+        <div class="box box-solid box-primary">
+          <div class="box-header">
+            <h3 class="box-title">定常費用一覧</h3>
           </div>
-          <div class="fee-add" v-on:click="addFee">
-            <i class="fa fa-plus-square-o"></i>
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>種類</th>
+                  <th>費用名</th>
+                  <th>金額(円)</th>
+                  <th>支払日</th>
+                  <th>初回検針</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(fee, index) in manager.contract.contract.fees">
+                  <td>
+                    <span class="label bg-blue">
+                      {{getFeeTypeName(fee)}}
+                    </span>
+                  </td>
+                  <td>{{fee.name}}</td>
+                  <td class="input-column">
+                    <input v-model="fee.price" type="number" step=1000 class="form-control">
+                  </td>
+                  <td>毎月{{fee.day}}日</td>
+                  <td class="input-column">
+                    <input v-model="fee.read" type="number" step=1 class="form-control" v-if="isMeter(fee)">
+                  </td>
+                  <td class="input-column">
+                    <div class="btn btn-danger btn-minimum pull-right" v-on:click="removeFee(index)">
+                      <i class="fa fa-close"></i> 削除
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="box-footer">
+            <button class="btn btn-primary pull-right" v-on:click="addFee">
+              <i class="fa fa-plus-circle"></i> 追加
+            </button>
           </div>
         </div>
 
@@ -129,6 +160,7 @@
   import utils from '@/tool/utils.js'
 
   import moment from 'moment'
+  import uuid from 'uuid'
   import Contract from '@/store/contract.js'
   export default {
     props: ['manager'],
@@ -146,6 +178,12 @@
         if ($('.control-sidebar').hasClass('control-sidebar-open')) {
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
+      },
+      getFeeTypeName(fee) {
+        return CONST.feeTypes[fee.type].name
+      },
+      isMeter(fee) {
+        return CONST.feeTypes[fee.type].type == 'meter'
       },
       pickDate() {
         let options = {
@@ -171,35 +209,43 @@
       },
       addFee() {
         utils.event.$emit('FEE_DETAIL', null, (fee) => {
+          if (CONST.feeTypes[fee.type].type == 'meter') {
+            fee.meter = uuid.v4()
+            fee.read = 0
+          }
           manager.contract.contract.fees.push(fee)
         })
       },
-      editFee(fee) {
-        utils.event.$emit('FEE_DETAIL', fee, (newfee) => {
-          fee.type = newfee.type
-          fee.name = newfee.name
-          fee.price = newfee.price
-          fee.day = newfee.day
-        })
+      removeFee(index) {
+        manager.contract.contract.fees.splice(index, 1)
       },
       deleteFee(index) {
         manager.contract.contract.fees.splice(index, 1)
       },
-      checkDate() {
+      check() {
         let tmp = new Date($('#start-date').val())
         manager.contract.contract.start = tmp.valueOf()
         tmp = new Date($('#end-date').val())
         manager.contract.contract.end = tmp.valueOf()
         tmp = new Date($('#first-date').val())
         manager.contract.contract.first = tmp.valueOf()
-        return manager.contract.contract.isDateValid()
+
+        if (!manager.contract.contract.isDateValid()) {
+          utils.event.$emit('SHOW_MESSAGE', 'B005')
+          return false
+        }
+        if (manager.contract.contract.checkFee()) {
+          utils.event.$emit('SHOW_MESSAGE', manager.contract.contract.checkFee())
+          return false
+        }
+        return true
       },
       saveContract() {
         let self = this
         manager.contract.contract.keyMoney = Number(manager.contract.contract.keyMoney)
         manager.contract.contract.rent = Number(manager.contract.contract.rent)
         manager.contract.contract.deposit = Number(manager.contract.contract.deposit)
-        if (self.checkDate()) {
+        if (self.check()) {
           let contract = {
             lord: manager.user._id,
             house: manager.contract.house._id,
@@ -223,9 +269,6 @@
               }
             }
           )
-        }
-        else {
-          utils.event.$emit('SHOW_MESSAGE', 'B005')
         }
       },
       generatePayments() {
@@ -331,7 +374,6 @@
   }
   .contract-header {
     padding: 15px;
-    border: 1px solid #aaa;
     border-radius: 3px;
     margin-bottom: 10px;
   }
@@ -356,60 +398,20 @@
   .input-text {
     width: calc(100% - 120px);
   }
-  .fee-list {
-    width: 100%;
-    padding: 20px;
-    border: 1px solid #ccc;
-    overflow: hidden;
-  }
-  .fee-item {
-    float: left;
-    height: 60px;
-    width: 120px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-top: 4px solid #605ca8;
-    border-radius: 5px;
-    position: relative;
-    cursor: pointer;
-  }
-  .fee-info {
-    padding: 5px 5px 0px 5px;
-  }
-  .fee-delete {
-    position: absolute;
-    right: 10px;
-    top: 12px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    border-radius: 15px;
-    background: #d2d6de;
-  }
-  .fee-delete:hover {
-    background: #605ca8;
-  }
-  .fee-delete i {
-    font-size: 25px;
+
+  thead {
+    background: #3c8dbc;
+    opacity: 0.7;
     color: #fff;
   }
-  .fee-add {
-    height: 60px;
-    width: 60px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  .input-column {
+    padding: 1px 5px 0px 5px;
+    width: 120px;
   }
-  .fee-add i {
-    font-size: 60px;
-    cursor: pointer;
+  .btn-minimum {
+    padding: 6px;
   }
-  .fee-add i:hover {
-    opacity: 0.7;
-  }
+
   .contract-action {
     margin-top: 20px;
     width: 100%;
