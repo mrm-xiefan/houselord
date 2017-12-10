@@ -401,10 +401,15 @@ router.post('/readMeter', (req, res) => {
         if (error) return reject(error)
         contractService.generatePayments(req.session.passport.user, contracts, req.body.params.meter, req.body.params.scale, (error, payments) => {
           if (error) return reject(error)
-          paymentService.insertMeterPayments(payments, (error) => {
-            if (error) return reject(error)
+          if (payments.length > 0) {
+            paymentService.insertMeterPayments(payments, (error) => {
+              if (error) return reject(error)
+              resolve()
+            })
+          }
+          else {
             resolve()
-          })
+          }
         })
       })
     })

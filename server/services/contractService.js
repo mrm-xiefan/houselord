@@ -196,10 +196,16 @@ class ContractService {
             return
           }
         }
-        return resolve()
+        return resolve(null)
       })
     })).then((values) => {
-      next(null, values)
+      let payments = []
+      for (let i = 0; i < values.length; i ++) {
+        if (values[i]) {
+          payments.push(values[i])
+        }
+      }
+      next(null, payments)
     }, (reason) => {
       next(reason)
     })
