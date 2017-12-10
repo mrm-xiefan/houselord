@@ -44,6 +44,13 @@ class RoomService {
     let documents = []
     for (let i = 0; i < floor; i ++) {
       for (let j = 0; j < room; j ++) {
+        let copy = JSON.parse(JSON.stringify(fees))
+        for (let k = 0; k < copy.length; k ++) {
+          let fee = copy[k]
+          if (fee.meter) {
+            fee.meter = ObjectId()
+          }
+        }
         let now = new Date()
         documents.push({
           lord: user._id,
@@ -52,7 +59,7 @@ class RoomService {
           keyMoney: keyMoney,
           rent: rent,
           deposit: deposit,
-          fees: fees,
+          fees: copy,
           cuser: user._id,
           uuser: user._id,
           cdate: now.valueOf(),

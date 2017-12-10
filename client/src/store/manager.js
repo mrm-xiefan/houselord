@@ -17,7 +17,7 @@ class Manager {
 
     this.feeTypes = CONST.feeTypes
 
-    // for house list page
+    // for list page
     this.houses = []
     this.rooms = []
 
@@ -107,11 +107,12 @@ class Manager {
     for (let i = 0; i < rooms.length; i ++) {
       this.rooms.push(new Room(rooms[i]))
     }
+    this.sortRoom()
   }
   sortRoom() {
     this.rooms.sort((a, b) => {
-      if (a.udate > b.udate) return -1
-      else if (a.udate < b.udate) return 1
+      if (Number(a.number) > Number(b.number)) return 1
+      else if (Number(a.number) < Number(b.number)) return -1
       else return 0
     })
   }

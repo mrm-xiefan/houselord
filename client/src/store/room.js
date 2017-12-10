@@ -2,6 +2,7 @@ import manager from '@/store/manager.js'
 import CONST from './const.js'
 import utils from '@/tool/utils.js'
 import Contract from './contract.js'
+import Meter from './meter.js'
 
 class Room {
   constructor(data) {
@@ -18,6 +19,12 @@ class Room {
     if (data.contracts) {
       for (let i = 0; i < data.contracts.length; i ++) {
         this.contracts.push(new Contract(data.contracts[i]))
+      }
+    }
+    this.meters = []
+    if (data.meters) {
+      for (let i = 0; i < data.meters.length; i ++) {
+        this.meters.push(new Meter(data.meters[i]))
       }
     }
   }

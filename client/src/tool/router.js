@@ -127,7 +127,15 @@ let preloadMeter = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
   }
-  next()
+  utils.restGet('/api/getMeterData').then(
+    response => {
+      if (response) {
+        manager.refreshHouse(response.houses)
+        manager.refreshRoom(response.rooms)
+        next()
+      }
+    }
+  )
 }
 let preloadReport = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {

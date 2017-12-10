@@ -139,6 +139,21 @@ class PaymentService {
       }
     )
   }
+  insertMeterPayments(payments, next) {
+    mongo.insert(
+      'payments',
+      payments,
+      {},
+      (error, result) => {
+        if (error) {
+          next(error, null)
+        }
+        else {
+          next(null, result.ops)
+        }
+      }
+    )
+  }
 }
 
 export default new PaymentService()

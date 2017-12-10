@@ -31,11 +31,19 @@ class Contract {
   checkFee() {
     for (let i = 0; i < this.fees.length; i ++) {
       let fee = this.fees[i]
-      if (fee.price <= 0) {
-        return 'B009'
+      if (CONST.feeTypes[fee.type].unit && fee.base < 0) {
+        return 'B011'
+      }
+      if (!CONST.feeTypes[fee.type].unit && fee.base <= 0) {
+        return 'B011'
+      }
+      if (CONST.feeTypes[fee.type].unit) {
+        if (fee.price <= 0) {
+          return 'B009'
+        }
       }
       if (CONST.feeTypes[fee.type].type == 'meter') {
-        if (fee.read <= 0) {
+        if (fee.read < 0) {
           return 'B010'
         }
       }
