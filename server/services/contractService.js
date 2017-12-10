@@ -177,7 +177,7 @@ class ContractService {
             let payment = {
               DRCR: 'DR',
               type: fee.type,
-              amount: fee.price * (scale.scaleRead - fee.scales[fee.scales.length - 1]) + fee.base,
+              amount: Math.round(fee.price * (scale.scaleRead - fee.scales[fee.scales.length - 1]) + fee.base),
               plan: now.valueOf(),
               lord: contract.lord,
               house: ObjectId(contract.house),
