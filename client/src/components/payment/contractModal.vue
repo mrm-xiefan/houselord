@@ -285,8 +285,8 @@
         return payments
       },
       generateFees(payments, plan) {
-        for (let i = 0; i < manager.contract.contract.fees.length; i ++) {
-          let fee = manager.contract.contract.fees[i]
+        for (let i = 0; i < this.contract.fees.length; i ++) {
+          let fee = this.contract.fees[i]
           if (CONST.feeTypes[fee.type].type != 'meter') {
             let payment = {
               DRCR: 'DR',
