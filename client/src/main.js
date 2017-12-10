@@ -25,6 +25,11 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.ja.min.js'
 import 'admin-lte/dist/js/adminlte.min.js'
 import 'bootstrap-fileinput/js/fileinput.min.js'
 
+import AmCharts from 'amcharts3'
+import AmSerial from 'amcharts3/amcharts/serial'
+import AmGauge from 'amcharts3/amcharts/gauge'
+import AmLight from 'amcharts3/amcharts/themes/light'
+
 import manager from '@/store/manager.js'
 import utils from '@/tool/utils.js'
 import Vue from 'vue'

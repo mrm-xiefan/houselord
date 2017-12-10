@@ -129,7 +129,7 @@
                   <!-- checkbox -->
                   <input type="checkbox" value="">
                   <!-- todo text -->
-                  <span class="text">仕事をする</span>
+                  <span class="text">専門学校留学生寮募集説明会</span>
                   <!-- Emphasis label -->
                   <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
                   <!-- General tools such as edit or delete-->
@@ -144,7 +144,7 @@
                     <i class="fa fa-ellipsis-v"></i>
                   </span>
                   <input type="checkbox" value="">
-                  <span class="text">残業する</span>
+                  <span class="text">池袋丸マンション更新</span>
                   <small class="label label-info"><i class="fa fa-clock-o"></i> 4 hours</small>
                   <div class="tools">
                     <i class="fa fa-edit"></i>
