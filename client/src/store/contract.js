@@ -95,6 +95,16 @@ class Contract {
     }
     return 'finish'
   }
+  willOver() {
+    if (this.over) return false
+    let counter = 0
+    for (let i = 0; i < this.payments.length; i ++) {
+      if (!this.payments[i].pay) {
+        counter ++
+      }
+    }
+    return (counter == 1)? 'finish': false
+  }
   isUnpaid() {
     let now = new Date()
     now = now.valueOf()
