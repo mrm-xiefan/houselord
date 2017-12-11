@@ -24,7 +24,7 @@
                   <tr>
                     <th>収支</th>
                     <th>科目</th>
-                    <th class="right-row">金額(円)</th>
+                    <th class="right-column">金額(円)</th>
                     <th>支払日</th>
                     <th>支払</th>
                     <th></th>
@@ -38,7 +38,7 @@
                       </span>
                     </td>
                     <td>{{payment.getType()}}</td>
-                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel' && !payment.meter, 'text-cancel': !payment.pay && contract.over == 'cancel', 'right-row': true}">
+                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel' && !payment.meter, 'text-cancel': !payment.pay && contract.over == 'cancel', 'right-column': true}">
                       <template v-if="payment.meter">
                         未検針
                       </template>
@@ -165,7 +165,12 @@
         let now = new Date()
         now = now.valueOf()
         payment.pay = now
-        utils.restPost('/api/fixPayment', {payment: payment._id, pay: payment.pay, contract: contract._id, over: contract.isOver()}).then(
+        payment.amount = Number(payment.amount)
+        if (payment.amount <= 0) {
+          utils.event.$emit('SHOW_MESSAGE', 'B013')
+          return
+        }
+        utils.restPost('/api/fixPayment', {payment: payment._id, amount: payment.amount, pay: payment.pay, contract: contract._id, over: contract.isOver()}).then(
           response => {
             if (response) {
             }
@@ -222,7 +227,7 @@
   .unpaid-row {
     background: rgb(240, 197, 197);
   }
-  .right-row {
+  .right-column {
     text-align: right;
   }
   .unpay-input {

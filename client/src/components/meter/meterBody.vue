@@ -31,8 +31,8 @@
               </tr>
             </thead>
             <tbody>
-              <template v-for="room in manager.rooms">
-                <tr v-for="meter in room.meters">
+              <template v-for="(room, i) in manager.rooms">
+                <tr v-for="meter in room.meters" :class="{'double': i % 2 == 1}">
                   <td>{{room.number}}</td>
                   <td>{{meter.name}}</td>
                   <td>{{getFeeType(meter.type)}}</td>
@@ -51,6 +51,9 @@
                 </tr>
               </template>
             </tbody>
+            <tfoot>
+              <tr></tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -114,7 +117,23 @@
           house: meter.house,
           room: meter.room
         }
-        utils.restPost('/api/readMeter', {meter: meterJson, scale: scale}).then(
+        let amount = 0
+        if (meter.lastRead() != '-') {
+          amount = Math.round(meter.price * (scale.scaleRead - meter.lastRead()) + meter.base)
+        }
+        else {
+          amount = Math.round(meter.price * scale.scaleRead + meter.base)
+        }
+        let expense = {
+          lord: meter.lord,
+          house: meter.house,
+          room: meter.room,
+          meter: meter._id,
+          DRCR: 'CR',
+          type: meter.type,
+          amount: amount
+        }
+        utils.restPost('/api/readMeter', {meter: meterJson, scale: scale, expense: expense}).then(
           response => {
             if (response) {
               meter.scales.push(scale)
@@ -163,5 +182,16 @@
   .input-column {
     padding: 1px 5px 0px 5px;
     width: 120px;
+  }
+  thead {
+    background: #3c8dbc;
+    opacity: 0.7;
+    color: #fff;
+  }
+  .double {
+    background: #eee;
+  }
+  tfoot tr {
+    height: 20px;
   }
 </style>

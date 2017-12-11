@@ -6,6 +6,7 @@ import io from 'socket.io-client/dist/socket.io.js'
 import House from './house.js'
 import Room from './room.js'
 import Contract from './contract.js'
+import Expense from './expense.js'
 
 class Manager {
   constructor() {
@@ -20,6 +21,7 @@ class Manager {
     // for list page
     this.houses = []
     this.rooms = []
+    this.expenses = []
 
     // for house page
     this.house = {
@@ -115,6 +117,23 @@ class Manager {
       else if (Number(a.number) < Number(b.number)) return -1
       else return 0
     })
+  }
+  refreshExpense(expenses) {
+    this.expenses.splice(0, this.expenses.length)
+    for (let i = 0; i < expenses.length; i ++) {
+      this.expenses.push(new Expense(expenses[i]))
+    }
+    this.mapRoomsExpenses()
+  }
+  mapRoomsExpenses() {
+    for (let i = 0; i < this.expenses.length; i ++) {
+      for (let j = 0; j < this.rooms.length; j ++) {
+        if (this.expenses[i].room == this.rooms[j]._id) {
+          this.expenses[i].room = this.rooms[j]
+          break
+        }
+      }
+    }
   }
 }
 

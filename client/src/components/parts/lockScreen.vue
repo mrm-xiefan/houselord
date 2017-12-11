@@ -53,7 +53,7 @@
     padding: 26px 0 25px;
     width: 80px;
     text-align: center;
-    background: #605ca8;
+    background: #3c8dbc;
   }
   .load-animation div {
     display: inline-block;

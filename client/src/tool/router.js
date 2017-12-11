@@ -159,7 +159,16 @@ let preloadExpense = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
   }
-  next()
+  utils.restGet('/api/getExpenseData').then(
+    response => {
+      if (response) {
+        manager.refreshHouse(response.houses)
+        manager.refreshRoom(response.rooms)
+        manager.refreshExpense(response.expenses)
+        next()
+      }
+    }
+  )
 }
 
 export default new Router({
