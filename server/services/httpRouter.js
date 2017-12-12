@@ -517,6 +517,12 @@ router.post('/deleteExpense', (req, res) => {
     res.json({error: error, data: {}})
   })
 })
+router.post('/addExpense', (req, res) => {
+  logger.info('addExpense:', JSON.stringify(req.body.params))
+  expenseService.insertExpense(req.session.passport.user, req.body.params.expense, (error, expense) => {
+    res.json({error: error, data: expense})
+  })
+})
 
 
 

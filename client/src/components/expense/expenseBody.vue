@@ -30,7 +30,7 @@
             </thead>
             <tbody>
               <tr v-for="(expense, i) in manager.expenses">
-                <td>{{expense.room.number}}</td>
+                <td>{{expense.room? expense.room.number: ''}}</td>
                 <td>
                   <span :class="{'label': true, 'bg-blue': expense.DRCR == 'DR', 'bg-yellow': expense.DRCR == 'CR'}">
                     {{expense.getDRCR()}}
@@ -82,6 +82,7 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
+  import Expense from '@/store/expense.js'
   export default {
     props: ['manager'],
     mounted() {
@@ -135,7 +136,15 @@
         )
       },
       addExpense() {
-
+        utils.event.$emit('EXPENSE_DETAIL', (expense) => {
+          utils.restPost('/api/addExpense', {expense: expense}).then(
+            response => {
+              if (response) {
+                manager.expenses.push(new Expense(response))
+              }
+            }
+          )
+        })
       }
     }
   }

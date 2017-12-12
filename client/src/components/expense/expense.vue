@@ -4,6 +4,7 @@
     <appHeader :manager="manager"></appHeader>
     <appSideMenu :manager="manager"></appSideMenu>
     <expenseBody :manager="manager"></expenseBody>
+    <expenseModal :manager="manager"></expenseModal>
     <appFooter :manager="manager"></appFooter>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
@@ -20,6 +21,7 @@
   import appHeader from '@/components/appHeader'
   import appSideMenu from '@/components/appSideMenu'
   import expenseBody from '@/components/expense/expenseBody'
+  import expenseModal from '@/components/expense/expenseModal'
   import appFooter from '@/components/appFooter'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
@@ -30,6 +32,7 @@
       appHeader: appHeader,
       appSideMenu: appSideMenu,
       expenseBody: expenseBody,
+      expenseModal: expenseModal,
       appFooter: appFooter,
       messageModal: messageModal,
       appControlPanel: appControlPanel

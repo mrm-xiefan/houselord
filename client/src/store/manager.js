@@ -17,6 +17,7 @@ class Manager {
     this.locker = 'unlock'
 
     this.feeTypes = CONST.feeTypes
+    this.expenseTypes = CONST.expenseTypes
 
     // for list page
     this.houses = []
@@ -122,17 +123,6 @@ class Manager {
     this.expenses.splice(0, this.expenses.length)
     for (let i = 0; i < expenses.length; i ++) {
       this.expenses.push(new Expense(expenses[i]))
-    }
-    this.mapRoomsExpenses()
-  }
-  mapRoomsExpenses() {
-    for (let i = 0; i < this.expenses.length; i ++) {
-      for (let j = 0; j < this.rooms.length; j ++) {
-        if (this.expenses[i].room == this.rooms[j]._id) {
-          this.expenses[i].room = this.rooms[j]
-          break
-        }
-      }
     }
   }
 }

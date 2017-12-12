@@ -13,7 +13,7 @@ class ExpenseService {
       'expenses',
       {lord: lord, house: ObjectId(house), deleted: {$ne: true}},
       {},
-      {udate: -1},
+      {cdate: 1},
       (error, results) => {
         if (error) {
           next(error, null)
@@ -25,9 +25,13 @@ class ExpenseService {
     )
   }
   insertExpense(user, expense, next) {
-    expense.house = ObjectId(expense.house),
-    expense.room = ObjectId(expense.room),
-    expense.meter = ObjectId(expense.meter),
+    expense.house = ObjectId(expense.house)
+    if (expense.room) {
+      expense.room = ObjectId(expense.room)
+    }
+    if (expense.meter) {
+      expense.meter = ObjectId(expense.meter)
+    }
     expense.cuser = user._id
     expense.uuser = user._id
     let now = new Date()

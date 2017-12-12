@@ -7,12 +7,21 @@ class Expense {
     this._id = data._id
     this.lord = data.lord
     this.house = data.house
-    this.room = data.room
-    this.meter = data.meter
+    this.room = data.room || null
+    this.meter = data.meter || null
     this.DRCR = data.DRCR
     this.type = data.type
     this.amount = data.amount
-    this.pay = data.pay
+    this.pay = data.pay || null
+    this.mapRoom()
+  }
+  mapRoom() {
+    for (let i = 0; i < manager.rooms.length; i ++) {
+      if (this.room == manager.rooms[i]._id) {
+        this.room = manager.rooms[i]
+        break
+      }
+    }
   }
   isUnpaid() {
     return !this.pay
