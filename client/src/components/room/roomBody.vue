@@ -1,46 +1,52 @@
 <template>
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
-      <div class="house-detail" v-if="manager.selectedHouse">
-        <div class="box box-solid box-primary">
-          <div class="box-header">
-            {{manager.selectedHouse.name}}
-            <div class="pull-right box-tools">
-              <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                <i class="fa fa-minus"></i>
-              </button>
-            </div>
-          </div>
-          <div class="box-body">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="house-photo">
-                  <img class="resize-picture" :src="manager.selectedHouse.getPhoto()"></img>
+        <h4>ルーム情報を更新する</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="input-group">
+                  <label class="input-label">部屋番号：</label>
+                  <div class="input-text">
+                    <input v-model="manager.room.number" type="number" class="form-control" step="1" placeholder="入力">
+                  </div>
                 </div>
               </div>
-              <div class="col-md-8">
-                <div class="row house-row">
-                  <div class="house-title text-blue"><i class="fa fa-user"></i> オーナー：</div><div class="house-content">{{manager.selectedHouse.owner}}</div>
-                </div>
-                <div class="row house-row">
-                  <div class="house-title text-blue"><i class="fa fa-map-pin"></i> アドレス：</div><div class="house-content">{{manager.selectedHouse.address}}</div>
-                </div>
-                <div class="row house-row">
-                  <div class="house-title text-blue"><i class="fa fa-sticky-note"></i> 備考：</div><div class="house-content">{{manager.selectedHouse.note}}</div>
-                </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label">礼金：</label>
+              <div class="input-text">
+                <input v-model="manager.room.keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label"><span class="text-red require">(＊)</span>家賃：</label>
+              <div class="input-text">
+                <input v-model="manager.room.rent" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label">敷金：</label>
+              <div class="input-text">
+                <input v-model="manager.room.deposit" type="number" class="form-control" step="1000" placeholder="入力">
               </div>
             </div>
           </div>
         </div>
-        <div class="row" v-for="index in Math.ceil(manager.selectedHouse.rooms.length / 2)">
-          <div class="col-md-6">
-            <roomBox :manager="manager" :room="manager.selectedHouse.rooms[(index - 1) * 2]"></roomBox>
-          </div>
-          <div class="col-md-6" v-if="manager.selectedHouse.rooms[(index - 1) * 2 + 1]">
-            <roomBox :manager="manager" :room="manager.selectedHouse.rooms[(index - 1) * 2 + 1]"></roomBox>
-          </div>
+        <div class="contract-action">
+          <button type="button" class="btn btn-primary" :disabled="!isValid" v-on:click="updateRoom(manager.room)">
+              <i class="fa fa-save"></i> 保存
+            </button>
+          <button type="button" class="btn bg-red btn-minimum" v-on:click="deleteRoom(manager.room)">
+            <i class="fa fa-save"></i> 削除
+          </button>
+          <button type="button" class="btn btn-default text-blue" v-on:click="backward">
+            <i class="fa fa-reply"></i> 戻る
+          </button>
         </div>
-      </div>
     </section>
   </div>
 </template>
@@ -50,16 +56,19 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
-  import Room from '@/store/room.js'
-  import roomBox from '@/components/room/roomBox'
+  import moment from 'moment'
+  import uuid from 'uuid'
+  import Contract from '@/store/contract.js'
   export default {
     props: ['manager'],
     mounted() {
       $('body').layout('fix')
-      $('.box').boxWidget()
     },
-    components: {
-      roomBox: roomBox
+    computed: {
+      isValid() {
+        if (Number(manager.room.rent) <= 0) return false
+        return true
+      }
     },
     methods: {
       closeSide() {
@@ -67,48 +76,90 @@
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
       },
-      addRoom() {
-        console.log('add room')
+      updateRoom(room) {
+          utils.restPost('/api/updateRoom', {room: room}).then(
+            response => {
+              if (response) {
+                console.log(response)
+                this.$router.push({name: 'room'})
+              }
+            }
+          )
+        },
+        deleteRoom(room) {
+          utils.restPost('/api/deleteRoom', {room: room}).then(
+            response => {
+              if (response) {
+                console.log(response)
+                this.$router.push({name: 'room'})
+              }
+            }
+          )
+        },
+        backward() {
+          this.$router.go(-1)
+        }
       }
-    },
-    beforeDestroy() {
-      manager.selectedHouse = null
-    }
+      
   }
 </script>
 
 <style scoped>
-  .house-photo {
-    margin: 10px;
+  h4 {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
   }
-  .resize-picture {
+  .margin-top {
+    margin-top: 40px;
+  }
+  .contract-header {
+    padding: 15px;
     border-radius: 3px;
+    margin-bottom: 10px;
+  }
+  .contract-body {
+    padding: 15px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+  }
+  .input-group {
+    display: flex;
     width: 100%;
-    max-width: 300px;
-    height: auto;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
+    margin-bottom: 10px;
   }
-  .house-row {
-    margin: 10px;
+  .input-label {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 120px;
     padding: 5px;
-    font-size: 15px;
-    overflow: hidden;
-    background: #eee;
-    border-radius: 5px;
+    margin: 0px;
   }
-  .house-title {
-    width: 110px;
-    float: left;
-    padding: 5px;
+  .input-text {
+    width: calc(100% - 120px);
   }
-  .house-content {
-    float: left;
-    padding: 5px;
-    width: calc(100% - 110px);
+
+  thead {
+    background: #3c8dbc;
+    opacity: 0.7;
+    color: #fff;
+  }
+  .input-column {
+    padding: 1px 5px 0px 5px;
+    width: 120px;
+  }
+  .btn-minimum {
+    padding: 6px;
+  }
+
+  .contract-action {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .contract-action button {
+    width: 120px;
   }
 </style>

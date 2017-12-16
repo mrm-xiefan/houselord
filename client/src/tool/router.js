@@ -7,7 +7,7 @@ import error from '@/components/error'
 import home from '@/components/home/home'
 import house from '@/components/house/house'
 import addHouse from '@/components/addHouse/addHouse'
-// import room from '@/components/room/room'
+import room from '@/components/room/room'
 import contract from '@/components/contract/contract'
 import payment from '@/components/payment/payment'
 import meter from '@/components/meter/meter'
@@ -51,25 +51,25 @@ let preloadAddHouse = (to, from, next) => {
   }
   next()
 }
-// let preloadRoom = (to, from, next) => {
-//   if (!manager.controller.checkAuth(to)) {
-//     return
-//   }
-//   if (to.params.house) {
-//     utils.restGet('/api/getHouseDetail', {_id: to.params.house}).then(
-//       response => {
-//         if (response) {
-//           manager.selectedHouse = new House(response.house)
-//           next()
-//         }
-//       }
-//     )
-//   }
-//   else {
-//     manager.selectedHouse = null
-//     next()
-//   }
-// }
+let preloadRoom = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  if (to.params.house) {
+    utils.restGet('/api/getHouseDetail', {_id: to.params.house}).then(
+      response => {
+        if (response) {
+          manager.selectedHouse = new House(response.house)
+          next()
+        }
+      }
+    )
+  }
+  else {
+    manager.selectedHouse = null
+    next()
+  }
+}
 let preloadContract = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
@@ -164,7 +164,7 @@ export default new Router({
     {name: 'home', path: '/', component: home, beforeEnter: preloadHome},
     {name: 'house', path: '/house', component: house, beforeEnter: preloadHouse},
     {name: 'addHouse', path: '/addHouse', component: addHouse, beforeEnter: preloadAddHouse},
-    // {name: 'room', path: '/room/:room', component: room, beforeEnter: preloadRoom},
+    {name: 'room', path: '/room', component: room, beforeEnter: preloadRoom},
     {name: 'contract', path: '/contract', component: contract, beforeEnter: preloadContract},
     {name: 'payment', path: '/payment', component: payment, beforeEnter: preloadPayment},
     {name: 'meter', path: '/meter', component: meter, beforeEnter: preloadMeter},

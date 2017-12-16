@@ -3,7 +3,7 @@
     <div class="box-header">
       {{room.number}}<span class="text-gray" v-if="room.size">（{{room.size}}）</span>
       <div class="pull-right box-tools">
-        <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']">
+        <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']" v-on:click="update(room)">
           <i class="glyphicon glyphicon-pencil"></i>
         </button>
       </div>
@@ -84,6 +84,16 @@
           contract: null
         }
         this.$router.push({name: 'contract'})
+      },
+      update(room) {
+        manager.room = {
+          _id: room._id,
+          number: room.number,
+          keyMoney: room.keyMoney,
+          rent: room.rent,
+          deposit: room.deposit
+        }
+        this.$router.push({name: 'room'})
       },
       pay(room) {
         if (room.contracts.length > 0) {

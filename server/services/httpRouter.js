@@ -278,6 +278,36 @@ router.post('/deletePayment', (req, res) => {
     res.json({error: reason, data: null})
   })
 })
+router.post('/updateRoom', (req, res) => {
+  logger.info('updateRoom:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      roomService.updateRoom(req.session.passport.user, req.body.params.room, (error, room) => {
+        if (error) return reject(error)
+        resolve(room)
+      })
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {room: values[0]}})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+router.post('/deleteRoom', (req, res) => {
+  logger.info('deleteRoom:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      roomService.updateRoom(req.session.passport.user, req.body.params.room, (error, room) => {
+        if (error) return reject(error)
+        resolve(room)
+      })
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {room: values[0]}})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
 router.post('/cancelContract', (req, res) => {
   logger.info('cancelContract:', JSON.stringify(req.body.params))
   contractService.updateContract(req.session.passport.user, req.body.params, (error) => {
