@@ -11,6 +11,7 @@ class Payment {
     this.amount = data.amount
     this.plan = data.plan
     this.pay = data.pay
+    this.comment = data.comment || ''
   }
   isUnpaid() {
     let now = new Date()
@@ -26,13 +27,22 @@ class Payment {
   }
   getType() {
     if (this.type == 'keyMoney') {
-      return '礼金'
+      return '入室金'
     }
     else if (this.type == 'deposit') {
       return '敷金'
     }
     else if (this.type == 'rent') {
       return '家賃'
+    }
+    if (this.type == 'fireInsurance') {
+      return '火災保険'
+    }
+    else if (this.type == 'clean') {
+      return '清潔費'
+    }
+    else if (this.type == 'facility') {
+      return '設備費'
     }
     else {
       if (CONST.feeTypes[this.type]) {

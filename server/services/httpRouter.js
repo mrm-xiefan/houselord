@@ -209,7 +209,8 @@ router.post('/fixPayment', (req, res) => {
       let payment = {
         _id: req.body.params.payment,
         amount: req.body.params.amount,
-        pay: req.body.params.pay
+        pay: req.body.params.pay,
+        comment: req.body.params.comment
       }
       paymentService.updatePayment(req.session.passport.user, payment, (error) => {
         if (error) return reject(error)

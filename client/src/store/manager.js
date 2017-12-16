@@ -47,7 +47,8 @@ class Manager {
     this.payment = {
       query: null,
       house: null,
-      room: null
+      room: null,
+      contract: null
     }
   }
 

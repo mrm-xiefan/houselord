@@ -33,7 +33,7 @@ class ContractService {
     })
     mongo.findAll(
       'contracts',
-      {room: {$in: roomIDs}, over: {$exists: false}, deleted: {$ne: true}},
+      {room: {$in: roomIDs}, over: {$nin: ['finish', 'cancel']}, deleted: {$ne: true}},
       null,
       {start: 1},
       (error, results) => {
@@ -148,7 +148,7 @@ class ContractService {
       house: ObjectId(meter.house),
       room: ObjectId(meter.room),
       start: {$lte: now},
-      over: {$ne: true},
+      over: {$nin: ['finish', 'cancel']},
       fees: {$elemMatch: {meter: ObjectId(meter._id)}}
     }
     mongo.findAll(
@@ -177,7 +177,7 @@ class ContractService {
             let payment = {
               DRCR: 'DR',
               type: fee.type,
-              amount: Math.round(fee.price * (scale.scaleRead - fee.scales[fee.scales.length - 1]) + fee.base),
+              amount: Math.round((fee.price * (scale.scaleRead - fee.scales[fee.scales.length - 1]) + fee.base) / contracts.length),
               plan: now.valueOf(),
               lord: contract.lord,
               house: ObjectId(contract.house),

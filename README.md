@@ -41,7 +41,7 @@ npm install
 npm install -g pm2
 ```
 
-# start project
+# develop project
 
 ## 1. boot frontend
 
@@ -50,7 +50,7 @@ cd houselord/client
 npm run dev
 ```
 
-## 2. boot backend
+## 2. develop backend
 
 ## 2.1. if linux
 
