@@ -93,6 +93,12 @@
           $('#fee-modal').modal('show')
         })
       })
+
+    },
+    updated() {
+      $("input[type='number']").off("click").on("click", function () {
+        $(this).select();
+      });
     },
     beforeDestroy() {
       utils.event.$off('FEE_DETAIL')

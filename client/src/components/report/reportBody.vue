@@ -77,7 +77,7 @@
                 "tickColor": "#67b7dc",
                 "startAngle": -90,
                 "endAngle": 90,
-                "unit": "%",
+                "unit": "",
                 "bandOutlineAlpha": 0,
                 "bands": [{
                   "color": "#0080ff",
@@ -94,17 +94,21 @@
                   "gradientRatio": [0.5, 0, -0.5],
                   "startValue": 0
                 }],
-                "bottomText": value + " %",
-			          "bottomTextYOffset": -30
+                //"bottomText": value + " %"
+			          //,"bottomTextYOffset": -10%
               }],
               "arrows": [{
                 "alpha": 1,
-                "innerRadius": "35%",
+                "innerRadius": "20%",
                 "nailRadius": 10,
-                "radius": "170%",
+                "radius": "150%",
                 "value": value
               }]
             } );
+
+            gauge.arrows[0].setValue(value);
+            gauge.axes[0].setTopText(value + " %");
+            gauge.axes[0].bands[1].setEndValue(value);
 
         var chartData = [ {
   "date": "2012-01-01",

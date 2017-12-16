@@ -129,6 +129,10 @@
     },
     mounted() {
       $('body').layout('fix')
+
+      $("input[type='number']").off("click").on("click", function () {
+        $(this).select();
+      });
     },
     computed: {
       isValid() {
