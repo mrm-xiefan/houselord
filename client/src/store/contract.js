@@ -13,6 +13,9 @@ class Contract {
     this.keyMoney = Number(data.keyMoney)
     this.rent = Number(data.rent)
     this.deposit = Number(data.deposit)
+    this.fireInsurance = Number(data.fireInsurance)
+    this.clean = Number(data.clean)
+    this.facility = Number(data.facility)
     this.fees = data.fees || []
 
     this.start = data.start
@@ -123,6 +126,15 @@ class Contract {
   }
   getDeposit() {
     return utils.formatMoney(this.deposit) + ' 円'
+  }
+  getFireInsurance() {
+    return utils.formatMoney(this.fireInsurance) + ' 円'
+  }
+  getClean() {
+    return utils.formatMoney(this.clean) + ' 円'
+  }
+  getFacility() {
+    return utils.formatMoney(this.facility) + ' 円'
   }
   getStart() {
     return utils.formatDate(this.start)

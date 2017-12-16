@@ -12,13 +12,13 @@
       <div class="info-row">
         <div class="money-box">
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 礼金：</div><div class="money-amount">{{room.getKeyMoney()}}</div>
+            <div class="money-title">入室金：</div><div class="money-amount">{{room.getKeyMoney()}}</div>
           </div>
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 家賃：</div><div class="money-amount">{{room.getRent()}}</div>
+            <div class="money-title">家賃：</div><div class="money-amount">{{room.getRent()}}</div>
           </div>
           <div class="money-row">
-            <div class="money-title"><i class="fa fa-money"></i> 敷金：</div><div class="money-amount">{{room.getDeposit()}}</div>
+            <div class="money-title">敷金：</div><div class="money-amount">{{room.getDeposit()}}</div>
           </div>
         </div>
         <div class="status-box">
@@ -36,18 +36,20 @@
           </div>
         </div>
       </div>
-      <div :class="['resident-row', room.isRented()? 'resident-green': 'resident-blue']">
-        <div class="info-row">
-          <div class="resident-box">
-            <div class="resident-title"><i class="fa fa-user"></i> 居住者：</div><div class="resident-content" v-if="room.getCurrentContract()">{{room.getCurrentContract().resident}}</div>
-          </div>
-          <div class="resident-box">
-            <div class="resident-title"><i class="fa fa-phone"></i> 連絡先：</div><div class="resident-content" v-if="room.getCurrentContract()">{{room.getCurrentContract().phone}}</div>
+      <div class="contract-row" v-if="!room.isRented()">
+        <div class="info-row contract-blue">
+          <div class="contract-box">
+            <div class="contract-title"><i class="fa fa-user"></i></div><div class="contract-content">-</div>
           </div>
         </div>
-        <div class="info-row">
-          <div class="resident-note">
-            <div class="resident-title"><i class="fa fa-sticky-note"></i> 備 考：</div><div class="resident-content" v-if="room.getCurrentContract()">{{room.getCurrentContract().note}}</div>
+      </div>
+      <div class="contract-row" v-else>
+        <div class="info-row contract-green" v-for="contract in room.contracts">
+          <div class="contract-box">
+            <div class="contract-title"><i class="fa fa-user"></i></div><div class="contract-content">{{contract.resident}}</div>
+            <div class="contract-title"><i class="fa fa-calendar"></i></div><div class="contract-content">{{contract.getStart()}} ~ {{contract.getEnd()}}</div>
+            <div class="contract-button"><i class="fa fa-money bg-green" v-on:click="pay(room, contract)"></i></div>
+            <div class="contract-button"><i class="fa fa-eye bg-green" v-on:click="view(room, contract)"></i></div>
           </div>
         </div>
       </div>
@@ -85,17 +87,31 @@
         }
         this.$router.push({name: 'contract'})
       },
-      pay(room) {
+      pay(room, contract) {
         if (room.contracts.length > 0) {
           manager.payment.query = {
             house: room.house,
             room: room._id
+          }
+          if (contract) {
+            manager.payment.contract = contract._id
+          }
+          else {
+            manager.payment.contract = ''
           }
           this.$router.push({name: 'payment'})
         }
         else {
           utils.event.$emit('SHOW_MESSAGE', 'B007')
         }
+      },
+      view(room, contract) {
+        manager.contract.query = {
+          house: room.house,
+          room: room._id,
+          contract: contract._id
+        }
+        this.$router.push({name: 'contract'})
       }
     }
   }
@@ -149,32 +165,43 @@
   .badge {
     margin: 5px;
   }
-  .resident-row {
-    padding: 10px 5px 10px 5px;
+  .contract-green {
+    margin-top:5px;
+    margin-bottom: 5px;
     border-radius: 5px;
-  }
-  .resident-green {
     border: 1px solid #00a65a;
   }
-  .resident-blue {
+  .contract-blue {
+    margin-top:5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
     border: 1px solid #3c8dbc;
   }
-  .resident-box {
+  .contract-box {
     margin: 5px;
-    width: calc(50%);
+    width: 100%;
     overflow: hidden;
   }
-  .resident-title {
-    width: 80px;
+  .contract-title {
+    width: 20px;
     float: left;
   }
-  .resident-content {
+  .contract-content {
+    min-width: 80px;
     float: left;
-    width: calc(100% - 80px);
   }
-  .resident-note {
-    margin: 5px;
-    overflow: hidden;
+  .contract-button {
+    float: right;
+    padding-right: 3px;
+    padding-left: 3px;
+    cursor: pointer;
+  }
+  .contract-button:hover {
+    opacity: 0.6;
+  }
+  .contract-button i {
+    padding: 2px;
+    border-radius: 5px;
   }
   .box-footer {
     display: flex;

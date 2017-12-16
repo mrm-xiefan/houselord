@@ -7,7 +7,7 @@
       </div>
 
       <div class="bg-gray-light payment-body">
-        <div v-for="(contract, i) in manager.payment.room.contracts">
+        <div v-for="(contract, i) in manager.payment.room.contracts" v-if="!manager.payment.contract || manager.payment.contract == contract._id">
 
           <div class="box box-solid box-primary">
             <div class="box-header">
@@ -26,6 +26,7 @@
                     <th>科目</th>
                     <th class="right-column">金額(円)</th>
                     <th>支払日</th>
+                    <th>コメント</th>
                     <th>支払</th>
                     <th></th>
                   </tr>
@@ -50,6 +51,14 @@
                       </template>
                     </td>
                     <td :class="{'unpay-row': !payment.pay}">{{payment.getDate()}}</td>
+                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel', 'text-cancel': !payment.pay && contract.over == 'cancel', 'comment-input': true}">
+                      <template v-if="payment.pay || contract.over == 'cancel'">
+                        {{payment.comment}}
+                      </template>
+                      <template v-else>
+                        <input v-model="payment.comment" type="text" class="form-control">
+                      </template>
+                    </td>
                     <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel'}">
                       <div class="btn btn-primary btn-minimum" v-if="!payment.pay && contract.over != 'cancel'" v-on:click="agreePayment(contract, payment)">
                         支払
@@ -170,7 +179,7 @@
           utils.event.$emit('SHOW_MESSAGE', 'B013')
           return
         }
-        utils.restPost('/api/fixPayment', {payment: payment._id, amount: payment.amount, pay: payment.pay, contract: contract._id, over: contract.isOver()}).then(
+        utils.restPost('/api/fixPayment', {payment: payment._id, amount: payment.amount, pay: payment.pay, comment: payment.comment, contract: contract._id, over: contract.isOver()}).then(
           response => {
             if (response) {
             }
@@ -233,6 +242,9 @@
   .unpay-input {
     padding: 1px 5px 0px 5px;
     width: 120px;
+  }
+  .comment-input {
+    min-width: 220px;
   }
   .unpay-row {
     color: #aaa;

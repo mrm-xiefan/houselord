@@ -63,7 +63,7 @@
             <div class="data-row box-3column">
               <div class="modal-item long-label">
                 <input v-model="room.keyMoney" type="number" step=1000 class="form-control" placeholder="入力">
-                <span class="input-group-label">礼金:</span>
+                <span class="input-group-label">入室金:</span>
               </div>
               <div class="modal-item long-label">
                 <input v-model="room.rent" type="number" step=1000 class="form-control" placeholder="入力">

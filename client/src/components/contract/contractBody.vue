@@ -41,7 +41,7 @@
         <div class="row">
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label">礼金：</label>
+              <label class="input-label">入室金：</label>
               <div class="input-text">
                 <input v-model="manager.contract.contract.keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
               </div>
@@ -60,6 +60,32 @@
               <label class="input-label">敷金：</label>
               <div class="input-text">
                 <input v-model="manager.contract.contract.deposit" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label">火災保険：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.contract.fireInsurance" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label">清潔費：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.contract.clean" type="number" class="form-control" step="1000" placeholder="入力">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="input-label">設備費：</label>
+              <div class="input-text">
+                <input v-model="manager.contract.contract.facility" type="number" class="form-control" step="1000" placeholder="入力">
               </div>
             </div>
           </div>
@@ -241,6 +267,9 @@
         manager.contract.contract.keyMoney = Number(manager.contract.contract.keyMoney)
         manager.contract.contract.rent = Number(manager.contract.contract.rent)
         manager.contract.contract.deposit = Number(manager.contract.contract.deposit)
+        manager.contract.contract.fireInsurance = Number(manager.contract.contract.fireInsurance)
+        manager.contract.contract.clean = Number(manager.contract.contract.clean)
+        manager.contract.contract.facility = Number(manager.contract.contract.facility)
         if (self.check()) {
           let contract = {
             lord: manager.user._id,
@@ -255,6 +284,9 @@
             keyMoney: manager.contract.contract.keyMoney,
             rent: manager.contract.contract.rent,
             deposit: manager.contract.contract.deposit,
+            fireInsurance: manager.contract.contract.fireInsurance,
+            clean: manager.contract.contract.clean,
+            facility: manager.contract.contract.facility,
             fees: manager.contract.contract.fees
           }
           let payments = self.generatePayments()
@@ -286,6 +318,33 @@
             DRCR: 'DR',
             type: 'deposit',
             amount: manager.contract.contract.deposit,
+            plan: contract.start,
+            pay: now
+          })
+        }
+        if (manager.contract.contract.fireInsurance > 0) {
+          payments.push({
+            DRCR: 'DR',
+            type: 'fireInsurance',
+            amount: manager.contract.contract.fireInsurance,
+            plan: contract.start,
+            pay: now
+          })
+        }
+        if (manager.contract.contract.clean > 0) {
+          payments.push({
+            DRCR: 'DR',
+            type: 'clean',
+            amount: manager.contract.contract.clean,
+            plan: contract.start,
+            pay: now
+          })
+        }
+        if (manager.contract.contract.facility > 0) {
+          payments.push({
+            DRCR: 'DR',
+            type: 'facility',
+            amount: manager.contract.contract.facility,
             plan: contract.start,
             pay: now
           })
