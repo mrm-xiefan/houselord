@@ -24,10 +24,10 @@
                   <tr>
                     <th>収支</th>
                     <th>科目</th>
-                    <th class="right-row">金額(円)</th>
+                    <th class="right-column">金額(円)</th>
                     <th>支払日</th>
                     <th>支払</th>
-                    <th>操作</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -38,7 +38,7 @@
                       </span>
                     </td>
                     <td>{{payment.getType()}}</td>
-                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel' && !payment.meter, 'text-cancel': !payment.pay && contract.over == 'cancel', 'right-row': true}">
+                    <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel' && !payment.meter, 'text-cancel': !payment.pay && contract.over == 'cancel', 'right-column': true}">
                       <template v-if="payment.meter">
                         未検針
                       </template>
@@ -62,7 +62,7 @@
                       </div>
                     </td>
                     <td :class="{'unpay-input': !payment.pay && contract.over != 'cancel'}">
-                      <div class="btn bg-red btn-minimum" v-if="!payment.pay && contract.over != 'cancel'" v-on:click="removePayment(contract, payment,j)">
+                      <div class="btn btn-danger btn-minimum" v-if="!payment.pay && contract.over != 'cancel'" v-on:click="removePayment(contract, payment, j)">
                         削除
                       </div>
                     </td>
@@ -80,7 +80,7 @@
               <button class="btn btn-primary pull-right" v-on:click="recontract(contract)" :disabled="contract.over == 'cancel'">
                 <i class="fa fa-legal"></i> 契約延長
               </button>
-              <button class="btn btn-danger pull-right" v-on:click="cancel(contract)" :disabled="contract.over == 'cancel'">
+              <button class="btn btn-danger pull-right" v-on:click="cancel(contract)" :disabled="contract.isOver()">
                 <i class="glyphicon glyphicon-erase"></i> 契約解除
               </button>
             </div>
@@ -165,18 +165,23 @@
         let now = new Date()
         now = now.valueOf()
         payment.pay = now
-        utils.restPost('/api/fixPayment', {payment: payment._id, pay: payment.pay, contract: contract._id, over: contract.isOver()}).then(
+        payment.amount = Number(payment.amount)
+        if (payment.amount <= 0) {
+          utils.event.$emit('SHOW_MESSAGE', 'B013')
+          return
+        }
+        utils.restPost('/api/fixPayment', {payment: payment._id, amount: payment.amount, pay: payment.pay, contract: contract._id, over: contract.isOver()}).then(
           response => {
             if (response) {
             }
           }
         )
       },
-      removePayment(contract, payment,j) {
-        contract.payments.splice(j, 1)
-        utils.restPost('/api/deletePayment', {payment: payment, contract: contract._id, over: contract.isOver()}).then(
+      removePayment(contract, payment, j) {
+        utils.restPost('/api/deletePayment', {payment: {_id: payment._id}, contract: contract._id, over: contract.willOver()}).then(
           response => {
             if (response) {
+              contract.payments.splice(j, 1)
             }
           }
         )
@@ -222,7 +227,7 @@
   .unpaid-row {
     background: rgb(240, 197, 197);
   }
-  .right-row {
+  .right-column {
     text-align: right;
   }
   .unpay-input {

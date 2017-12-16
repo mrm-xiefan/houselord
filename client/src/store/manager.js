@@ -6,6 +6,7 @@ import io from 'socket.io-client/dist/socket.io.js'
 import House from './house.js'
 import Room from './room.js'
 import Contract from './contract.js'
+import Expense from './expense.js'
 
 class Manager {
   constructor() {
@@ -16,10 +17,12 @@ class Manager {
     this.locker = 'unlock'
 
     this.feeTypes = CONST.feeTypes
+    this.expenseTypes = CONST.expenseTypes
 
-    // for house list page
+    // for list page
     this.houses = []
     this.rooms = []
+    this.expenses = []
 
     // for house page
     this.house = {
@@ -107,13 +110,20 @@ class Manager {
     for (let i = 0; i < rooms.length; i ++) {
       this.rooms.push(new Room(rooms[i]))
     }
+    this.sortRoom()
   }
   sortRoom() {
     this.rooms.sort((a, b) => {
-      if (a.udate > b.udate) return -1
-      else if (a.udate < b.udate) return 1
+      if (Number(a.number) > Number(b.number)) return 1
+      else if (Number(a.number) < Number(b.number)) return -1
       else return 0
     })
+  }
+  refreshExpense(expenses) {
+    this.expenses.splice(0, this.expenses.length)
+    for (let i = 0; i < expenses.length; i ++) {
+      this.expenses.push(new Expense(expenses[i]))
+    }
   }
 }
 

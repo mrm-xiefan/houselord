@@ -19,10 +19,12 @@
                   <span class="dropdown-text" v-else>{{typeName}}</span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li v-for="type in manager.feeTypes" v-if="type.type != 'once'" class="selection-item"><a v-on:click="setType(type)">{{type.name}}</a></li>
+                  <li v-for="type in manager.feeTypes" v-if="type.type != 'once' && (hasMeter || (!hasMeter && type.type != 'meter'))" class="selection-item"><a v-on:click="setType(type)">{{type.name}}</a></li>
                 </ul>
               </div>
             </div>
+          </div>
+          <div class="row">
             <div class="col-sm-6 column-block">
               <label class="input-label">費用名：</label>
               <input v-model="name" type="text" class="form-control" placeholder="入力">
@@ -30,12 +32,12 @@
           </div>
           <div class="row">
             <div class="col-sm-6 column-block">
-              <label class="input-label">金額：</label>
-              <input v-model="price" type="number" step=1000 class="form-control" placeholder="入力">
+              <label class="input-label">基本料金：</label>
+              <input v-model="base" type="number" step=1000 class="form-control" placeholder="入力">
             </div>
-            <div class="col-sm-6 column-block">
-              <label class="input-label">支払日：</label>
-              <input v-model="day" type="number" step=1 class="form-control" placeholder="入力">
+            <div class="col-sm-6 column-block" v-if="isFeeHasUnit(type)">
+              <label class="input-label">使用料金（一単位あたり）：</label>
+              <input v-model="price" type="number" step=1000 class="form-control" placeholder="入力">
             </div>
           </div>
         </div>
@@ -60,24 +62,26 @@
       return {
         type: '',
         name: '',
+        base: 0,
         price: 0,
-        day: ''
+        hasMeter: false
       }
     },
     mounted() {
       let self = this
-      utils.event.$on('FEE_DETAIL', (fee, next) => {
+      utils.event.$on('FEE_DETAIL', (fee, hasMeter, next) => {
+        self.hasMeter = hasMeter
         if (fee) {
           self.type = fee.type
           self.name = fee.name
+          self.base = fee.base
           self.price = fee.price
-          self.day = fee.day
         }
         else {
           self.type = ''
           self.name = ''
+          self.base = 0
           self.price = 0
-          self.day = ''
         }
         if (next) {
           self.next = next
@@ -100,35 +104,38 @@
       isValid() {
         if (!this.type) return false
         if (!this.name) return false
-        if (this.price <= 0) return false
-        if (this.day <= 0 || this.day > 31) return false
+        if (this.isFeeHasUnit(this.type) && this.base < 0) return false
+        if (!this.isFeeHasUnit(this.type) && this.base <= 0) return false
+        if (this.isFeeHasUnit(this.type) && this.price <= 0) return false
         return true
       }
     },
     methods: {
+      isFeeHasUnit(type) {
+        if (!type) return false
+        return CONST.feeTypes[type].unit
+      },
       setType(type) {
         this.type = type.value
-        if (this.type != '30') {
-          this.name = type.name
-        }
-        else {
-          this.name = ''
+        this.name = type.sample
+        if (!this.isFeeHasUnit(this.type)) {
+          this.price = 0
         }
       },
       save() {
         let fee = {
           type: this.type,
           name: this.name,
-          price: Number(this.price),
-          day: Number(this.day)
+          base: Number(this.base),
+          price: Number(this.price)
         }
         if (this.next) {
           this.next(fee)
         }
         this.type = ''
         this.name = ''
+        this.base = 0
         this.price = 0
-        this.day = ''
         $('#fee-modal').modal('hide')
       }
     }

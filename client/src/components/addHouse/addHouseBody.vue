@@ -74,10 +74,16 @@
         <div class="fee-list">
           <div class="fee-item" v-for="(fee, index) in fees" v-on:click="editFee(fee)">
             <div class="fee-info">
-              {{fee.name}}
+              <div style="float: left;">
+                {{fee.name}}
+              </div>
+              <div class="fee-blank"></div>
             </div>
             <div class="fee-info">
-              {{fee.price}}
+              <div style="float: left;">
+                {{getFee(fee)}}
+              </div>
+              <div class="fee-blank"></div>
             </div>
             <div class="fee-delete" v-on:click.stop="deleteFee(index)">
               <i class="fa fa-close"></i>
@@ -140,19 +146,41 @@
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
       },
+      getFee(fee) {
+        let text = ''
+        if (fee.base > 0) {
+          text += utils.formatMoney(fee.base) + '円'
+        }
+        if (fee.price > 0) {
+          if (text != '') {
+            text += ' ＋ '
+          }
+          text += utils.formatMoney(fee.price) + '円 ＊ 刻み'
+        }
+        return text
+      },
       addFee() {
         let self = this
-        utils.event.$emit('FEE_DETAIL', null, (fee) => {
+        utils.event.$emit('FEE_DETAIL', null, true, (fee) => {
           fee.read = 0
+          if (CONST.feeTypes[fee.type].type == 'meter') {
+            fee.meter = true
+          }
           self.fees.push(fee)
         })
       },
       editFee(fee) {
-        utils.event.$emit('FEE_DETAIL', fee, (newfee) => {
+        utils.event.$emit('FEE_DETAIL', fee, true, (newfee) => {
           fee.type = newfee.type
           fee.name = newfee.name
+          fee.base = newfee.base
           fee.price = newfee.price
-          fee.day = newfee.day
+          if (CONST.feeTypes[newfee.type].type == 'meter') {
+            fee.meter = true
+          }
+          else {
+            delete fee.meter
+          }
         })
       },
       deleteFee(index) {
@@ -245,21 +273,27 @@
   .fee-item {
     float: left;
     height: 60px;
-    width: 120px;
+    width: auto;
     margin-right: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-top: 4px solid #605ca8;
+    border-top: 4px solid #3c8dbc;
     border-radius: 5px;
     position: relative;
     cursor: pointer;
+    overflow: hidden;
   }
   .fee-info {
     padding: 5px 5px 0px 5px;
   }
+  .fee-blank {
+    width: 30px;
+    height: auto;
+    float: left;
+  }
   .fee-delete {
     position: absolute;
-    right: 10px;
+    right: 2px;
     top: 12px;
     width: 30px;
     height: 30px;
@@ -270,7 +304,7 @@
     background: #d2d6de;
   }
   .fee-delete:hover {
-    background: #605ca8;
+    background: #3c8dbc;
   }
   .fee-delete i {
     font-size: 25px;

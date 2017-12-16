@@ -2,26 +2,34 @@
 
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
-      <div>{{manager.controller.currentApp}}</div>
-      <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="showChart()">showChart</button>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="chartdiv3"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div id="chartdiv"></div>
+        </div>
+        <div class="col-md-6">
+          <div id="chartdiv2"></div>
+        </div>
+      </div>
     </section>
-    <div id="chartdiv" style="width: 100%; height: 400px;"></div>
-    <div id="chartdiv2" style="width: 100%; height: 400px;"></div>
-    <div id="chartdiv3" style="width: 100%; height: 400px;"></div>
   </div>
-  
+
 </template>
 
 <script>
   import CONST from '@/store/const.js'
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
-  
-  
+
   export default {
     props: ['manager'],
     mounted() {
       $('body').layout('fix')
+      this.showChart()
     },
     methods: {
       closeSide() {
@@ -30,8 +38,6 @@
         }
       },
       showChart() {
-        console.log("showChart");
-        
         AmCharts.makeChart("chartdiv",
           {
             "type": "serial",
@@ -342,13 +348,21 @@ var chart = AmCharts.makeChart( "chartdiv3", {
     //"color": "#FFFFFF"
   }
 } );
-        
+
       }
     }
   }
 </script>
 
 <style>
+#chartdiv {
+  width: 100%;
+  height: 220px;
+}
+#chartdiv2 {
+  width: 100%;
+  height: 400px;
+}
 #chartdiv3{
   width: 100%;
   height: 500px;
@@ -438,5 +452,5 @@ var chart = AmCharts.makeChart( "chartdiv3", {
 /* OVERWRITE OUR MAIN STYLE */
 .demo-flipper-front.demo-panel-white, body {
   background-color: #161616;
-}				
+}
 </style>

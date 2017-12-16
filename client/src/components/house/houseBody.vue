@@ -65,7 +65,7 @@
         this.$router.push({name: 'addHouse'})
       },
       selectHouse(house) {
-        utils.restPost('/api/selectHouse', {_id: house._id}).then(
+        utils.restPost('/api/selectHouseForRoom', {_id: house._id}).then(
           response => {
             if (response) {
               manager.user.selectedHouse = house._id

@@ -8,8 +8,10 @@ import mongo from './mongo.js'
 import userService from './userService.js'
 import houseService from './houseService.js'
 import roomService from './roomService.js'
+import meterService from './meterService.js'
 import contractService from './contractService.js'
 import paymentService from './paymentService.js'
+import expenseService from './expenseService.js'
 
 let router = express.Router()
 
@@ -72,21 +74,33 @@ router.post('/addHouse', (req, res) => {
         req.body.params.deposit,
         req.body.params.fees,
         (error, rooms) => {
-          userService.selectHouse(req.session.passport.user, house._id, (error) => {
-            if (error) {
-              res.json({error: error, data: null})
-            }
-            else {
-              res.json({error: error, data: {house: house, rooms, rooms}})
-            }
-          })
+          if (error) {
+            res.json({error: error, data: null})
+          }
+          else {
+            meterService.insertMeters(req.session.passport.user, rooms, (error) => {
+              if (error) {
+                res.json({error: error, data: null})
+              }
+              else {
+                userService.selectHouse(req.session.passport.user, house._id, (error) => {
+                  if (error) {
+                    res.json({error: error, data: null})
+                  }
+                  else {
+                    res.json({error: error, data: {house: house, rooms, rooms}})
+                  }
+                })
+              }
+            })
+          }
         }
       )
     }
   })
 })
-router.post('/selectHouse', (req, res) => {
-  logger.info('selectHouse:', JSON.stringify(req.body.params))
+router.post('/selectHouseForRoom', (req, res) => {
+  logger.info('selectHouseForRoom:', JSON.stringify(req.body.params))
   userService.selectHouse(req.session.passport.user, req.body.params._id, (error) => {
     if (error) {
       res.json({error: error, data: null})
@@ -194,6 +208,7 @@ router.post('/fixPayment', (req, res) => {
     new Promise((resolve, reject) => {
       let payment = {
         _id: req.body.params.payment,
+        amount: req.body.params.amount,
         pay: req.body.params.pay
       }
       paymentService.updatePayment(req.session.passport.user, payment, (error) => {
@@ -347,6 +362,195 @@ router.post('/recontract', (req, res) => {
     }})
   }, (reason) => {
     res.json({error: reason, data: null})
+  })
+})
+router.get('/getMeterData', (req, res) => {
+  logger.info('getMeterData:', JSON.stringify(req.session.passport.user))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      houseService.getHouses(req.session.passport.user._id, (error, houses) => {
+        if (error) return reject(error)
+        resolve(houses)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      if (req.session.passport.user.selectedHouse) {
+        roomService.getRooms(req.session.passport.user._id, req.session.passport.user.selectedHouse, (error, rooms) => {
+          if (error) return reject(error)
+          meterService.assignMetersToRooms(rooms, (error) => {
+            if (error) return reject(error)
+            resolve(rooms)
+          })
+        })
+      }
+      else {
+        resolve([])
+      }
+    })
+  ]).then((values) => {
+    res.json({
+      error: null,
+      data: {
+        houses: values[0],
+        rooms: values[1]
+      }
+    })
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+router.post('/selectHouseForMeter', (req, res) => {
+  logger.info('selectHouseForMeter:', JSON.stringify(req.body.params))
+  userService.selectHouse(req.session.passport.user, req.body.params._id, (error) => {
+    if (error) {
+      res.json({error: error, data: null})
+    }
+    else {
+      roomService.getRooms(req.session.passport.user._id, req.body.params._id, (error, rooms) => {
+        if (error) {
+          res.json({error: error, data: null})
+        }
+        else {
+          meterService.assignMetersToRooms(rooms, (error) => {
+            res.json({error: error, data: rooms})
+          })
+        }
+      })
+    }
+  })
+})
+router.post('/readMeter', (req, res) => {
+  logger.info('readMeter:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      meterService.readMeter(req.session.passport.user, req.body.params.meter._id, req.body.params.scale, (error) => {
+        if (error) return reject(error)
+        resolve()
+      })
+    }),
+    new Promise((resolve, reject) => {
+      contractService.getContractsUsingMeter(req.body.params.meter, (error, contracts) => {
+        if (error) return reject(error)
+        contractService.generatePayments(req.session.passport.user, contracts, req.body.params.meter, req.body.params.scale, (error, payments) => {
+          if (error) return reject(error)
+          if (payments.length > 0) {
+            paymentService.insertMeterPayments(payments, (error) => {
+              if (error) return reject(error)
+              resolve()
+            })
+          }
+          else {
+            resolve()
+          }
+        })
+      })
+    }),
+    new Promise((resolve, reject) => {
+      expenseService.insertExpense(req.session.passport.user, req.body.params.expense, (error) => {
+        if (error) return reject(error)
+        resolve()
+      })
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {}})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+router.get('/getExpenseData', (req, res) => {
+  logger.info('getExpenseData:', JSON.stringify(req.session.passport.user))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      houseService.getHouses(req.session.passport.user._id, (error, houses) => {
+        if (error) return reject(error)
+        resolve(houses)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      if (req.session.passport.user.selectedHouse) {
+        roomService.getRooms(req.session.passport.user._id, req.session.passport.user.selectedHouse, (error, rooms) => {
+          if (error) return reject(error)
+          resolve(rooms)
+        })
+      }
+      else {
+        resolve([])
+      }
+    }),
+    new Promise((resolve, reject) => {
+      if (req.session.passport.user.selectedHouse) {
+        expenseService.getExpenses(req.session.passport.user._id, req.session.passport.user.selectedHouse, (error, expenses) => {
+          if (error) return reject(error)
+          resolve(expenses)
+        })
+      }
+      else {
+        resolve([])
+      }
+    })
+  ]).then((values) => {
+    res.json({
+      error: null,
+      data: {
+        houses: values[0],
+        rooms: values[1],
+        expenses: values[2]
+      }
+    })
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+router.post('/selectHouseForExpense', (req, res) => {
+  logger.info('selectHouseForExpense:', JSON.stringify(req.body.params))
+  userService.selectHouse(req.session.passport.user, req.body.params._id, (error) => {
+    if (error) {
+      res.json({error: error, data: null})
+    }
+    else {
+      Promise.all([
+        new Promise((resolve, reject) => {
+          roomService.getRooms(req.session.passport.user._id, req.body.params._id, (error, rooms) => {
+            if (error) return reject(error)
+            resolve(rooms)
+          })
+        }),
+        new Promise((resolve, reject) => {
+          expenseService.getExpenses(req.session.passport.user._id, req.body.params._id, (error, expenses) => {
+            if (error) return reject(error)
+            resolve(expenses)
+          })
+        })
+      ]).then((values) => {
+        res.json({
+          error: null,
+          data: {
+            rooms: values[0],
+            expenses: values[1]
+          }
+        })
+      }, (reason) => {
+        res.json({error: reason, data: null})
+      })
+    }
+  })
+})
+router.post('/fixExpense', (req, res) => {
+  logger.info('fixExpense:', JSON.stringify(req.body.params))
+  expenseService.updateExpense(req.session.passport.user, req.body.params.expense, (error) => {
+    res.json({error: error, data: {}})
+  })
+})
+router.post('/deleteExpense', (req, res) => {
+  logger.info('deleteExpense:', JSON.stringify(req.body.params))
+  expenseService.deleteExpense(req.session.passport.user, req.body.params.expense, (error) => {
+    res.json({error: error, data: {}})
+  })
+})
+router.post('/addExpense', (req, res) => {
+  logger.info('addExpense:', JSON.stringify(req.body.params))
+  expenseService.insertExpense(req.session.passport.user, req.body.params.expense, (error, expense) => {
+    res.json({error: error, data: expense})
   })
 })
 

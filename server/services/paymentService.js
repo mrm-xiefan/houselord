@@ -101,6 +101,10 @@ class PaymentService {
     )
   }
   updatePayment(user, payment, next) {
+    if (!payment) {
+      next(null, null)
+      return
+    }
     let id = payment._id
     delete payment._id
     payment.uuser = user._id
@@ -135,6 +139,21 @@ class PaymentService {
         }
         else {
           next(null)
+        }
+      }
+    )
+  }
+  insertMeterPayments(payments, next) {
+    mongo.insert(
+      'payments',
+      payments,
+      {},
+      (error, result) => {
+        if (error) {
+          next(error, null)
+        }
+        else {
+          next(null, result.ops)
         }
       }
     )

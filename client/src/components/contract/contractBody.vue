@@ -103,8 +103,8 @@
                 <tr>
                   <th>種類</th>
                   <th>費用名</th>
-                  <th>金額(円)</th>
-                  <th>支払日</th>
+                  <th>基本料金</th>
+                  <th>単位料金</th>
                   <th>初回検針</th>
                   <th></th>
                 </tr>
@@ -118,9 +118,11 @@
                   </td>
                   <td>{{fee.name}}</td>
                   <td class="input-column">
-                    <input v-model="fee.price" type="number" step=1000 class="form-control">
+                    <input v-model="fee.base" type="number" step=1000 class="form-control">
                   </td>
-                  <td>毎月{{fee.day}}日</td>
+                  <td class="input-column">
+                    <input v-model="fee.price" type="number" step=1000 class="form-control" v-if="isMeter(fee)">
+                  </td>
                   <td class="input-column">
                     <input v-model="fee.read" type="number" step=1 class="form-control" v-if="isMeter(fee)">
                   </td>
@@ -208,18 +210,12 @@
         $('#first-date').datepicker(options)
       },
       addFee() {
-        utils.event.$emit('FEE_DETAIL', null, (fee) => {
-          if (CONST.feeTypes[fee.type].type == 'meter') {
-            fee.meter = uuid.v4()
-            fee.read = 0
-          }
+        utils.event.$emit('FEE_DETAIL', null, false, (fee) => {
+          fee.read = 0
           manager.contract.contract.fees.push(fee)
         })
       },
       removeFee(index) {
-        manager.contract.contract.fees.splice(index, 1)
-      },
-      deleteFee(index) {
         manager.contract.contract.fees.splice(index, 1)
       },
       check() {
@@ -301,7 +297,7 @@
           amount: manager.contract.contract.rent,
           plan: contract.first
         })
-        this.generateFees(payments, moment(contract.first), moment(contract.start), moment(contract.end))
+        this.generateFees(payments, contract.first)
 
         let end = moment(contract.end)
         let i = 0
@@ -317,7 +313,7 @@
             amount: manager.contract.contract.rent,
             plan: current.toDate().valueOf()
           })
-          this.generateFees(payments, current, moment(contract.start), moment(contract.end))
+          this.generateFees(payments, current.toDate().valueOf())
         }
 
         if (manager.contract.contract.deposit > 0) {
@@ -330,29 +326,20 @@
         }
         return payments
       },
-      generateFees(payments, base, start, end) {
+      generateFees(payments, plan) {
         for (let i = 0; i < manager.contract.contract.fees.length; i ++) {
           let fee = manager.contract.contract.fees[i]
-          let plan = null
-          if (moment([base.year(), base.month(), fee.day]).isValid()) {
-            plan = moment([base.year(), base.month(), fee.day])
+          if (CONST.feeTypes[fee.type].type == 'meter') {
+            fee.scales = [fee.read]
           }
-          else if (moment([base.year(), base.month(), fee.day - 1]).isValid()) {
-            plan = moment([base.year(), base.month(), fee.day - 1])
-          }
-          else if (moment([base.year(), base.month(), fee.day - 2]).isValid()) {
-            plan = moment([base.year(), base.month(), fee.day - 2])
-          }
-          else if (moment([base.year(), base.month(), fee.day - 3]).isValid()) {
-            plan = moment([base.year(), base.month(), fee.day - 3])
-          }
-          if (plan > start && plan <= end) {
-            payments.push({
+          else {
+            let payment = {
               DRCR: 'DR',
               type: fee.type,
-              amount: CONST.feeTypes[fee.type].type == 'meter'? -1: fee.price,
-              plan: plan.toDate().valueOf()
-            })
+              amount: fee.base,
+              plan: plan
+            }
+            payments.push(payment)
           }
         }
       },
