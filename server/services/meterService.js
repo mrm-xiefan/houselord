@@ -37,6 +37,10 @@ class MeterService {
         }
       }
     }
+    if (meters.length <= 0) {
+      next(null, meters)
+      return
+    }
     mongo.insert(
       'meters',
       meters,

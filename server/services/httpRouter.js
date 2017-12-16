@@ -99,6 +99,32 @@ router.post('/addHouse', (req, res) => {
     }
   })
 })
+router.post('/deleteHouse', (req, res) => {
+  logger.info('deleteHouse:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      houseService.deleteHouse(req.session.passport.user, req.body.params.house, (error) => {
+        if (error) return reject(error)
+        resolve(null)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      if (req.body.params.isSelect) {
+        userService.selectHouse(req.session.passport.user, null, (error) => {
+          if (error) return reject(error)
+          resolve(null)
+        })
+      }
+      else {
+        resolve(null)
+      }
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {}})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
 router.post('/selectHouseForRoom', (req, res) => {
   logger.info('selectHouseForRoom:', JSON.stringify(req.body.params))
   userService.selectHouse(req.session.passport.user, req.body.params._id, (error) => {
@@ -317,17 +343,8 @@ router.post('/updateRoom', (req, res) => {
 })
 router.post('/deleteRoom', (req, res) => {
   logger.info('deleteRoom:', JSON.stringify(req.body.params))
-  Promise.all([
-    new Promise((resolve, reject) => {
-      roomService.deleteRoom(req.session.passport.user, req.body.params.room, (error, room) => {
-        if (error) return reject(error)
-        resolve(room)
-      })
-    })
-  ]).then((values) => {
-    res.json({error: null, data: {room: values[0]}})
-  }, (reason) => {
-    res.json({error: reason, data: null})
+  roomService.deleteRoom(req.session.passport.user, req.body.params.room, (error) => {
+    res.json({error: error, data: {}})
   })
 })
 router.post('/cancelContract', (req, res) => {
@@ -570,12 +587,6 @@ router.post('/updateHouse', (req, res) => {
   logger.info('updateHouse:', JSON.stringify(req.body.params))
   houseService.updateHouse(req.session.passport.user, req.body.params, (error, house) => {
     res.json({error: error, data: house})
-  })
-})
-router.post('/deleteHouse', (req, res) => {
-  logger.info('deleteHouse:', JSON.stringify(req.body.params))
-  houseService.deleteHouse(req.session.passport.user, req.body.params, (error) => {
-    res.json({error: error, data: {}})
   })
 })
 router.post('/addOwner', (req, res) => {
