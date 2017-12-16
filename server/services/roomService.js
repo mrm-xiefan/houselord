@@ -10,7 +10,7 @@ class RoomService {
   getRoom(_id, next) {
     mongo.findAll(
       'rooms',
-      {_id: ObjectId(_id)},
+      {_id: ObjectId(_id),deleted: {$ne: true}},
       {},
       {},
       (error, result) => {
@@ -81,6 +81,54 @@ class RoomService {
       }
     )
   }
+  updateRoom(user, room, next) {
+    let id = room._id
+    delete room._id
+    delete room.house
+    room.uuser = user._id
+    let now = new Date()
+    room.udate = now.valueOf()
+    mongo.update(
+      'rooms',
+      {_id: ObjectId(id)},
+      {$set: room},
+      {multi: false},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          room._id = id
+          next(null, room)
+        }
+      }
+    )
+  }
+
+  deleteRoom(user, room, next) {
+    let id = room._id
+    delete room._id
+    delete room.house
+    room.uuser = user._id
+    room.deleted = true
+    let now = new Date()
+    room.udate = now.valueOf()
+    mongo.update(
+      'rooms',
+      {_id: ObjectId(id)},
+      {$set: room},
+      {multi: false},
+      (error, result) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          next(null)
+        }
+      }
+    )
+  }
+
 }
 
 export default new RoomService()

@@ -5,8 +5,6 @@
     <appSideMenu :manager="manager"></appSideMenu>
     <roomBody :manager="manager"></roomBody>
     <appFooter :manager="manager"></appFooter>
-    <contractModal :manager="manager"></contractModal>
-    <paymentModal :manager="manager"></paymentModal>
     <messageModal :manager="manager"></messageModal>
     <appControlPanel :manager="manager"></appControlPanel>
     <div class="control-sidebar-bg"></div>
@@ -23,8 +21,6 @@
   import appSideMenu from '@/components/appSideMenu'
   import roomBody from '@/components/room/roomBody'
   import appFooter from '@/components/appFooter'
-  import paymentModal from '@/components/contract/paymentModal'
-  import contractModal from '@/components/contract/contractModal'
   import messageModal from '@/components/parts/messageModal'
   import appControlPanel from '@/components/appControlPanel'
   export default {
@@ -35,8 +31,6 @@
       appSideMenu: appSideMenu,
       roomBody: roomBody,
       appFooter: appFooter,
-      paymentModal: paymentModal,
-      contractModal: contractModal,
       messageModal: messageModal,
       appControlPanel: appControlPanel
     },
