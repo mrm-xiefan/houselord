@@ -13,7 +13,7 @@
               </div>
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label">礼金：</label>
+              <label class="input-label">入室金：</label>
               <div class="input-text">
                 <input v-model="manager.room.keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
               </div>
@@ -40,9 +40,6 @@
           <button type="button" class="btn btn-primary" :disabled="!isValid" v-on:click="updateRoom(manager.room)">
               <i class="fa fa-save"></i> 保存
             </button>
-          <button type="button" class="btn bg-red btn-minimum" v-on:click="deleteRoom(manager.room)">
-            <i class="fa fa-save"></i> 削除
-          </button>
           <button type="button" class="btn btn-default text-blue" v-on:click="backward">
             <i class="fa fa-reply"></i> 戻る
           </button>
@@ -80,8 +77,7 @@
           utils.restPost('/api/updateRoom', {room: room}).then(
             response => {
               if (response) {
-                console.log(response)
-                this.$router.push({name: 'room'})
+                this.$router.push({name: 'house'})
               }
             }
           )

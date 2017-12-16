@@ -312,7 +312,7 @@ router.post('/deleteRoom', (req, res) => {
   logger.info('deleteRoom:', JSON.stringify(req.body.params))
   Promise.all([
     new Promise((resolve, reject) => {
-      roomService.updateRoom(req.session.passport.user, req.body.params.room, (error, room) => {
+      roomService.deleteRoom(req.session.passport.user, req.body.params.room, (error, room) => {
         if (error) return reject(error)
         resolve(room)
       })

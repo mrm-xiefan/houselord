@@ -17,8 +17,8 @@
           <ul>
             <li :class="{'house-item': true, 'house-item-selected': manager.user.selectedHouse && house._id == manager.user.selectedHouse}" v-for="house in manager.houses" v-on:click="selectHouse(house)">
               {{house.name}}
-              <i class="tag-edit fa fa-edit" v-on:click.stop=""></i>
-              <i class="tag-close fa fa-close" v-on:click.stop=""></i>
+              <i class="tag-edit fa fa-edit" v-on:click.stop="update(house)"></i>
+              <i class="tag-close fa fa-close" v-on:click.stop="remove(house, index)"></i>
             </li>
           </ul>
         </div>
@@ -27,13 +27,13 @@
       <div class="room-area">
         <div class="row" v-for="index in Math.ceil(manager.rooms.length / 3)">
           <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3]">
-            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3]"></roomCard>
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3]" :index="index"></roomCard>
           </div>
           <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3 + 1]">
-            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 1]"></roomCard>
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 1]" :index="index"></roomCard>
           </div>
           <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3 + 2]">
-            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 2]"></roomCard>
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 2]" :index="index"></roomCard>
           </div>
         </div>
       </div>
@@ -63,6 +63,27 @@
       },
       addHouse() {
         this.$router.push({name: 'addHouse'})
+      },
+      update(house) {
+        // manager.house = {
+        //   _id: room._id,
+        //   number: room.number,
+        //   keyMoney: room.keyMoney,
+        //   rent: room.rent,
+        //   deposit: room.deposit
+        // }
+        // this.$router.push({name: 'room'})
+      },
+      remove(house, index) {
+        utils.event.$emit('SHOW_MESSAGE', 'I004', () => {
+          utils.restPost('/api/deleteHouse', {house:{_id: house._id}}).then(
+            response => {
+              if (response) {
+                manager.houses.splice(index, 1)
+              }
+            }
+          )
+        })
       },
       selectHouse(house) {
         utils.restPost('/api/selectHouseForRoom', {_id: house._id}).then(
