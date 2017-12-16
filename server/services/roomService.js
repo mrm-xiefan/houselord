@@ -104,11 +104,9 @@ class RoomService {
       }
     )
   }
-
   deleteRoom(user, room, next) {
     let id = room._id
     delete room._id
-    delete room.house
     room.uuser = user._id
     room.deleted = true
     let now = new Date()
@@ -128,7 +126,6 @@ class RoomService {
       }
     )
   }
-
 }
 
 export default new RoomService()

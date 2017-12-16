@@ -19,16 +19,6 @@
     pros: ["manager"],
     methods: {
       addHouse() {
-        let house = {
-          isNew: true,
-          lord: manager.user._id,
-          owner: '',
-          name: '',
-          address: '',
-          note: '',
-          image: null
-        }
-        utils.event.$emit('HOUSE_DETAIL', new House(house))
       }
     }
   }

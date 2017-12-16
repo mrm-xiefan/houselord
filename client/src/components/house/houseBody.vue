@@ -15,25 +15,25 @@
         </div>
         <div class="house-items">
           <ul>
-            <li :class="{'house-item': true, 'house-item-selected': manager.user.selectedHouse && house._id == manager.user.selectedHouse}" v-for="house in manager.houses" v-on:click="selectHouse(house)">
+            <li :class="{'house-item': true, 'house-item-selected': manager.user.selectedHouse && house._id == manager.user.selectedHouse}" v-for="(house, i) in manager.houses" v-on:click="selectHouse(house)">
               {{house.name}}
-              <i class="tag-edit fa fa-edit" v-on:click.stop="update(house)"></i>
-              <i class="tag-close fa fa-close" v-on:click.stop="remove(house, index)"></i>
+              <!-- <i class="tag-edit fa fa-edit" v-on:click.stop="update(house)"></i> -->
+              <i class="tag-close fa fa-close" v-on:click.stop="remove(house, i)"></i>
             </li>
           </ul>
         </div>
       </div>
 
-      <div class="room-area">
+      <div class="room-area" v-if="manager.rooms.length > 0">
         <div class="row" v-for="index in Math.ceil(manager.rooms.length / 3)">
           <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3]">
-            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3]" :index="index"></roomCard>
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3]"></roomCard>
           </div>
           <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3 + 1]">
-            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 1]" :index="index"></roomCard>
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 1]"></roomCard>
           </div>
           <div class="col-md-4" v-if="manager.rooms[(index - 1) * 3 + 2]">
-            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 2]" :index="index"></roomCard>
+            <roomCard :manager="manager" :room="manager.rooms[(index - 1) * 3 + 2]"></roomCard>
           </div>
         </div>
       </div>
@@ -76,9 +76,14 @@
       },
       remove(house, index) {
         utils.event.$emit('SHOW_MESSAGE', 'I004', () => {
-          utils.restPost('/api/deleteHouse', {house:{_id: house._id}}).then(
+          let isSelect = manager.user.selectedHouse == house._id
+          utils.restPost('/api/deleteHouse', {house: {_id: house._id}, isSelect: isSelect}).then(
             response => {
               if (response) {
+                if (isSelect) {
+                  manager.user.selectedHouse = null
+                  manager.rooms.splice(0, manager.rooms.length)
+                }
                 manager.houses.splice(index, 1)
               }
             }

@@ -4,9 +4,9 @@
       {{room.number}}<span class="text-gray" v-if="room.size">（{{room.size}}）</span>
       <div class="pull-right box-tools">
         <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']" v-on:click="update(room)">
-            <i class="glyphicon glyphicon-pencil"></i>
-          </button>
-        <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']" v-on:click="remove(room, index)">
+          <i class="glyphicon glyphicon-pencil"></i>
+        </button>
+        <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']" v-on:click="remove(room)">
           <i class="glyphicon glyphicon-remove"></i>
         </button>
       </div>
@@ -80,7 +80,7 @@
   import utils from '@/tool/utils.js'
 
   export default {
-    props: ['manager', 'room', 'index'],
+    props: ['manager', 'room'],
     methods: {
       deal(room) {
         manager.contract.query = {
@@ -100,12 +100,17 @@
         }
         this.$router.push({name: 'room'})
       },
-      remove(room, index) {
+      remove(room) {
         utils.event.$emit('SHOW_MESSAGE', 'I004', () => {
           utils.restPost('/api/deleteRoom', {room:{_id: room._id}}).then(
             response => {
               if (response) {
-                manager.rooms.splice(index, 1)
+                for (let i = 0; i < manager.rooms.length; i ++) {
+                  if (manager.rooms[i]._id == room._id) {
+                    manager.rooms.splice(i, 1)
+                    break
+                  }
+                }
               }
             }
           )
