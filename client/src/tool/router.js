@@ -55,20 +55,11 @@ let preloadRoom = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
   }
-  if (to.params.house) {
-    utils.restGet('/api/getHouseDetail', {_id: to.params.house}).then(
-      response => {
-        if (response) {
-          manager.selectedHouse = new House(response.house)
-          next()
-        }
-      }
-    )
+  if (!manager.room) {
+    utils.router.push({path: '/'})
+    return
   }
-  else {
-    manager.selectedHouse = null
-    next()
-  }
+  next()
 }
 let preloadContract = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {

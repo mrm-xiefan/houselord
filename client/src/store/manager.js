@@ -30,10 +30,7 @@ class Manager {
     }
 
     // for room page
-    this.room = {
-      house: null,
-      room: null
-    }
+    this.room = null
 
     // for contract page
     this.contract = {

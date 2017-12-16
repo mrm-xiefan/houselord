@@ -99,6 +99,12 @@ router.post('/addHouse', (req, res) => {
     }
   })
 })
+router.post('/updateHouse', (req, res) => {
+  logger.info('updateHouse:', JSON.stringify(req.body.params))
+  houseService.updateHouse(req.session.passport.user, req.body.params, (error, house) => {
+    res.json({error: error, data: house})
+  })
+})
 router.post('/selectHouseForRoom', (req, res) => {
   logger.info('selectHouseForRoom:', JSON.stringify(req.body.params))
   userService.selectHouse(req.session.passport.user, req.body.params._id, (error) => {
@@ -558,42 +564,6 @@ router.post('/addExpense', (req, res) => {
   logger.info('addExpense:', JSON.stringify(req.body.params))
   expenseService.insertExpense(req.session.passport.user, req.body.params.expense, (error, expense) => {
     res.json({error: error, data: expense})
-  })
-})
-
-
-
-
-
-
-router.post('/updateHouse', (req, res) => {
-  logger.info('updateHouse:', JSON.stringify(req.body.params))
-  houseService.updateHouse(req.session.passport.user, req.body.params, (error, house) => {
-    res.json({error: error, data: house})
-  })
-})
-router.post('/deleteHouse', (req, res) => {
-  logger.info('deleteHouse:', JSON.stringify(req.body.params))
-  houseService.deleteHouse(req.session.passport.user, req.body.params, (error) => {
-    res.json({error: error, data: {}})
-  })
-})
-router.post('/addOwner', (req, res) => {
-  logger.info('addOwner:', JSON.stringify(req.body.params))
-  ownerService.insertOwner(req.session.passport.user, req.body.params, (error, owner) => {
-    res.json({error: error, data: owner})
-  })
-})
-router.get('/getHouseDetail', (req, res) => {
-  let url_parts = url.parse(req.url, true)
-  logger.info('getHouseDetail: ' + JSON.stringify(url_parts.query))
-  houseService.getHouse(url_parts.query._id, (error, house) => {
-    if (error) {
-      res.json({error: error, data: null})
-    }
-    else {
-      res.json({error: null, data: {house: house}})
-    }
   })
 })
 

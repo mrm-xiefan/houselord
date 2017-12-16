@@ -50,9 +50,9 @@
         <div class="info-row contract-green" v-for="contract in room.contracts">
           <div class="contract-box">
             <div class="contract-title"><i class="fa fa-user"></i></div><div class="contract-content">{{contract.resident}}</div>
-            <div class="contract-title"><i class="fa fa-calendar"></i></div><div class="contract-content">{{contract.getStart()}} ~ {{contract.getEnd()}}</div>
-            <div class="contract-button"><i class="fa fa-money bg-green" v-on:click="pay(room, contract)"></i></div>
-            <div class="contract-button"><i class="fa fa-eye bg-green" v-on:click="view(room, contract)"></i></div>
+            <div class="contract-content">{{contract.getStart()}} ~ {{contract.getEnd()}}</div>
+            <div class="contract-button contract-pay"><i class="fa fa-money bg-green" v-on:click="pay(room, contract)"></i></div>
+            <div class="contract-button contract-view"><i class="fa fa-eye bg-green" v-on:click="view(room, contract)"></i></div>
           </div>
         </div>
       </div>
@@ -205,6 +205,7 @@
     margin: 5px;
     width: 100%;
     overflow: hidden;
+    position: relative;
   }
   .contract-title {
     width: 20px;
@@ -215,7 +216,7 @@
     float: left;
   }
   .contract-button {
-    float: right;
+    position: absolute;
     padding-right: 3px;
     padding-left: 3px;
     cursor: pointer;
@@ -226,6 +227,14 @@
   .contract-button i {
     padding: 2px;
     border-radius: 5px;
+  }
+  .contract-pay {
+    top: 0px;
+    right: 0px;
+  }
+  .contract-view {
+    top: 0px;
+    right: 25px;
   }
   .box-footer {
     display: flex;
