@@ -172,6 +172,12 @@ router.post('/saveContract', (req, res) => {
     }
   })
 })
+router.post('/updateContract', (req, res) => {
+  logger.info('updateContract:', JSON.stringify(req.body.params))
+  contractService.updateContract(req.session.passport.user, req.body.params, (error) => {
+    res.json({error: error, data: {}})
+  })
+})
 router.get('/getPaymentData', (req, res) => {
   let url_parts = url.parse(req.url, true)
   logger.info('getPaymentData:', JSON.stringify(url_parts.query))

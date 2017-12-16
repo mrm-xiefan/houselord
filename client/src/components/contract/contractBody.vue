@@ -43,15 +43,15 @@
             <div class="input-group">
               <label class="input-label">入室金：</label>
               <div class="input-text">
-                <input v-model="manager.contract.contract.keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.keyMoney" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label"><span class="text-red require">(＊)</span>家賃：</label>
+              <label class="input-label"><span class="text-red require" v-if="manager.contract.contract.isNew">(＊)</span>家賃：</label>
               <div class="input-text">
-                <input v-model="manager.contract.contract.rent" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.rent" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@
             <div class="input-group">
               <label class="input-label">敷金：</label>
               <div class="input-text">
-                <input v-model="manager.contract.contract.deposit" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.deposit" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
@@ -69,7 +69,7 @@
             <div class="input-group">
               <label class="input-label">火災保険：</label>
               <div class="input-text">
-                <input v-model="manager.contract.contract.fireInsurance" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.fireInsurance" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@
             <div class="input-group">
               <label class="input-label">清潔費：</label>
               <div class="input-text">
-                <input v-model="manager.contract.contract.clean" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.clean" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@
             <div class="input-group">
               <label class="input-label">設備費：</label>
               <div class="input-text">
-                <input v-model="manager.contract.contract.facility" type="number" class="form-control" step="1000" placeholder="入力">
+                <input v-model="manager.contract.contract.facility" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
@@ -93,25 +93,25 @@
         <div class="row">
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label"><span class="text-red require">(＊)</span>開始日：</label>
+              <label class="input-label"><span class="text-red require" v-if="manager.contract.contract.isNew">(＊)</span>開始日：</label>
               <div class="input-text">
-                <input id="start-date" type="text" class="form-control" placeholder="選択">
+                <input id="start-date" type="text" class="form-control" placeholder="選択" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label"><span class="text-red require">(＊)</span>初回支払：</label>
+              <label class="input-label"><span class="text-red require" v-if="manager.contract.contract.isNew">(＊)</span>初回支払：</label>
               <div class="input-text">
-                <input id="first-date" type="text" class="form-control" placeholder="選択">
+                <input id="first-date" type="text" class="form-control" placeholder="選択" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label"><span class="text-red require">(＊)</span>終了日：</label>
+              <label class="input-label"><span class="text-red require" v-if="manager.contract.contract.isNew">(＊)</span>終了日：</label>
               <div class="input-text">
-                <input id="end-date" type="text" class="form-control" placeholder="選択">
+                <input id="end-date" type="text" class="form-control" placeholder="選択" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
@@ -144,16 +144,16 @@
                   </td>
                   <td>{{fee.name}}</td>
                   <td class="input-column">
-                    <input v-model="fee.base" type="number" step=1000 class="form-control">
+                    <input v-model="fee.base" type="number" step=1000 class="form-control" :disabled="!manager.contract.contract.isNew">
                   </td>
                   <td class="input-column">
-                    <input v-model="fee.price" type="number" step=1000 class="form-control" v-if="isMeter(fee)">
+                    <input v-model="fee.price" type="number" step=1000 class="form-control" v-if="isMeter(fee)" :disabled="!manager.contract.contract.isNew">
                   </td>
                   <td class="input-column">
-                    <input v-model="fee.read" type="number" step=1 class="form-control" v-if="isMeter(fee)">
+                    <input v-model="fee.read" type="number" step=1 class="form-control" v-if="isMeter(fee)" :disabled="!manager.contract.contract.isNew">
                   </td>
                   <td class="input-column">
-                    <div class="btn btn-danger btn-minimum pull-right" v-on:click="removeFee(index)">
+                    <div class="btn btn-danger btn-minimum pull-right" v-on:click="removeFee(index)" v-if="manager.contract.contract.isNew">
                       <i class="fa fa-close"></i> 削除
                     </div>
                   </td>
@@ -162,7 +162,7 @@
             </table>
           </div>
           <div class="box-footer">
-            <button class="btn btn-primary pull-right" v-on:click="addFee">
+            <button class="btn btn-primary pull-right" v-on:click="addFee" v-if="manager.contract.contract.isNew">
               <i class="fa fa-plus-circle"></i> 追加
             </button>
           </div>
@@ -264,33 +264,49 @@
       },
       saveContract() {
         let self = this
-        manager.contract.contract.keyMoney = Number(manager.contract.contract.keyMoney)
-        manager.contract.contract.rent = Number(manager.contract.contract.rent)
-        manager.contract.contract.deposit = Number(manager.contract.contract.deposit)
-        manager.contract.contract.fireInsurance = Number(manager.contract.contract.fireInsurance)
-        manager.contract.contract.clean = Number(manager.contract.contract.clean)
-        manager.contract.contract.facility = Number(manager.contract.contract.facility)
-        if (self.check()) {
-          let contract = {
-            lord: manager.user._id,
-            house: manager.contract.house._id,
-            room: manager.contract.room._id,
+        if (manager.contract.contract.isNew) {
+          manager.contract.contract.keyMoney = Number(manager.contract.contract.keyMoney)
+          manager.contract.contract.rent = Number(manager.contract.contract.rent)
+          manager.contract.contract.deposit = Number(manager.contract.contract.deposit)
+          manager.contract.contract.fireInsurance = Number(manager.contract.contract.fireInsurance)
+          manager.contract.contract.clean = Number(manager.contract.contract.clean)
+          manager.contract.contract.facility = Number(manager.contract.contract.facility)
+          if (self.check()) {
+            let contract = {
+              lord: manager.user._id,
+              house: manager.contract.house._id,
+              room: manager.contract.room._id,
+              resident: manager.contract.contract.resident,
+              phone: manager.contract.contract.phone,
+              note: manager.contract.contract.note,
+              start: manager.contract.contract.start,
+              end: manager.contract.contract.end,
+              first: manager.contract.contract.first,
+              keyMoney: manager.contract.contract.keyMoney,
+              rent: manager.contract.contract.rent,
+              deposit: manager.contract.contract.deposit,
+              fireInsurance: manager.contract.contract.fireInsurance,
+              clean: manager.contract.contract.clean,
+              facility: manager.contract.contract.facility,
+              fees: manager.contract.contract.fees
+            }
+            let payments = self.generatePayments()
+            utils.restPost('/api/saveContract', {contract: contract, payments: payments}).then(
+              response => {
+                if (response) {
+                  self.$router.push({name: 'house'})
+                }
+              }
+            )
+          }
+        }
+        else {
+          utils.restPost('/api/updateContract', {
+            _id: manager.contract.contract._id,
             resident: manager.contract.contract.resident,
             phone: manager.contract.contract.phone,
-            note: manager.contract.contract.note,
-            start: manager.contract.contract.start,
-            end: manager.contract.contract.end,
-            first: manager.contract.contract.first,
-            keyMoney: manager.contract.contract.keyMoney,
-            rent: manager.contract.contract.rent,
-            deposit: manager.contract.contract.deposit,
-            fireInsurance: manager.contract.contract.fireInsurance,
-            clean: manager.contract.contract.clean,
-            facility: manager.contract.contract.facility,
-            fees: manager.contract.contract.fees
-          }
-          let payments = self.generatePayments()
-          utils.restPost('/api/saveContract', {contract: contract, payments: payments}).then(
+            note: manager.contract.contract.note
+          }).then(
             response => {
               if (response) {
                 self.$router.push({name: 'house'})

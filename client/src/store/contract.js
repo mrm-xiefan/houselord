@@ -5,6 +5,7 @@ import Payment from './payment.js'
 
 class Contract {
   constructor(data) {
+    this.isNew = data.isNew
     this._id = data._id
 
     this.resident = data.resident

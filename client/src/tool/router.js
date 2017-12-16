@@ -88,6 +88,7 @@ let preloadContract = (to, from, next) => {
         }
         else {
           manager.contract.contract = new Contract({
+            isNew: true,
             resident: '',
             phone: '',
             note: '',
