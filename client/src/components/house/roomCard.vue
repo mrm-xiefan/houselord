@@ -217,7 +217,7 @@
     float: left;
   }
   .contract-content {
-    min-width: 80px;
+    min-width: 50px;
     float: left;
   }
   .contract-button {
