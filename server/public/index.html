@@ -1,9 +1,4 @@
 <!DOCTYPE HTML>
-<!--
-	Intensify by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
 <html>
 	<head>
 		<title>HouseLord</title>
@@ -95,7 +90,7 @@
 		<!-- Three -->
 			<section id="three" class="wrapper">
 				<div class="inner flex flex-3">
-					<div class="flex-item box">
+					<div class="flex-item box" onclick=openHouseLord()>
 						<div class="image fit">
 							<img src="homepage/images/pic01.jpeg" alt="" />
 						</div>
@@ -146,6 +141,10 @@
 			<script src="homepage/assets/js/skel.min.js"></script>
 			<script src="homepage/assets/js/util.js"></script>
 			<script src="homepage/assets/js/main.js"></script>
-
+			<script type="text/javascript">
+				function openHouseLord() {
+					location.replace(location.protocol + '//' + location.host + '/houselord');
+				}
+			</script>
 	</body>
 </html>

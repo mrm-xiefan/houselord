@@ -2559,6 +2559,11 @@
 
 /* Flex */
 
+	.flex-item:hover {
+		box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.4);
+		cursor: pointer;
+	}
+
 	.flex {
 		display: -ms-flexbox;
 		-ms-flex-wrap: nowrap;
@@ -2613,9 +2618,9 @@
 					flex-basis: 100%;
 				}
 
-					.flex.flex-3 .flex-item.left {
-						text-align: right;
-					}
+				.flex.flex-3 .flex-item.left {
+					text-align: right;
+				}
 
 		}
 
