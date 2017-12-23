@@ -13,28 +13,25 @@
       </div>
       <ul id='side-menu-tree' class="sidebar-menu" data-widget="tree">
         <li class="header">ナビゲーション</li>
-        <li :class="{'treeview': true, 'active': manager.controller.currentApp == 'house' || manager.controller.currentApp == 'addHouse'}">
-          <a href="#">
+        <li :class="{'active': manager.controller.currentApp == 'house' || manager.controller.currentApp == 'addHouse'}">
+          <router-link to="/house">
             <i class="fa fa-home"></i>
-            <span>ハウス</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
+            <span>物件管理</span>
+          </router-link>
+          <!-- <ul class="treeview-menu">
             <li :class="{'active': manager.controller.currentApp == 'house'}">
               <router-link to="/house">
-                <i class="fa fa-circle-o"></i> ハウス一覧
+                <i class="fa fa-circle-o"></i> 物件一覧
               </router-link>
             </li>
             <li :class="{'active': manager.controller.currentApp == 'addHouse'}">
               <router-link to="/addHouse">
-                <i class="fa fa-circle-o"></i> ハウス登録
+                <i class="fa fa-circle-o"></i> 物件登録
               </router-link>
             </li>
-          </ul>
+          </ul> -->
         </li>
-        <li :class="{'active': manager.controller.currentApp == 'owner'}">
+        <!-- <li :class="{'active': manager.controller.currentApp == 'owner'}">
           <router-link to="/owner">
             <i class="fa fa-users"></i> <span>オーナー</span>
           </router-link>
@@ -43,7 +40,7 @@
           <router-link to="/layout">
             <i class="fa fa-th-large"></i> <span>間取り</span>
           </router-link>
-        </li>
+        </li> -->
         <li :class="{'active': manager.controller.currentApp == 'meter'}">
           <router-link to="/meter">
             <i class="fa fa-tachometer"></i> <span>メーター</span>
@@ -51,7 +48,7 @@
         </li>
         <li :class="{'active': manager.controller.currentApp == 'expense'}">
           <router-link to="/expense">
-            <i class="fa fa-money"></i> <span>経費</span>
+            <i class="fa fa-money"></i> <span>経費管理</span>
           </router-link>
         </li>
         <li :class="{'active': manager.controller.currentApp == 'report'}">

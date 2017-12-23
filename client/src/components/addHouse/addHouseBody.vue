@@ -2,13 +2,13 @@
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
       <div class="bg-blue add-header">
-        <i class="fa fa-edit"></i> ハウス詳細
+        <i class="fa fa-edit"></i> 物件詳細
       </div>
 
       <div class="bg-gray-light add-body">
-        <h4>1.ハウス情報を入力する</h4>
+        <h4>1.物件情報を入力する</h4>
         <div class="input-group">
-          <label class="input-label"><span class="text-red require">(＊)</span>ハウス名：</label>
+          <label class="input-label"><span class="text-red require">(＊)</span>物件名：</label>
           <div class="input-text">
             <input v-model="name" type="text" class="form-control" placeholder="入力">
           </div>

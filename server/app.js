@@ -306,7 +306,70 @@ app.get('/logout', (req, res) => {
 
 
 
-// app.use(express.static(path.join(__dirname, '..', 'dist')))
+let mimeTypes = {
+  '.js': 'text/javascript',
+  '.css': 'text/css',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.ico': 'image/x-icon',
+  '.svg': 'image/svg+xml',
+  '.ttf': 'font/ttf',
+  '.otf': 'font/opentype',
+  '.woff': 'application/font-woff',
+  '.woff2': 'application/font-woff2',
+  '.eot': 'application/vnd.ms-fontobject'
+}
+let returnResourceFile = (req, res) => {
+  let publicDirectory = fs.realpathSync('public')
+  let decodedUri = decodeURI(req.url)
+  let fileFullPathArray = path.join(publicDirectory, decodedUri).split('?')
+  let fileFullPath = fileFullPathArray[0]
+  let st = fs.statSync(fileFullPath)
+  let etag = '"' + st.size + '-' + Number(st.mtime) + '"'
+  if (req.headers['if-none-match'] === etag) {
+    res.writeHead(304)
+    res.end()
+  } else {
+    let ext = path.extname(path.basename(decodedUri).split('?')[0])
+    let mimeType = 'application/octet-stream'
+    if (mimeTypes[ext]) {
+      mimeType = mimeTypes[ext]
+    }
+    fs.exists(fileFullPath, (exists) => {
+      if (exists) {
+        fs.readFile(fileFullPath, (err, data) => {
+          if (err) {
+            res.writeHead(500)
+            res.end('Internal Server Error')
+          } else {
+            let headers = {
+                'Content-Type': mimeType,
+                'Etag': etag
+            }
+            res.writeHead(200, headers)
+            res.end(data)
+          }
+        })
+      } else {
+        res.writeHead(404)
+        res.end('Nod found.')
+      }
+    })
+  }
+}
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
+app.get('/homepage/*', (req, res) => {
+  req.url = req.url.replace('/homepage/', '/')
+  returnResourceFile(req, res)
+})
+
+
+
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'))
 })

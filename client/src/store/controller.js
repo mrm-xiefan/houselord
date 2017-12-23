@@ -24,4 +24,5 @@ class Controller {
     return manager.user.isLogin()
   }
 }
+
 export default Controller

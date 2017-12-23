@@ -1,12 +1,12 @@
 <template>
   <div class="content-wrapper">
     <div class="add-info bg-teal">
-      ハウスはまだ登録されていません。早速登録して、HouseLordを使ってみましょう。
+      物件はまだ登録されていません。早速登録して、HouseLordを使ってみましょう。
     </div>
     <section class="content" v-on:click="closeSide">
       <div class="add-house-guide">
         <div class="add-house-button" v-on:click="addHouse()">
-          <i class="fa fa-plus"></i> ハウスを登録する
+          <i class="fa fa-plus"></i> 物件を登録する
         </div>
       </div>
     </section>
