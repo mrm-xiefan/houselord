@@ -19,7 +19,7 @@
         <div class="row">
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label">入室金：</label>
+              <label class="input-label">礼金：</label>
               <div class="input-text">
                 <input v-model="manager.room.keyMoney" type="number" class="form-control" step="1000" placeholder="入力">
               </div>

@@ -6,7 +6,7 @@ import register from '@/components/register'
 import error from '@/components/error'
 import home from '@/components/home/home'
 import house from '@/components/house/house'
-import addHouse from '@/components/addHouse/addHouse'
+import addHouses from '@/components/addHouse/addHouses'
 import room from '@/components/room/room'
 import contract from '@/components/contract/contract'
 import payment from '@/components/payment/payment'
@@ -88,7 +88,7 @@ let preloadContract = (to, from, next) => {
             deposit: manager.contract.room.deposit,
             fireInsurance: 0,
             clean: 0,
-            facility: 0,
+            management: manager.contract.room.management,
             fees: JSON.parse(JSON.stringify(manager.contract.room.fees)) || [],
             start: 0,
             end: 0,
@@ -175,7 +175,7 @@ export default new Router({
     {name: 'error', path: '/error', component: error},
     {name: 'home', path: '/', component: home, beforeEnter: preloadHome},
     {name: 'house', path: '/house', component: house, beforeEnter: preloadHouse},
-    {name: 'addHouse', path: '/addHouse', component: addHouse, beforeEnter: preloadAddHouse},
+    {name: 'addHouses', path: '/addHouses', component: addHouses, beforeEnter: preloadAddHouse},
     {name: 'room', path: '/room', component: room, beforeEnter: preloadRoom},
     {name: 'contract', path: '/contract', component: contract, beforeEnter: preloadContract},
     {name: 'payment', path: '/payment', component: payment, beforeEnter: preloadPayment},

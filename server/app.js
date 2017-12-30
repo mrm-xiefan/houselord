@@ -345,8 +345,8 @@ let returnResourceFile = (req, res) => {
             res.end('Internal Server Error')
           } else {
             let headers = {
-                'Content-Type': mimeType,
-                'Etag': etag
+              'Content-Type': mimeType,
+              'Etag': etag
             }
             res.writeHead(200, headers)
             res.end(data)

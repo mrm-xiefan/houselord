@@ -27,7 +27,7 @@ class Payment {
   }
   getType() {
     if (this.type == 'keyMoney') {
-      return '入室金'
+      return '礼金'
     }
     else if (this.type == 'deposit') {
       return '敷金'
@@ -39,10 +39,10 @@ class Payment {
       return '火災保険'
     }
     else if (this.type == 'clean') {
-      return '清潔費'
+      return 'クリニング費'
     }
-    else if (this.type == 'facility') {
-      return '設備費'
+    else if (this.type == 'management') {
+      return '管理費'
     }
     else {
       if (CONST.feeTypes[this.type]) {

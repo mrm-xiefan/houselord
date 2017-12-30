@@ -15,7 +15,7 @@
       <div class="info-row">
         <div class="money-box">
           <div class="money-row">
-            <div class="money-title">入室金：</div><div class="money-amount">{{room.getKeyMoney()}}</div>
+            <div class="money-title">礼金：</div><div class="money-amount">{{room.getKeyMoney()}}</div>
           </div>
           <div class="money-row">
             <div class="money-title">家賃：</div><div class="money-amount">{{room.getRent()}}</div>
@@ -23,10 +23,13 @@
           <div class="money-row">
             <div class="money-title">敷金：</div><div class="money-amount">{{room.getDeposit()}}</div>
           </div>
+          <div class="money-row">
+            <div class="money-title">管理費：</div><div class="money-amount">{{room.getManagement()}}</div>
+          </div>
         </div>
         <div class="status-box">
           <div class="badge bg-green" v-if="room.isRented()">
-            レンタル中
+            入居中
           </div>
           <div class="badge bg-blue" v-else>
             空室

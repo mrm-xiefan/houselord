@@ -55,9 +55,13 @@ router.post('/addHouse', (req, res) => {
   let document = {
     lord: req.body.params.lord,
     name: req.body.params.name,
-    address: req.body.params.address,
     floor: req.body.params.floor,
-    note: req.body.params.note
+    built: req.body.params.build,
+    construction: req.body.params.construction,
+    address: req.body.params.address,
+    traffic: req.body.params.traffic,
+    note: req.body.params.note,
+    photos: req.body.params.photos
   }
   houseService.insertHouse(req.session.passport.user, document, (error, house) => {
     if (error) {
@@ -69,9 +73,11 @@ router.post('/addHouse', (req, res) => {
         house,
         req.body.params.floor,
         req.body.params.room,
+        req.body.params.aspect,
         req.body.params.keyMoney,
         req.body.params.rent,
         req.body.params.deposit,
+        req.body.params.management,
         req.body.params.fees,
         (error, rooms) => {
           if (error) {
@@ -369,6 +375,12 @@ router.post('/recontract', (req, res) => {
       })
     }),
     new Promise((resolve, reject) => {
+      paymentService.updatePayment(req.session.passport.user, req.body.params.management, (error) => {
+        if (error) return reject(error)
+        resolve()
+      })
+    }),
+    new Promise((resolve, reject) => {
       let contract = req.body.params.contract
       contract.house = req.body.params.house
       contract.room = req.body.params.room
@@ -379,7 +391,7 @@ router.post('/recontract', (req, res) => {
     })
   ]).then((values) => {
     res.json({error: null, data: {
-      payments: values[2]
+      payments: values[3]
     }})
   }, (reason) => {
     res.json({error: reason, data: null})
@@ -466,12 +478,12 @@ router.post('/readMeter', (req, res) => {
         })
       })
     }),
-    new Promise((resolve, reject) => {
-      expenseService.insertExpense(req.session.passport.user, req.body.params.expense, (error) => {
-        if (error) return reject(error)
-        resolve()
-      })
-    })
+    // new Promise((resolve, reject) => {
+    //   expenseService.insertExpense(req.session.passport.user, req.body.params.expense, (error) => {
+    //     if (error) return reject(error)
+    //     resolve()
+    //   })
+    // })
   ]).then((values) => {
     res.json({error: null, data: {}})
   }, (reason) => {

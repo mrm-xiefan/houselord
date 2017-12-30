@@ -63,7 +63,7 @@
           <div class="row">
             <div class="col-md-4">
               <div class="input-group">
-                <label class="input-label">開始日：</label>
+                <label class="input-label">入居日：</label>
                 <label class="input-text label-border">{{start}}</label>
               </div>
             </div>
@@ -196,19 +196,26 @@
             end: self.end
           }
           let deposit = null
+          let management = null
           for (let i = 0; i < self.contract.payments.length; i ++) {
             if (self.contract.payments[i].type == 'deposit' && self.contract.payments[i].DRCR == 'CR') {
               deposit = {
                 _id: this.contract.payments[i]._id,
                 plan: this.end
               }
-              break
+            }
+            if (self.contract.payments[i].type == 'clean' && self.contract.payments[i].DRCR == 'DR') {
+              management = {
+                _id: this.contract.payments[i]._id,
+                plan: this.end
+              }
             }
           }
           let payments = self.generatePayments()
           utils.restPost('/api/recontract', {
             contract: contract,
             deposit: deposit,
+            management: management,
             payments: payments,
             house: manager.payment.house._id,
             room: manager.payment.room._id
@@ -222,6 +229,14 @@
                 if (deposit) {
                   for (let i = 0; i < self.contract.payments.length; i ++) {
                     if (self.contract.payments[i]._id == deposit._id) {
+                      self.contract.payments[i].plan = self.end
+                      break
+                    }
+                  }
+                }
+                if (management) {
+                  for (let i = 0; i < self.contract.payments.length; i ++) {
+                    if (self.contract.payments[i]._id == management._id) {
                       self.contract.payments[i].plan = self.end
                       break
                     }

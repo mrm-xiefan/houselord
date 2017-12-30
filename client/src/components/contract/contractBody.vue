@@ -41,7 +41,7 @@
         <div class="row">
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label">入室金：</label>
+              <label class="input-label">礼金：</label>
               <div class="input-text">
                 <input v-model="manager.contract.contract.keyMoney" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
@@ -75,7 +75,7 @@
           </div>
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label">清潔費：</label>
+              <label class="input-label">クリニング費：</label>
               <div class="input-text">
                 <input v-model="manager.contract.contract.clean" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
@@ -83,9 +83,9 @@
           </div>
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label">設備費：</label>
+              <label class="input-label">管理費：</label>
               <div class="input-text">
-                <input v-model="manager.contract.contract.facility" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
+                <input v-model="manager.contract.contract.management" type="number" class="form-control" step="1000" placeholder="入力" :disabled="!manager.contract.contract.isNew">
               </div>
             </div>
           </div>
@@ -93,7 +93,7 @@
         <div class="row">
           <div class="col-md-4">
             <div class="input-group">
-              <label class="input-label"><span class="text-red require" v-if="manager.contract.contract.isNew">(＊)</span>開始日：</label>
+              <label class="input-label"><span class="text-red require" v-if="manager.contract.contract.isNew">(＊)</span>入居日：</label>
               <div class="input-text">
                 <input id="start-date" type="text" class="form-control" placeholder="選択" :disabled="!manager.contract.contract.isNew">
               </div>
@@ -270,7 +270,7 @@
           manager.contract.contract.deposit = Number(manager.contract.contract.deposit)
           manager.contract.contract.fireInsurance = Number(manager.contract.contract.fireInsurance)
           manager.contract.contract.clean = Number(manager.contract.contract.clean)
-          manager.contract.contract.facility = Number(manager.contract.contract.facility)
+          manager.contract.contract.management = Number(manager.contract.contract.management)
           if (self.check()) {
             let contract = {
               lord: manager.user._id,
@@ -287,7 +287,7 @@
               deposit: manager.contract.contract.deposit,
               fireInsurance: manager.contract.contract.fireInsurance,
               clean: manager.contract.contract.clean,
-              facility: manager.contract.contract.facility,
+              management: manager.contract.contract.management,
               fees: manager.contract.contract.fees
             }
             let payments = self.generatePayments()
@@ -352,15 +352,14 @@
             DRCR: 'DR',
             type: 'clean',
             amount: manager.contract.contract.clean,
-            plan: contract.start,
-            pay: now
+            plan: contract.end
           })
         }
-        if (manager.contract.contract.facility > 0) {
+        if (manager.contract.contract.management > 0) {
           payments.push({
             DRCR: 'DR',
-            type: 'facility',
-            amount: manager.contract.contract.facility,
+            type: 'management',
+            amount: manager.contract.contract.management,
             plan: contract.start,
             pay: now
           })

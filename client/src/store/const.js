@@ -41,7 +41,7 @@ let CONST = {
     'B002': 'アカウント名もしくはパスワードに誤りがあります。',
     'B003': 'アカウントはすでに存在しています。',
     'B004': '入力エラー',
-    'B005': '日付不正！開始日＜＝初回支払日＜＝終了日で入力してください。',
+    'B005': '日付不正！入居日＜＝初回支払日＜＝終了日で入力してください。',
     'B006': '500部屋以上を作成することができません。階層数もしくは部屋数を減らしてください。',
     'B007': 'まだ契約が結ばれていません。',
     'B008': '1階層には99部屋までしか登録できません。',
@@ -84,24 +84,26 @@ let CONST = {
     'I004': 'select',
     'I005': 'select'
   },
+  aspects: {
+    '1': {'name': '仲介元付（専任）', 'value': '1'},
+    '2': {'name': '仲介元付', 'value': '2'},
+    '3': {'name': '一般', 'value': '3'}
+  },
   feeTypes: {
     '1': {'name': '上水道代', 'value': '1', 'type': 'meter', 'unit': true, 'sample': '上水道メーター'},
     '2': {'name': '下水道代', 'value': '2', 'type': 'meter', 'unit': true, 'sample': '下水道メーター'},
     '3': {'name': '電気代', 'value': '3', 'type': 'meter', 'unit': true, 'sample': '電気メーター'},
     '4': {'name': 'ガス代', 'value': '4', 'type': 'meter', 'unit': true, 'sample': 'ガスメーター'},
-    '5': {'name': '管理費', 'value': '5', 'type': 'monthly', 'unit': false, 'sample': '管理費'},
-    '6': {'name': '共益費', 'value': '6', 'type': 'monthly', 'unit': false, 'sample': '共益費'},
     '7': {'name': '更新料金', 'value': '7', 'type': 'once', 'unit': false, 'sample': '更新料'},
-    '8': {'name': 'ネット代', 'value': '8', 'type': 'monthly', 'unit': false, 'sample': 'ネット代'},
-    '30': {'name': 'その他月次', 'value': '30', 'type': 'monthly', 'unit': false, 'sample': '月次雑費'},
-    '99': {'name': 'その他雑費', 'value': '99', 'type': 'once', 'unit': false, 'sample': 'その他雑費'}
+    '30': {'name': '月次雑費', 'value': '30', 'type': 'monthly', 'unit': false, 'sample': '月次費用'},
+    '99': {'name': 'その他雑費', 'value': '99', 'type': 'once', 'unit': false, 'sample': 'その他費用'}
   },
   expenseTypes: {
     '1': {'name': '上水道代', 'value': '1'},
     '2': {'name': '下水道代', 'value': '2'},
     '3': {'name': '電気代', 'value': '3'},
     '4': {'name': 'ガス代', 'value': '4'},
-    '5': {'name': '清潔費', 'value': '5'},
+    '5': {'name': 'クリニング費', 'value': '5'},
     '6': {'name': '品代', 'value': '6'},
     '7': {'name': '修理費用', 'value': '7'},
     '8': {'name': 'メンテ費用', 'value': '8'},

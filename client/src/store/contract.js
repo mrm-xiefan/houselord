@@ -16,7 +16,7 @@ class Contract {
     this.deposit = Number(data.deposit)
     this.fireInsurance = Number(data.fireInsurance)
     this.clean = Number(data.clean)
-    this.facility = Number(data.facility)
+    this.management = Number(data.management)
     this.fees = data.fees || []
 
     this.start = data.start
@@ -134,8 +134,8 @@ class Contract {
   getClean() {
     return utils.formatMoney(this.clean) + ' 円'
   }
-  getFacility() {
-    return utils.formatMoney(this.facility) + ' 円'
+  getManagement() {
+    return utils.formatMoney(this.management) + ' 円'
   }
   getStart() {
     return utils.formatDate(this.start)

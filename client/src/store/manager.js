@@ -16,6 +16,7 @@ class Manager {
     this.oldsocket = null
     this.locker = 'unlock'
 
+    this.aspects = CONST.aspects
     this.feeTypes = CONST.feeTypes
     this.expenseTypes = CONST.expenseTypes
 

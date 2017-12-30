@@ -8,7 +8,9 @@ class House {
     this.lord = data.lord
     this.name = data.name
     this.address = data.address
+    this.traffic = data.traffic
     this.note = data.note
+    this.photos = data.photos
     this.udate = data.udate
   }
 }

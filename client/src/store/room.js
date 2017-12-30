@@ -10,11 +10,15 @@ class Room {
     this.lord = data.lord
     this.house = data.house
     this.number = data.number
+    this.aspect = data.aspect
+    this.area = data.area
+    this.direction = data.direction
     this.fees = data.fees
     this.udate = data.udate
     this.keyMoney = Number(data.keyMoney)
     this.rent = Number(data.rent)
     this.deposit = Number(data.deposit)
+    this.management = Number(data.management)
     this.contracts = []
     if (data.contracts) {
       for (let i = 0; i < data.contracts.length; i ++) {
@@ -50,6 +54,14 @@ class Room {
     }
     else {
       return utils.formatMoney(this.deposit) + ' 円'
+    }
+  }
+  getManagement() {
+    if (this.getCurrentContract()) {
+      return utils.formatMoney(this.getCurrentContract().management) + ' 円'
+    }
+    else {
+      return utils.formatMoney(this.management) + ' 円 / 月'
     }
   }
   getCurrentContract() {

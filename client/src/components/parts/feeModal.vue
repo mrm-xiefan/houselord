@@ -96,9 +96,9 @@
 
     },
     updated() {
-      $("input[type='number']").off("click").on("click", function () {
-        $(this).select();
-      });
+      $("input[type='number']").off("click").on("click", () => {
+        $(this).select()
+      })
     },
     beforeDestroy() {
       utils.event.$off('FEE_DETAIL')

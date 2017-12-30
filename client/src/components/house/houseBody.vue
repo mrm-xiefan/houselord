@@ -3,14 +3,11 @@
     <section class="content" v-on:click="closeSide">
       <div class="houses-area">
         <div class="house-action">
-          <button type="button" class="btn btn-primary" v-on:click="addHouse">
-            <i class="fa fa-plus-circle"></i> 登録
+          <button type="button" class="btn btn-primary" v-on:click="addHouses">
+            <i class="fa fa-plus-circle"></i> 集合住宅登録
           </button>
           <button type="button" class="btn btn-primary">
-            <i class="fa fa-plus-circle"></i> インポート
-          </button>
-          <button type="button" class="btn btn-primary">
-            <i class="fa fa-print"></i> 印刷
+            <i class="fa fa-plus-circle"></i> 分散住宅登録
           </button>
         </div>
         <div class="house-items">
@@ -61,8 +58,8 @@
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
       },
-      addHouse() {
-        this.$router.push({name: 'addHouse'})
+      addHouses() {
+        this.$router.push({name: 'addHouses'})
       },
       update(house) {
         // manager.house = {
@@ -119,7 +116,7 @@
     justify-content: flex-end;
   }
   .house-action button {
-    width: 120px;
+    width: 140px;
     margin-right: 10px;
   }
   .house-items {
