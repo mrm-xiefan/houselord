@@ -1,7 +1,7 @@
 <template>
   <div :class="['box', 'box-solid', room.isRented()? 'bg-rent-gradient': 'bg-not-rent-gradient', 'room-card']">
     <div class="box-header">
-      {{room.number}}<span class="text-gray" v-if="room.size">（{{room.size}}）</span>
+      {{room.number}}<span class="text-gray" v-if="room.layout">（{{manager.layouts[room.layout].name}}）</span>
       <div class="pull-right box-tools">
         <button type="button" :class="['btn', room.isRented()? 'btn-success': 'btn-primary', 'btn-sm', 'daterange']" v-on:click="update(room)">
           <i class="glyphicon glyphicon-pencil"></i>
@@ -94,12 +94,9 @@
         this.$router.push({name: 'contract'})
       },
       update(room) {
-        manager.room = {
-          _id: room._id,
-          number: room.number,
-          keyMoney: room.keyMoney,
-          rent: room.rent,
-          deposit: room.deposit
+        manager.room.query = {
+          house: room.house,
+          room: room._id
         }
         this.$router.push({name: 'room'})
       },
@@ -220,7 +217,7 @@
     float: left;
   }
   .contract-content {
-    min-width: 50px;
+    min-width: 80px;
     float: left;
   }
   .contract-button {

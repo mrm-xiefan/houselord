@@ -10,15 +10,17 @@ class Room {
     this.lord = data.lord
     this.house = data.house
     this.number = data.number
-    this.aspect = data.aspect
-    this.area = data.area
-    this.direction = data.direction
-    this.fees = data.fees
+    this.aspect = data.aspect || ''
+    this.layout = data.layout || ''
+    this.area = data.area || ''
+    this.direction = data.direction || ''
+    this.fees = data.fees || []
     this.udate = data.udate
-    this.keyMoney = Number(data.keyMoney)
-    this.rent = Number(data.rent)
-    this.deposit = Number(data.deposit)
-    this.management = Number(data.management)
+    this.keyMoney = Number(data.keyMoney || 0)
+    this.rent = Number(data.rent || 0)
+    this.deposit = Number(data.deposit || 0)
+    this.management = Number(data.management || 0)
+    this.photos = data.photos || []
     this.contracts = []
     if (data.contracts) {
       for (let i = 0; i < data.contracts.length; i ++) {

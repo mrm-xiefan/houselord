@@ -6,7 +6,8 @@ import register from '@/components/register'
 import error from '@/components/error'
 import home from '@/components/home/home'
 import house from '@/components/house/house'
-import addHouses from '@/components/addHouse/addHouses'
+import addDistributedHouse from '@/components/addHouse/addDistributedHouse'
+import addCentralizedHouse from '@/components/addHouse/addCentralizedHouse'
 import room from '@/components/room/room'
 import contract from '@/components/contract/contract'
 import payment from '@/components/payment/payment'
@@ -45,7 +46,13 @@ let preloadHouse = (to, from, next) => {
     }
   )
 }
-let preloadAddHouse = (to, from, next) => {
+let preloadAddDistributedHouse = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  next()
+}
+let preloadAddCentralizedHouse = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
   }
@@ -55,11 +62,19 @@ let preloadRoom = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
   }
-  if (!manager.room) {
+  if (!manager.room.query || !manager.room.query.house || !manager.room.query.room) {
     utils.router.push({path: '/'})
     return
   }
-  next()
+  utils.restGet('/api/getRoomData', {house: manager.room.query.house, room: manager.room.query.room}).then(
+    response => {
+      if (response) {
+        manager.room.house = new House(response.house)
+        manager.room.room = new Room(response.room)
+        next()
+      }
+    }
+  )
 }
 let preloadContract = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
@@ -175,7 +190,8 @@ export default new Router({
     {name: 'error', path: '/error', component: error},
     {name: 'home', path: '/', component: home, beforeEnter: preloadHome},
     {name: 'house', path: '/house', component: house, beforeEnter: preloadHouse},
-    {name: 'addHouses', path: '/addHouses', component: addHouses, beforeEnter: preloadAddHouse},
+    {name: 'addDistributedHouse', path: '/addDistributedHouse', component: addDistributedHouse, beforeEnter: preloadAddDistributedHouse},
+    {name: 'addCentralizedHouse', path: '/addCentralizedHouse', component: addCentralizedHouse, beforeEnter: preloadAddCentralizedHouse},
     {name: 'room', path: '/room', component: room, beforeEnter: preloadRoom},
     {name: 'contract', path: '/contract', component: contract, beforeEnter: preloadContract},
     {name: 'payment', path: '/payment', component: payment, beforeEnter: preloadPayment},

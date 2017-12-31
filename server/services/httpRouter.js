@@ -5,6 +5,7 @@ import url from 'url'
 import logger from './logger.js'
 import conf from 'config'
 import mongo from './mongo.js'
+import {ObjectId} from 'mongodb'
 import userService from './userService.js'
 import houseService from './houseService.js'
 import roomService from './roomService.js'
@@ -50,8 +51,8 @@ router.get('/getHouseData', (req, res) => {
     res.json({error: reason, data: null})
   })
 })
-router.post('/addHouse', (req, res) => {
-  logger.info('addHouse:', JSON.stringify(req.body.params))
+router.post('/addCentralizedHouse', (req, res) => {
+  logger.info('addCentralizedHouse:', JSON.stringify(req.body.params))
   let document = {
     lord: req.body.params.lord,
     name: req.body.params.name,
@@ -105,9 +106,46 @@ router.post('/addHouse', (req, res) => {
     }
   })
 })
+router.post('/addDistributedHouse', (req, res) => {
+  logger.info('addDistributedHouse:', JSON.stringify(req.body.params))
+  houseService.insertHouse(req.session.passport.user, req.body.params.house, (error, house) => {
+    if (error) {
+      res.json({error: error, data: null})
+    }
+    else {
+      req.body.params.room.house = ObjectId(house._id)
+      roomService.insertRoom(
+        req.session.passport.user,
+        req.body.params.room,
+        (error, room) => {
+          if (error) {
+            res.json({error: error, data: null})
+          }
+          else {
+            meterService.insertMeters(req.session.passport.user, [room], (error) => {
+              if (error) {
+                res.json({error: error, data: null})
+              }
+              else {
+                userService.selectHouse(req.session.passport.user, house._id, (error) => {
+                  if (error) {
+                    res.json({error: error, data: null})
+                  }
+                  else {
+                    res.json({error: error, data: {house: house, room, room}})
+                  }
+                })
+              }
+            })
+          }
+        }
+      )
+    }
+  })
+})
 router.post('/updateHouse', (req, res) => {
   logger.info('updateHouse:', JSON.stringify(req.body.params))
-  houseService.updateHouse(req.session.passport.user, req.body.params, (error, house) => {
+  houseService.updateHouse(req.session.passport.user, req.body.params.house, (error, house) => {
     res.json({error: error, data: house})
   })
 })
@@ -130,6 +168,27 @@ router.post('/deleteHouse', (req, res) => {
       else {
         resolve(null)
       }
+    })
+  ]).then((values) => {
+    res.json({error: null, data: {}})
+  }, (reason) => {
+    res.json({error: reason, data: null})
+  })
+})
+router.post('/saveRoom', (req, res) => {
+  logger.info('saveRoom:', JSON.stringify(req.body.params))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      houseService.updateHouse(req.session.passport.user, req.body.params.house, (error) => {
+        if (error) return reject(error)
+        resolve(null)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      roomService.updateRoom(req.session.passport.user, req.body.params.room, (error, room) => {
+        if (error) return reject(error)
+        resolve(null)
+      })
     })
   ]).then((values) => {
     res.json({error: null, data: {}})
@@ -167,6 +226,34 @@ router.post('/selectHouseForRoom', (req, res) => {
         }
       })
     }
+  })
+})
+router.get('/getRoomData', (req, res) => {
+  let url_parts = url.parse(req.url, true)
+  logger.info('getRoomData:', JSON.stringify(url_parts.query))
+  Promise.all([
+    new Promise((resolve, reject) => {
+      houseService.getHouse(url_parts.query.house, (error, house) => {
+        if (error) return reject(error)
+        resolve(house)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      roomService.getRoom(url_parts.query.room, (error, room) => {
+        if (error) return reject(error)
+        resolve(room)
+      })
+    })
+  ]).then((values) => {
+    res.json({
+      error: null,
+      data: {
+        house: values[0],
+        room: values[1]
+      }
+    })
+  }, (reason) => {
+    res.json({error: reason, data: null})
   })
 })
 router.get('/getContractData', (req, res) => {

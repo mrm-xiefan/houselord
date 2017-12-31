@@ -17,6 +17,9 @@ class Manager {
     this.locker = 'unlock'
 
     this.aspects = CONST.aspects
+    this.layouts = CONST.layouts
+    this.constructions = CONST.constructions
+    this.directions = CONST.directions
     this.feeTypes = CONST.feeTypes
     this.expenseTypes = CONST.expenseTypes
 
@@ -31,7 +34,11 @@ class Manager {
     }
 
     // for room page
-    this.room = null
+    this.room = {
+      query: null,
+      house: null,
+      room: null
+    }
 
     // for contract page
     this.contract = {

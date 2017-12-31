@@ -5,8 +5,11 @@
     </div>
     <section class="content" v-on:click="closeSide">
       <div class="add-house-guide">
-        <div class="add-house-button" v-on:click="addHouses()">
+        <div class="add-house-button" v-on:click="addCentralizedHouse()">
           <i class="fa fa-plus"></i> 集合住宅物件を登録する
+        </div>
+        <div class="add-house-button" v-on:click="addDistributedHouse()">
+          <i class="fa fa-plus"></i> 分散住宅物件を登録する
         </div>
       </div>
     </section>
@@ -18,10 +21,14 @@
   import manager from '@/store/manager.js'
   import utils from '@/tool/utils.js'
 
+  import 'jquery-ui-touch-punch/jquery.ui.touch-punch.js'
   export default {
     props: ['manager'],
     mounted() {
       $('body').layout('fix')
+      $(".add-house-button").draggable({
+        containment: $('.add-house-guide')
+      })
     },
     methods: {
       closeSide() {
@@ -29,8 +36,11 @@
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
       },
-      addHouses() {
-        this.$router.push({name: 'addHouses'})
+      addCentralizedHouse() {
+        this.$router.push({name: 'addCentralizedHouse'})
+      },
+      addDistributedHouse() {
+        this.$router.push({name: 'addDistributedHouse'})
       }
     }
   }
@@ -48,7 +58,7 @@
     justify-content: space-around;
     align-items: center;
     width: 300px;
-    height: 200px;
+    height: 300px;
     position: fixed;
     top: calc(50% - 100px);
     left: calc(50% - 150px);

@@ -3,10 +3,10 @@
     <section class="content" v-on:click="closeSide">
       <div class="houses-area">
         <div class="house-action">
-          <button type="button" class="btn btn-primary" v-on:click="addHouses">
+          <button type="button" class="btn btn-primary" v-on:click="addCentralizedHouse">
             <i class="fa fa-plus-circle"></i> 集合住宅登録
           </button>
-          <button type="button" class="btn btn-primary">
+          <button type="button" class="btn btn-primary" v-on:click="addDistributedHouse">
             <i class="fa fa-plus-circle"></i> 分散住宅登録
           </button>
         </div>
@@ -58,8 +58,11 @@
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
       },
-      addHouses() {
-        this.$router.push({name: 'addHouses'})
+      addCentralizedHouse() {
+        this.$router.push({name: 'addCentralizedHouse'})
+      },
+      addDistributedHouse() {
+        this.$router.push({name: 'addDistributedHouse'})
       },
       update(house) {
         // manager.house = {
@@ -72,7 +75,7 @@
         // this.$router.push({name: 'room'})
       },
       remove(house, index) {
-        utils.event.$emit('SHOW_MESSAGE', 'I004', () => {
+        utils.event.$emit('SHOW_MESSAGE', 'I005', () => {
           let isSelect = manager.user.selectedHouse == house._id
           utils.restPost('/api/deleteHouse', {house: {_id: house._id}, isSelect: isSelect}).then(
             response => {

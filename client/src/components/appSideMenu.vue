@@ -13,23 +13,11 @@
       </div>
       <ul id='side-menu-tree' class="sidebar-menu" data-widget="tree">
         <li class="header">ナビゲーション</li>
-        <li :class="{'active': manager.controller.currentApp == 'house' || manager.controller.currentApp == 'addHouse'}">
+        <li :class="{'active': manager.controller.currentApp == 'house'}">
           <router-link to="/house">
             <i class="fa fa-home"></i>
             <span>物件管理</span>
           </router-link>
-          <!-- <ul class="treeview-menu">
-            <li :class="{'active': manager.controller.currentApp == 'house'}">
-              <router-link to="/house">
-                <i class="fa fa-circle-o"></i> 物件一覧
-              </router-link>
-            </li>
-            <li :class="{'active': manager.controller.currentApp == 'addHouse'}">
-              <router-link to="/addHouse">
-                <i class="fa fa-circle-o"></i> 物件登録
-              </router-link>
-            </li>
-          </ul> -->
         </li>
         <!-- <li :class="{'active': manager.controller.currentApp == 'owner'}">
           <router-link to="/owner">

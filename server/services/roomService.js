@@ -10,7 +10,7 @@ class RoomService {
   getRoom(_id, next) {
     mongo.findAll(
       'rooms',
-      {_id: ObjectId(_id),deleted: {$ne: true}},
+      {_id: ObjectId(_id), deleted: {$ne: true}},
       {},
       {},
       (error, result) => {
@@ -83,10 +83,35 @@ class RoomService {
       }
     )
   }
+  insertRoom(user, room, next) {
+    for (let i = 0; i < room.fees.length; i ++) {
+      let fee = room.fees[i]
+      if (fee.meter) {
+        fee.meter = ObjectId()
+      }
+    }
+    room.cuser = user._id
+    room.uuser = user._id
+    let now = new Date()
+    room.cdate = now.valueOf()
+    room.udate = now.valueOf()
+    mongo.insert(
+      'rooms',
+      room,
+      {},
+      (error, result) => {
+        if (error) {
+          next(error, null)
+        }
+        else {
+          next(null, result.ops[0])
+        }
+      }
+    )
+  }
   updateRoom(user, room, next) {
     let id = room._id
     delete room._id
-    delete room.house
     room.uuser = user._id
     let now = new Date()
     room.udate = now.valueOf()

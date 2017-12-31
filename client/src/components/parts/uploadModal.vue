@@ -54,7 +54,7 @@
       uploadUrl += 'uploadFiles'
       $('#upload-input').fileinput({
         uploadUrl: uploadUrl,
-        // allowedFileExtensions : null,
+        allowedFileExtensions : ['JPG', 'JPEG', 'PNG', 'TIF', 'TIFF'],
         // overwriteInitial: false,
         maxFilesNum: 20,
         maxFileSize: 2000000,
