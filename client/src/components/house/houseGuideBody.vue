@@ -1,7 +1,7 @@
 <template>
   <div class="content-wrapper">
     <div class="add-info bg-teal">
-      物件はまだ登録されていません。早速登録して、HouseLordを使ってみましょう。
+      物件はまだ登録されていません。早速登録して、ReinsManageを使ってみましょう。
     </div>
     <section class="content" v-on:click="closeSide">
       <div class="add-house-guide">

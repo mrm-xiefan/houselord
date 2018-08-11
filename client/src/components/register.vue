@@ -3,7 +3,7 @@
     <div class="fullscreen">
       <div class="login-box">
         <div class="login-logo">
-          HouseLord
+          ReinsManage
         </div>
         <div class="login-box-body">
           <p class="login-box-msg">アカウントの作成</p>

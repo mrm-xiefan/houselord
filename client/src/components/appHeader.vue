@@ -1,8 +1,8 @@
 <template>
   <header class="main-header">
     <a class="logo" v-on:click="triggerIcon()">
-      <span class="logo-mini"><b>HLord</b></span>
-      <span class="logo-lg">HouseLord</span>
+      <span class="logo-mini"><b>RM</b></span>
+      <span class="logo-lg">ReinsManage</span>
     </a>
     <nav class="navbar navbar-static-top">
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">

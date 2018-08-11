@@ -3,7 +3,7 @@
     <div class="fullscreen">
       <div class="login-box">
         <div class="login-logo">
-          HouseLord
+          ReinsManage
         </div>
         <div class="login-box-body">
           <p class="login-box-msg">すでにアカウントをお持ちの場合、ログインしてご利用ください。</p>
@@ -17,7 +17,7 @@
           </div>
           <div class="row">
             <div class="col-xs-8 middle-padding">
-              <router-link to="/register">アカウントを持っていない場合</router-link>
+              <router-link to="/register" style="display: none;">アカウントを持っていない場合</router-link>
             </div>
             <div class="col-xs-4">
               <button type="submit" class="btn btn-primary btn-block btn-flat" v-on:click="login()">ログイン</button>

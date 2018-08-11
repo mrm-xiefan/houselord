@@ -119,10 +119,10 @@
         }
         let amount = 0
         if (meter.lastRead() != '-') {
-          amount = Math.round(meter.price * (scale.scaleRead - meter.lastRead()) + meter.base)
+          amount = Math.round(parseInt(meter.price) * (parseInt(scale.scaleRead) - parseInt(meter.lastRead())) + parseInt(meter.base))
         }
         else {
-          amount = Math.round(meter.price * scale.scaleRead + meter.base)
+          amount = Math.round(parseInt(meter.price) * parseInt(scale.scaleRead) + parseInt(meter.base))
         }
         let expense = {
           lord: meter.lord,
