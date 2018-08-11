@@ -33,9 +33,9 @@ class ContractService {
     })
     mongo.findAll(
       'contracts',
-      {room: {$in: roomIDs}, deleted: {$ne: true}},
+      {room: {$in: roomIDs}, over: {$nin: ['finish', 'cancel']}, deleted: {$ne: true}},
       null,
-      {over: -1, start: 1},
+      {start: 1},
       (error, results) => {
         if (error) {
           next(error)
