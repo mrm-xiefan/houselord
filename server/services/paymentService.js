@@ -70,6 +70,36 @@ class PaymentService {
       }
     )
   }
+  assignDonePaymentsToContracts(contracts, next) {
+    const contractMap = new Map(contracts.map((contract) => {
+      return [String(contract._id), contract]
+    }))
+    const contractIDs = contracts.map((contract) => {
+      return ObjectId(contract._id)
+    })
+    mongo.findAll(
+      'payments',
+      {contract: {$in: contractIDs}, pay: {$ne: null}, deleted: {$ne: true}},
+      null,
+      {plan: 1},
+      (error, results) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          results.forEach((payment) => {
+            const contract = contractMap.get(String(payment.contract))
+            if (contract.payments) {
+              contract.payments.push(payment)
+            } else {
+              contract.payments = [payment]
+            }
+          })
+          next(null)
+        }
+      }
+    )
+  }
   insertPayments(user, contract, documents, next) {
     let now = new Date()
     if (!contract || !documents || documents.length <= 0) {

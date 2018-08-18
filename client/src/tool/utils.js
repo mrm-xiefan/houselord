@@ -378,6 +378,91 @@ class Utils {
   getBytes(text) {
     return(encodeURIComponent(text).replace(/%../g,"x").length)
   }
+  report(years, payment) {
+    const existYear = years.find(year => {
+      return year.text === payment.pay.format('YYYY年')
+    })
+    if (existYear) {
+      const existMonth = existYear.months.find(month => {
+        return month.text === payment.pay.format('M月')
+      })
+      if (payment.DRCR === 'DR') {
+        existYear.DR += parseInt(payment.amount)
+      }
+      if (payment.DRCR === 'CR') {
+        existYear.CR += parseInt(payment.amount)
+      }
+      if (existMonth) {
+        if (payment.DRCR === 'DR') {
+          existMonth.DR += parseInt(payment.amount)
+        }
+        if (payment.DRCR === 'CR') {
+          existMonth.CR += parseInt(payment.amount)
+        }
+      } else {
+        let month = {
+          text: payment.pay.format('M月'),
+          DR: 0,
+          CR: 0
+        }
+        if (payment.DRCR === 'DR') {
+          month.DR = parseInt(payment.amount)
+        }
+        if (payment.DRCR === 'CR') {
+          month.CR = parseInt(payment.amount)
+        }
+        existYear.months.push(month)
+      }
+    } else {
+      let year = {
+        text: payment.pay.format('YYYY年'),
+        DR: 0,
+        CR: 0,
+        months: []
+      }
+      let month = {
+        text: payment.pay.format('M月'),
+        DR: 0,
+        CR: 0
+      }
+      if (payment.DRCR === 'DR') {
+        year.DR = parseInt(payment.amount)
+        month.DR = parseInt(payment.amount)
+      }
+      if (payment.DRCR === 'CR') {
+        year.CR = parseInt(payment.amount)
+        month.CR = parseInt(payment.amount)
+      }
+      year.months.push(month)
+      years.push(year)
+    }
+  }
+  mergeReport (origin, years) {
+    for (let i = 0; i < years.length; i++) {
+      const year = years[i]
+      let existYear = origin.find(one => {
+        return year.text === one.text
+      })
+      if (existYear) {
+        for (let j = 0; j < year.months.length; j++) {
+          const month = year.months[j]
+          existYear.DR += month.DR
+          existYear.CR += month.CR
+          let existMonth = existYear.months.find(one => {
+            return month.text === one.text
+          })
+          if (existMonth) {
+            existMonth.DR += month.DR
+            existMonth.CR += month.CR
+          } else {
+            existYear.months.push(month)
+          }
+        }
+      } else {
+        origin.push(year)
+      }
+    }
+  }
 }
 
 export default new Utils()

@@ -57,6 +57,39 @@ class ContractService {
       }
     )
   }
+  assignAllContractsToRooms(rooms, next) {
+    const roomMap = new Map(rooms.map((room) => {
+      return [String(room._id), room]
+    }))
+    const roomIDs = rooms.map((room) => {
+      return ObjectId(room._id)
+    })
+    mongo.findAll(
+      'contracts',
+      {room: {$in: roomIDs}, deleted: {$ne: true}},
+      null,
+      {},
+      (error, results) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          paymentService.assignDonePaymentsToContracts(results, (error) => {
+            if (error) return next(error)
+            results.forEach((contract) => {
+              const room = roomMap.get(String(contract.room))
+              if (room.contracts) {
+                room.contracts.push(contract)
+              } else {
+                room.contracts = [contract]
+              }
+            })
+            next(null)
+          })
+        }
+      }
+    )
+  }
   insertContract(user, contract, next) {
     contract.house = ObjectId(contract.house)
     contract.room = ObjectId(contract.room)

@@ -2,17 +2,47 @@
 
   <div class="content-wrapper">
     <section class="content" v-on:click="closeSide">
-      <div class="row">
-        <div class="col-md-12">
-          <div id="chartdiv3"></div>
+      <div class="elements-area">
+        <div class="element-items">
+          <ul>
+            <li class="element-item element-item-selected" v-if="manager.report.reporting.parent" v-on:click="selectElement(manager.report.reporting.parent)">
+              <i class="fa fa-long-arrow-up"></i>
+            </li>
+            <li class="element-item" v-for="element in manager.report.reporting.elements" v-if="manager.report.reporting.elements" v-on:click="selectElement(element)">
+              {{element.name}}
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div id="chartdiv"></div>
-        </div>
-        <div class="col-md-6">
-          <div id="chartdiv2"></div>
+      <div>
+        <div class="box box-solid box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">{{manager.report.reporting.name || '全物件'}}</h3>
+          </div>
+          <div class="box-body">
+            <table class="table">
+              <tr class="bg-blue">
+                <th style="width: 70px;">年</th>
+                <th style="width: 50px;">月</th>
+                <th>収入</th>
+                <th>支出</th>
+              </tr>
+              <template v-for="year in manager.report.reporting.report">
+                <tr>
+                  <td class="bg-gray">{{year.text}}</td>
+                  <td class="bg-gray"></td>
+                  <td class="bg-gray">{{year.DR}}</td>
+                  <td class="bg-gray">{{year.CR}}</td>
+                </tr>
+                <tr v-for="month in year.months" v-if="year.months">
+                  <td class="bg-gray"></td>
+                  <td>{{month.text}}</td>
+                  <td>{{month.DR}}</td>
+                  <td>{{month.CR}}</td>
+                </tr>
+              </template>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -29,7 +59,6 @@
     props: ['manager'],
     mounted() {
       $('body').layout('fix')
-      this.showChart()
     },
     methods: {
       closeSide() {
@@ -37,424 +66,54 @@
           $('.control-sidebar').removeClass('control-sidebar-open')
         }
       },
-      showChart() {
-        AmCharts.makeChart("chartdiv",
-          {
-            "type": "serial",
-            "categoryField": "type",
-            "chartCursor": {},
-            "graphs": [
-              {
-                "type": "column",
-                "title": "Pizza types",
-                "valueField": "sold",
-                "fillAlphas": 0.8
-              }
-            ],
-
-            "dataProvider": [
-              { "type": "Margherita", "sold": 120 },
-              { "type": "Funghi", "sold": 82 },
-              { "type": "Capricciosa", "sold": 78 },
-              { "type": "Quattro Stagioni", "sold": 71 }
-            ]
-          }
-        );
-        var value = Math.round(Math.random() * 100);
-        var gauge = AmCharts.makeChart( "chartdiv2", {
-              "theme": "light",
-              "type": "gauge",
-              "axes": [{
-                "topTextFontSize": 20,
-                "topTextYOffset": 70,
-                "axisColor": "#31d6ea",
-                "axisThickness": 1,
-                "endValue": 100,
-                "gridInside": true,
-                "inside": true,
-                "radius": "50%",
-                "valueInterval": 10,
-                "tickColor": "#67b7dc",
-                "startAngle": -90,
-                "endAngle": 90,
-                "unit": "",
-                "bandOutlineAlpha": 0,
-                "bands": [{
-                  "color": "#0080ff",
-                  "endValue": 100,
-                  "innerRadius": "105%",
-                  "radius": "170%",
-                  "gradientRatio": [0.5, 0, -0.5],
-                  "startValue": 0
-                }, {
-                  "color": "#3cd3a3",
-                  "endValue": 0,
-                  "innerRadius": "105%",
-                  "radius": "170%",
-                  "gradientRatio": [0.5, 0, -0.5],
-                  "startValue": 0
-                }],
-                //"bottomText": value + " %"
-			          //,"bottomTextYOffset": -10%
-              }],
-              "arrows": [{
-                "alpha": 1,
-                "innerRadius": "20%",
-                "nailRadius": 10,
-                "radius": "150%",
-                "value": value
-              }]
-            } );
-
-            gauge.arrows[0].setValue(value);
-            gauge.axes[0].setTopText(value + " %");
-            gauge.axes[0].bands[1].setEndValue(value);
-
-        var chartData = [ {
-  "date": "2012-01-01",
-  "distance": 227,
-  "townName": "New York",
-  "townName2": "New York",
-  "townSize": 25,
-  "latitude": 40.71,
-  "duration": 408
-}, {
-  "date": "2012-01-02",
-  "distance": 371,
-  "townName": "Washington",
-  "townSize": 14,
-  "latitude": 38.89,
-  "duration": 482
-}, {
-  "date": "2012-01-03",
-  "distance": 433,
-  "townName": "Wilmington",
-  "townSize": 6,
-  "latitude": 34.22,
-  "duration": 562
-}, {
-  "date": "2012-01-04",
-  "distance": 345,
-  "townName": "Jacksonville",
-  "townSize": 7,
-  "latitude": 30.35,
-  "duration": 379
-}, {
-  "date": "2012-01-05",
-  "distance": 480,
-  "townName": "Miami",
-  "townName2": "Miami",
-  "townSize": 10,
-  "latitude": 25.83,
-  "duration": 501
-}, {
-  "date": "2012-01-06",
-  "distance": 386,
-  "townName": "Tallahassee",
-  "townSize": 7,
-  "latitude": 30.46,
-  "duration": 443
-}, {
-  "date": "2012-01-07",
-  "distance": 348,
-  "townName": "New Orleans",
-  "townSize": 10,
-  "latitude": 29.94,
-  "duration": 405
-}, {
-  "date": "2012-01-08",
-  "distance": 238,
-  "townName": "Houston",
-  "townName2": "Houston",
-  "townSize": 16,
-  "latitude": 29.76,
-  "duration": 309
-}, {
-  "date": "2012-01-09",
-  "distance": 218,
-  "townName": "Dalas",
-  "townSize": 17,
-  "latitude": 32.8,
-  "duration": 287
-}, {
-  "date": "2012-01-10",
-  "distance": 349,
-  "townName": "Oklahoma City",
-  "townSize": 11,
-  "latitude": 35.49,
-  "duration": 485
-}, {
-  "date": "2012-01-11",
-  "distance": 603,
-  "townName": "Kansas City",
-  "townSize": 10,
-  "latitude": 39.1,
-  "duration": 890
-}, {
-  "date": "2012-01-12",
-  "distance": 534,
-  "townName": "Denver",
-  "townName2": "Denver",
-  "townSize": 18,
-  "latitude": 39.74,
-  "duration": 810
-}, {
-  "date": "2012-01-13",
-  "townName": "Salt Lake City",
-  "townSize": 12,
-  "distance": 425,
-  "duration": 670,
-  "latitude": 40.75,
-  "alpha": 0.4
-}, {
-  "date": "2012-01-14",
-  "latitude": 36.1,
-  "duration": 470,
-  "townName": "Las Vegas",
-  "townName2": "Las Vegas",
-  "bulletClass": "lastBullet"
-}, {
-  "date": "2012-01-15"
-}, {
-  "date": "2012-01-16"
-}, {
-  "date": "2012-01-17"
-}, {
-  "date": "2012-01-18"
-}, {
-  "date": "2012-01-19"
-} ];
-var chart = AmCharts.makeChart( "chartdiv3", {
-  "type": "serial",
-"theme": "light",
-
-  "dataDateFormat": "YYYY-MM-DD",
-  "dataProvider": chartData,
-
-  "addClassNames": true,
-  "startDuration": 1,
-  //"color": "#FFFFFF",
-  "marginLeft": 0,
-
-  "categoryField": "date",
-  "categoryAxis": {
-    "parseDates": true,
-    "minPeriod": "DD",
-    "autoGridCount": false,
-    "gridCount": 50,
-    "gridAlpha": 0.1,
-    "gridColor": "#FFFFFF",
-    "axisColor": "#555555",
-    "dateFormats": [ {
-      "period": 'DD',
-      "format": 'DD'
-    }, {
-      "period": 'WW',
-      "format": 'MMM DD'
-    }, {
-      "period": 'MM',
-      "format": 'MMM'
-    }, {
-      "period": 'YYYY',
-      "format": 'YYYY'
-    } ]
-  },
-
-  "valueAxes": [ {
-    "id": "a1",
-    "title": "distance",
-    "gridAlpha": 0,
-    "axisAlpha": 0
-  }, {
-    "id": "a2",
-    "position": "right",
-    "gridAlpha": 0,
-    "axisAlpha": 0,
-    "labelsEnabled": false
-  }, {
-    "id": "a3",
-    "title": "duration",
-    "position": "right",
-    "gridAlpha": 0,
-    "axisAlpha": 0,
-    "inside": true,
-    "duration": "mm",
-    "durationUnits": {
-      "DD": "d. ",
-      "hh": "h ",
-      "mm": "min",
-      "ss": ""
-    }
-  } ],
-  "graphs": [ {
-    "id": "g1",
-    "valueField": "distance",
-    "title": "distance",
-    "type": "column",
-    "fillAlphas": 0.9,
-    "valueAxis": "a1",
-    "balloonText": "[[value]] miles",
-    "legendValueText": "[[value]] mi",
-    "legendPeriodValueText": "total: [[value.sum]] mi",
-    "lineColor": "#263138",
-    "alphaField": "alpha"
-  }, {
-    "id": "g2",
-    "valueField": "latitude",
-    "classNameField": "bulletClass",
-    "title": "latitude/city",
-    "type": "line",
-    "valueAxis": "a2",
-    "lineColor": "#786c56",
-    "lineThickness": 1,
-    "legendValueText": "[[value]]/[[description]]",
-    "descriptionField": "townName",
-    "bullet": "round",
-    "bulletSizeField": "townSize",
-    "bulletBorderColor": "#786c56",
-    "bulletBorderAlpha": 1,
-    "bulletBorderThickness": 2,
-    "bulletColor": "#000000",
-    "labelText": "[[townName2]]",
-    "labelPosition": "right",
-    "balloonText": "latitude:[[value]]",
-    "showBalloon": true,
-    "animationPlayed": true
-  }, {
-    "id": "g3",
-    "title": "duration",
-    "valueField": "duration",
-    "type": "line",
-    "valueAxis": "a3",
-    "lineColor": "#ff5755",
-    "balloonText": "[[value]]",
-    "lineThickness": 1,
-    "legendValueText": "[[value]]",
-    "bullet": "square",
-    "bulletBorderColor": "#ff5755",
-    "bulletBorderThickness": 1,
-    "bulletBorderAlpha": 1,
-    "dashLengthField": "dashLength",
-    "animationPlayed": true
-  } ],
-
-  "chartCursor": {
-    "zoomable": false,
-    "categoryBalloonDateFormat": "DD",
-    "cursorAlpha": 0,
-    "valueBalloonsEnabled": false
-  },
-  "legend": {
-    "bulletType": "round",
-    "equalWidths": false,
-    "valueWidth": 120,
-    "useGraphSettings": true,
-    //"color": "#FFFFFF"
-  }
-} );
-
+      selectElement(element) {
+        manager.report.reporting = element
       }
     }
   }
 </script>
 
 <style>
-#chartdiv {
-  width: 100%;
-  height: 220px;
-}
-#chartdiv2 {
-  width: 100%;
-  height: 400px;
-}
-#chartdiv3{
-  width: 100%;
-  height: 500px;
-}
-
-.amcharts-graph-g2 .amcharts-graph-stroke {
-  stroke-dasharray: 3px 3px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  -webkit-animation: am-moving-dashes 1s linear infinite;
-  animation: am-moving-dashes 1s linear infinite;
-}
-
-@-webkit-keyframes am-moving-dashes {
-  100% {
-    stroke-dashoffset: -31px;
+  .elements-area {
+    width: 100%;
+    overflow: hidden;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
   }
-}
-@keyframes am-moving-dashes {
-  100% {
-    stroke-dashoffset: -31px;
+  .element-items {
+    width: 100%;
   }
-}
-
-
-.lastBullet {
-  -webkit-animation: am-pulsating 1s ease-out infinite;
-  animation: am-pulsating 1s ease-out infinite;
-}
-@-webkit-keyframes am-pulsating {
-  0% {
-    stroke-opacity: 1;
-    stroke-width: 0px;
+  .element-items ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
   }
-  100% {
-    stroke-opacity: 0;
-    stroke-width: 50px;
+  .element-items li {
+    margin: 3px;
+    padding: 5px;
+    color: #333;
+    font-size: 12px;
+    font-weight: 100;
+    text-align: center;
+    list-style: none;
+    background: #d4d4d4;
+    border-radius: 2px;
+    cursor: pointer;
   }
-}
-@keyframes am-pulsating {
-  0% {
-    stroke-opacity: 1;
-    stroke-width: 0px;
+  .element-item-selected {
+    color: #fff !important;
+    background: #3c8dbc !important;
+    padding: 5px 10px !important;
   }
-  100% {
-    stroke-opacity: 0;
-    stroke-width: 50px;
+  .box-body {
+    padding: 1px;
   }
-}
-
-.amcharts-graph-column-front {
-  -webkit-transition: all .3s .3s ease-out;
-  transition: all .3s .3s ease-out;
-}
-.amcharts-graph-column-front:hover {
-  fill: #496375;
-  stroke: #496375;
-  -webkit-transition: all .3s ease-out;
-  transition: all .3s ease-out;
-}
-
-.amcharts-graph-g3 {
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  stroke-dasharray: 500%;
-  stroke-dasharray: 0 ;    /* fixes IE prob */
-  stroke-dashoffset: 0 ;   /* fixes IE prob */
-  -webkit-animation: am-draw 40s;
-  animation: am-draw 40s;
-}
-@-webkit-keyframes am-draw {
-    0% {
-        stroke-dashoffset: 500%;
-    }
-    100% {
-        stroke-dashoffset: 0%;
-    }
-}
-@keyframes am-draw {
-    0% {
-        stroke-dashoffset: 500%;
-    }
-    100% {
-        stroke-dashoffset: 0%;
-    }
-}
-/* OVERWRITE OUR MAIN STYLE */
-.demo-flipper-front.demo-panel-white, body {
-  background-color: #161616;
-}
+  th, td {
+    padding: 10px;
+  }
+  td {
+    border: solid 1px #eee;
+  }
 </style>

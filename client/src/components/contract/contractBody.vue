@@ -355,15 +355,6 @@
             plan: contract.end
           })
         }
-        if (manager.contract.contract.management > 0) {
-          payments.push({
-            DRCR: 'DR',
-            type: 'management',
-            amount: manager.contract.contract.management,
-            plan: contract.start,
-            pay: now
-          })
-        }
 
         payments.push({
           DRCR: 'DR',
@@ -371,6 +362,14 @@
           amount: manager.contract.contract.rent,
           plan: contract.first
         })
+        if (manager.contract.contract.management > 0) {
+          payments.push({
+            DRCR: 'DR',
+            type: 'management',
+            amount: manager.contract.contract.management,
+            plan: contract.first
+          })
+        }
         this.generateFees(payments, contract.first)
 
         let end = moment(contract.end)
@@ -387,6 +386,14 @@
             amount: manager.contract.contract.rent,
             plan: current.toDate().valueOf()
           })
+          if (manager.contract.contract.management > 0) {
+            payments.push({
+              DRCR: 'DR',
+              type: 'management',
+              amount: manager.contract.contract.management,
+              plan: current.toDate().valueOf()
+            })
+          }
           this.generateFees(payments, current.toDate().valueOf())
         }
 

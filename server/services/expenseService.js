@@ -24,6 +24,36 @@ class ExpenseService {
       }
     )
   }
+  assignExpensesToRooms(rooms, next) {
+    const roomMap = new Map(rooms.map((room) => {
+      return [String(room._id), room]
+    }))
+    const roomIDs = rooms.map((room) => {
+      return ObjectId(room._id)
+    })
+    mongo.findAll(
+      'expenses',
+      {room: {$in: roomIDs}, pay: {$ne: null}, deleted: {$ne: true}},
+      null,
+      {},
+      (error, results) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          results.forEach((expense) => {
+            const room = roomMap.get(String(expense.room))
+            if (room.expenses) {
+              room.expenses.push(expense)
+            } else {
+              room.expenses = [expense]
+            }
+          })
+          next(null)
+        }
+      }
+    )
+  }
   insertExpense(user, expense, next) {
     expense.house = ObjectId(expense.house)
     if (expense.room) {

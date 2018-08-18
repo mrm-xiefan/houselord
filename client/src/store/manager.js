@@ -7,6 +7,7 @@ import House from './house.js'
 import Room from './room.js'
 import Contract from './contract.js'
 import Expense from './expense.js'
+import Reporter from './reporter.js'
 
 class Manager {
   constructor() {
@@ -54,6 +55,12 @@ class Manager {
       house: null,
       room: null,
       contract: null
+    }
+
+    // for report page
+    this.report = {
+      reporter: null,
+      reporting: null
     }
   }
 
@@ -130,6 +137,10 @@ class Manager {
     for (let i = 0; i < expenses.length; i ++) {
       this.expenses.push(new Expense(expenses[i]))
     }
+  }
+  initReport(data) {
+    this.report.reporter = new Reporter(data)
+    this.report.reporting = this.report.reporter
   }
 }
 

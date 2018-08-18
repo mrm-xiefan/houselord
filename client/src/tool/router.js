@@ -147,12 +147,6 @@ let preloadMeter = (to, from, next) => {
     }
   )
 }
-let preloadReport = (to, from, next) => {
-  if (!manager.controller.checkAuth(to)) {
-    return
-  }
-  next()
-}
 let preloadOwner = (to, from, next) => {
   if (!manager.controller.checkAuth(to)) {
     return
@@ -175,6 +169,19 @@ let preloadExpense = (to, from, next) => {
         manager.refreshHouse(response.houses)
         manager.refreshRoom(response.rooms)
         manager.refreshExpense(response.expenses)
+        next()
+      }
+    }
+  )
+}
+let preloadReport = (to, from, next) => {
+  if (!manager.controller.checkAuth(to)) {
+    return
+  }
+  utils.restGet('/api/getReportData').then(
+    response => {
+      if (response) {
+        manager.initReport(response)
         next()
       }
     }

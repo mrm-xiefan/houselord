@@ -39,11 +39,11 @@
             <i class="fa fa-money"></i> <span>経費管理</span>
           </router-link>
         </li>
-        <!-- <li :class="{'active': manager.controller.currentApp == 'report'}">
+        <li :class="{'active': manager.controller.currentApp == 'report'}">
           <router-link to="/report">
             <i class="fa fa-newspaper-o"></i> <span>レポート</span>
           </router-link>
-        </li> -->
+        </li>
       </ul>
     </section>
   </aside>

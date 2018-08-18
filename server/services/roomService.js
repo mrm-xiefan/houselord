@@ -4,6 +4,8 @@ import mongo from './mongo.js'
 import {ObjectId} from 'mongodb'
 import utils from './utils.js'
 
+import contractService from './contractService.js'
+import expenseService from './expenseService.js'
 class RoomService {
   constructor() {
   }
@@ -36,6 +38,42 @@ class RoomService {
         }
         else {
           next(error, results)
+        }
+      }
+    )
+  }
+  assignRoomsToHouses(houses, next) {
+    const houseMap = new Map(houses.map((house) => {
+      return [String(house._id), house]
+    }))
+    const houseIDs = houses.map((house) => {
+      return ObjectId(house._id)
+    })
+    mongo.findAll(
+      'rooms',
+      {house: {$in: houseIDs}, deleted: {$ne: true}},
+      null,
+      {},
+      (error, results) => {
+        if (error) {
+          next(error)
+        }
+        else {
+          contractService.assignAllContractsToRooms(results, (error) => {
+            if (error) return next(error)
+            expenseService.assignExpensesToRooms(results, (error) => {
+              if (error) return next(error)
+              results.forEach((room) => {
+                const house = houseMap.get(String(room.house))
+                if (house.rooms) {
+                  house.rooms.push(room)
+                } else {
+                  house.rooms = [room]
+                }
+              })
+              next(null)
+            })
+          })
         }
       }
     )

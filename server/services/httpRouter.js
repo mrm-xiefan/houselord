@@ -673,5 +673,15 @@ router.post('/addExpense', (req, res) => {
     res.json({error: error, data: expense})
   })
 })
+router.get('/getReportData', (req, res) => {
+  logger.info('getReportData:', JSON.stringify(req.session.passport.user))
+  houseService.getHouses(req.session.passport.user._id, (error, houses) => {
+    if (error) return res.json({error: error, data: null})
+    roomService.assignRoomsToHouses(houses, (error) => {
+      if (error) return res.json({error: error, data: null})
+      res.json({error: null, data: {houses: houses}})
+    })
+  })
+})
 
 module.exports = router
